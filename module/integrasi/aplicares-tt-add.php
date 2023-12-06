@@ -1,7 +1,7 @@
 <?php
-$page = "Keteresediaan Tempat Tidur";
+$page = "Ketersediaan Tempat Tidur";
 require 'view.php';
-$query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
+require '../../controller/base/integrasi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,18 +78,28 @@ $query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
                               </div>
                            </div>
                            <div class="card-body file-manager">
-                              <div class="row">
+                              <form class="row" action="../module/integrasi/aplicares-tt-add-api" method="POST">
                                  <div class="col-12">
                                     <div class="mb-3 row">
                                        <label for="inputPassword" class="col-sm-2 col-form-label">Kode Kelas</label>
                                        <div class="col-sm-10">
-                                          <select name="kodekelas" id="kodekelas" class="form-select">
+                                          <select name="kodekelas" id="kodekelas" class="form-select" required>
                                              <?php
-                                             $query = tampildata("SELECT * FROM kamar_referensi");
+                                             // API Endpoint URL
+                                             $apiUrl = "$baseUrlAplicare/$serviceNameAplicare/rest/ref/kelas";
+
+                                             $response = get($apiUrl, $consIdAplicare, $secretKeyAplicare, $userKeyAplicare);
+
+                                             $jsonData = json_decode($response[0], true);
+                                             // Check if metadata->code is equal to 1
+                                             if (isset($jsonData['metadata']['code']) && $jsonData['metadata']['code'] == 1) {
+                                                // The API response is successful, you can access the response data
+                                                $responseData = $jsonData['response']['list'];
+                                                foreach ($responseData as $row) {
                                              ?>
-                                             <?php foreach ($query as $row) : ?>
-                                                <option value="<?= $row['namakelas'] ?>"><?= $row['namakelas'] ?></option>
-                                             <?php endforeach ?>
+                                                   <option value="<?= $row['kodekelas'] ?>"><?= $row['kodekelas'] ?></option>
+                                             <?php }
+                                             } ?>
                                           </select>
                                        </div>
                                     </div>
@@ -98,7 +108,7 @@ $query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
                                     <div class="mb-3 row">
                                        <label for="inputPassword" class="col-sm-2 col-form-label">Kode Ruang</label>
                                        <div class="col-sm-10">
-                                          <input type="text" class="form-control" name="koderuang">
+                                          <input type="text" class="form-control" name="koderuang" required>
                                        </div>
                                     </div>
                                  </div>
@@ -106,7 +116,7 @@ $query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
                                     <div class="mb-3 row">
                                        <label for="inputPassword" class="col-sm-2 col-form-label">Nama Ruang</label>
                                        <div class="col-sm-10">
-                                          <input type="text" class="form-control" name="koderuang">
+                                          <input type="text" class="form-control" name="namaruang" required>
                                        </div>
                                     </div>
                                  </div>
@@ -114,7 +124,7 @@ $query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
                                     <div class="mb-3 row">
                                        <label for="inputPassword" class="col-sm-2 col-form-label">Kapasitas</label>
                                        <div class="col-sm-10">
-                                          <input type="number" class="form-control" name="kapasitas">
+                                          <input type="number" class="form-control" name="kapasitas" required>
                                        </div>
                                     </div>
                                  </div>
@@ -122,13 +132,16 @@ $query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
                                     <div class="mb-3 row">
                                        <label for="inputPassword" class="col-sm-2 col-form-label">Tersedia</label>
                                        <div class="col-sm-2">
-                                          <input type="number" class="form-control" name="kapasitas">
+                                          <input type="number" class="form-control" name="tersedia" required>
                                        </div>
                                        <div class="col-sm-2">
-                                          <input type="number" class="form-control" name="kapasitas" placeholder="Pria">
+                                          <input type="number" class="form-control" name="tersediapria" placeholder="Pria" required>
                                        </div>
                                        <div class="col-sm-2">
-                                          <input type="number" class="form-control" name="kapasitas" placeholder="Wanita">
+                                          <input type="number" class="form-control" name="tersediawanita" placeholder="Wanita" required>
+                                       </div>
+                                       <div class="col-sm-2">
+                                          <input type="number" class="form-control" name="tersediapriawanita" placeholder="Pria dan Wanita" required>
                                        </div>
                                     </div>
                                  </div>
@@ -136,14 +149,14 @@ $query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
                                     <div class="mb-3 row">
                                        <label for="inputPassword" class="col-sm-2 col-form-label"></label>
                                        <div class="col-sm-10">
-                                          <button class="btn btn-success btn-sm">Simpan</button>
+                                          <button type="submit" class="btn btn-success btn-sm">Simpan</button>
                                           <a href="integrasi/aplicares-tt">
                                              <button type="button" class="btn btn-light btn-sm">Batal</button>
                                           </a>
                                        </div>
                                     </div>
                                  </div>
-                              </div>
+                              </form>
                            </div>
                         </div>
                      </div>

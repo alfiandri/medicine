@@ -108,7 +108,6 @@ if (isset($_POST['caridatanonjkn'])) {
 
 		$response = post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
 
-		$timeStamp = $response[1];
 		$jsonData = json_decode($response[0], true);
 		// Check if metadata->code is equal to 1
 		if (isset($jsonData['metadata']['code'])) {

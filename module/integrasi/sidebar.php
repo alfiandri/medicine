@@ -67,7 +67,7 @@
                <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="file-text"></i><span>Aplicares</span></a>
                   <ul class="sidebar-submenu">
                      <li><a href="integrasi/aplicares-ref">Referensi Kamar</a></li>
-                     <li><a href="integrasi/aplicares-tt">Keteresdiaan Tempat Tidur</a></li>
+                     <li><a href="integrasi/aplicares-tt">Ketersediaan Tempat Tidur</a></li>
                      <li><a href="integrasi/display">Display</a></li>
                   </ul>
                </li>

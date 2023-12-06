@@ -1,7 +1,7 @@
 <?php
 $page = "Display Tempat Tidur";
 require 'view.php';
-$query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
+require '../../controller/base/integrasi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,23 +61,38 @@ $query = tampildata("SELECT * FROM kamar_ketersediaan_tempattidur");
             <!-- Container-fluid starts-->
             <div class="container-fluid">
                <div class="row">
-                  <?php foreach ($query as $row) : ?>
-                     <div class="col-sm-6 col-xl-6 col-lg-6">
-                        <div class=" card o-hidden">
-                           <div class="bg-primary b-r-4 card-body">
-                              <div class="media static-top-widget">
-                                 <div class="align-self-center text-center"><i data-feather="database"></i></div>
-                                 <div class="media-body">
-                                    <span class="m-0"><?= $row['namaruang'] ?>
-                                    </span>
-                                    <h4 class="mb-0 counter">Kapasitas : <?= $row['kapasitas'] ?> | Tersedia : <?= $row['tersedia'] ?></h4><i class="icon-bg" data-feather="database"></i>
-                                    <p>Update : <?= $row['create_at'] ?></p>
+                  <?php
+                  // API Endpoint URL
+                  $start = 1;
+                  $limit = 1000;
+                  $kodePpk = '0038R060';
+                  $apiUrl = "$baseUrlAplicare/$serviceNameAplicare/rest/bed/read/$kodePpk/$start/$limit";
+
+                  $response = get($apiUrl, $consIdAplicare, $secretKeyAplicare, $userKeyAplicare);
+
+                  $jsonData = json_decode($response[0], true);
+                  // Check if metadata->code is equal to 1
+                  if (isset($jsonData['metadata']['code']) && $jsonData['metadata']['code'] == 1) {
+                     // The API response is successful, you can access the response data
+                     $responseData = $jsonData['response']['list'];
+                     foreach ($responseData as $row) {
+                  ?> <div class="col-sm-6 col-xl-6 col-lg-6">
+                           <div class=" card o-hidden">
+                              <div class="bg-primary b-r-4 card-body">
+                                 <div class="media static-top-widget">
+                                    <div class="align-self-center text-center"><i data-feather="database"></i></div>
+                                    <div class="media-body">
+                                       <span class="m-0"><?= $row['namaruang'] ?>
+                                       </span>
+                                       <h4 class="mb-0 counter">Kapasitas : <?= $row['kapasitas'] ?> | Tersedia : <?= $row['tersedia'] ?></h4><i class="icon-bg" data-feather="database"></i>
+                                       <p>Update : <?= $row['lastupdate'] ?></p>
+                                    </div>
                                  </div>
                               </div>
                            </div>
                         </div>
-                     </div>
-                  <?php endforeach ?>
+                  <?php }
+                  } ?>
                </div>
             </div>
             <!-- Container-fluid Ends-->

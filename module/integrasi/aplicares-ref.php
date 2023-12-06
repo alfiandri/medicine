@@ -86,7 +86,8 @@ require '../../controller/base/integrasi.php';
                                           // The API response is successful, you can access the response data
                                           $responseData = $jsonData['response']['list'];
                                           foreach ($responseData as $row) {
-                                       ?> <tr>
+                                       ?>
+                                             <tr>
                                                 <td><?= $row['kodekelas'] ?></td>
                                                 <td><?= $row['namakelas'] ?></td>
                                              </tr>
