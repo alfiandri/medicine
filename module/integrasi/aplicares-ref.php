@@ -1,7 +1,7 @@
 <?php
 $page = "Referensi Kamar";
 require 'view.php';
-$query = tampildata("SELECT * FROM kamar_referensi");
+require '../../controller/base/integrasi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,12 +74,24 @@ $query = tampildata("SELECT * FROM kamar_referensi");
                                        </tr>
                                     </thead>
                                     <tbody>
-                                       <?php foreach ($query as $row) : ?>
-                                          <tr>
-                                             <td><?= $row['kodekelas'] ?></td>
-                                             <td><?= $row['namakelas'] ?></td>
-                                          </tr>
-                                       <?php endforeach ?>
+                                       <?php
+                                       // API Endpoint URL
+                                       $apiUrl = "$baseUrlAplicare/$serviceNameAplicare/rest/ref/kelas";
+
+                                       $response = get($apiUrl, $consIdAplicare, $secretKeyAplicare, $userKeyAplicare);
+
+                                       $jsonData = json_decode($response[0], true);
+                                       // Check if metadata->code is equal to 1
+                                       if (isset($jsonData['metadata']['code']) && $jsonData['metadata']['code'] == 1) {
+                                          // The API response is successful, you can access the response data
+                                          $responseData = $jsonData['response']['list'];
+                                          foreach ($responseData as $row) {
+                                       ?> <tr>
+                                                <td><?= $row['kodekelas'] ?></td>
+                                                <td><?= $row['namakelas'] ?></td>
+                                             </tr>
+                                       <?php }
+                                       } ?>
                                     </tbody>
                                  </table>
                               </div>

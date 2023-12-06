@@ -76,8 +76,6 @@ require '../../controller/base/integrasi.php';
                                                 </thead>
                                                 <tbody>
                                                     <?php
-
-
                                                     // API Endpoint URL
                                                     $apiUrl = "$baseUrl/$serviceNameAntrean/ref/dokter";
 

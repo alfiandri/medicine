@@ -10,11 +10,11 @@ function validateFieldNotEmpty($request, $fieldName)
     return $request[$fieldName];
 }
 
-function getSetting($key)
+function getSetting($key, $table)
 {
     require "../../db/connect.php";
 
-    $sql = "SELECT * FROM setting_antrean WHERE status = 1";
+    $sql = "SELECT * FROM $table WHERE status = 1";
 
     $result = mysqli_query($koneksi, $sql);
 
