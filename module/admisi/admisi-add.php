@@ -70,12 +70,12 @@ require '../../controller/admisi/admisi.php';
                               <div class="row">
                                  <div class="col-12">
                                     <div class="mb-2 row">
-                                       <label for="nama" class="col-sm-2 col-form-label">No.Rekam Medis <span class="text-danger">*</span></label>
+                                       <label for="nama" class="col-sm-2 col-form-label">No.Rekam Medis <span class="text-danger">*</span></label>121212121212121
                                        <div class="col-sm-10">
-                                          <form method="POST" action="../controller/admisi/validasi-rm?&tipe=<?= $_GET['tipe'] ?>">
+                                          <form method="POST" action="../controller/admisi/validasi-rm?&tipe=<?= @$_GET['tipe'] ?>">
                                              <div class="input-group">
                                                 <?php
-                                                $rm = $_GET['rm'];
+                                                $rm = @$_GET['rm'];
                                                 if ($rm == NULL) {
                                                    $rm = 0;
                                                 } else {
@@ -91,7 +91,7 @@ require '../../controller/admisi/admisi.php';
                                     </div>
                                  </div>
                                  <form action="" method="POST">
-                                    <input type="hidden" name="tipe" value="<?= $_GET['tipe'] ?>">
+                                    <input type="hidden" name="tipe" value="<?= @$_GET['tipe'] ?>">
                                     <input type="hidden" name="nomorrm" value="<?= $rm ?>">
                                     <div class="col-12">
                                        <div class="mb-2 row">
@@ -109,6 +109,14 @@ require '../../controller/admisi/admisi.php';
                                           </div>
                                           <div class="col-sm-7">
                                              <input type="text" class="form-control form-control-sm" name="nama" id="nama" placeholder="Nama Lengkap Sesuai Identitas">
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-12">
+                                       <div class="mb-2 row">
+                                          <label for="kodebooking" class="col-sm-2 col-form-label">Kode Booking</label>
+                                          <div class="col-sm-10">
+                                             <input type="text" class="form-control form-control-sm" name="kodebooking" id="kodebooking" placeholder="Kode Booking">
                                           </div>
                                        </div>
                                     </div>

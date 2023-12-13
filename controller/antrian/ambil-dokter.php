@@ -2,8 +2,8 @@
 date_default_timezone_set('Asia/Jakarta');
 require '../../controller/base/integrasi.php';
 $kodePoli = 'ANA';
-$tanggal = date('Y-m-d');
-
+// $tanggal = date('Y-m-d');
+$tanggal = '2023-12-08';
 // API Endpoint URL
 $apiUrl = "$baseUrl/$serviceNameAntrean/jadwaldokter/kodepoli/$kodePoli/tanggal/$tanggal";
 

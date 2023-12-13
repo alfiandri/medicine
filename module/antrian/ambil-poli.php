@@ -104,7 +104,7 @@ $page = "Poli";
                                 </div>
                                 <div class="mb-3">
                                     <label for="poli" class="form-label">Pilih Poli</label>
-                                    <select name="poli" id="poli" class="form-control select2" required>
+                                    <select name="poli" id="poli" class="form-control select2 poli" required>
                                         <option value="">-- PILIH --</option>
                                         <?php
                                         $query = tampildata("SELECT * FROM poli");
@@ -118,12 +118,12 @@ $page = "Poli";
                                 </div>
                                 <div class="mb-3">
                                     <label for="dokter" class="form-label">Pilih Dokter</label>
-                                    <select name="dokter" id="dokter" class="form-control select2" required>
+                                    <select name="dokter" id="dokter" class="form-control select2 dokter" required>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="jadwal" class="form-label">Jadwal Dokter</label>
-                                    <input type="text" name="jadwal" id="jadwal" class="form-control" readonly>
+                                    <input type="text" name="jadwal" id="jadwal" class="form-control jadwal" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label for="nomorreferensi" class="form-label">No.Referensi (opsional)</label>
@@ -168,7 +168,7 @@ $page = "Poli";
                                 </div>
                                 <div class="mb-3">
                                     <label for="poli" class="form-label">Pilih Poli</label>
-                                    <select name="poli" id="poli" class="form-control select2" required>
+                                    <select name="poli" id="poli" class="form-control select2 poli" required>
                                         <option value="">-- PILIH --</option>
                                         <?php
                                         $query = tampildata("SELECT * FROM poli");
@@ -182,12 +182,12 @@ $page = "Poli";
                                 </div>
                                 <div class="mb-3">
                                     <label for="dokter" class="form-label">Pilih Dokter</label>
-                                    <select name="dokter" id="dokter" class="form-control select2" required>
+                                    <select name="dokter" id="dokter" class="form-control select2 dokter" required>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="jadwal" class="form-label">Jadwal Dokter</label>
-                                    <input type="text" name="jadwal" id="jadwal" class="form-control" readonly>
+                                    <input type="text" name="jadwal" id="jadwal" class="form-control jadwal" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label for="nomorreferensi" class="form-label">No.Referensi (opsional)</label>
@@ -222,7 +222,7 @@ $page = "Poli";
     <script>
         // $('#poli').select2();
 
-        $('#poli').on('change', function() {
+        $('.poli').on('change', function() {
             // Get the selected category value
             const poli = $(this).val();
 
@@ -236,13 +236,13 @@ $page = "Poli";
                 dataType: 'json',
                 success: function(data) {
                     // Clear existing options
-                    $('#dokter').empty();
+                    $('.dokter').empty();
 
                     // Populate options based on the response
-                    $('#dokter').append(`<option value="">-- Pilih Dokter --</option>`);
+                    $('.dokter').append(`<option value="">-- Pilih Dokter --</option>`);
 
                     $.each(data, function(index, dokter) {
-                        $('#dokter').append(`<option value="${dokter.kodedokter}" data-jadwal="${dokter.jadwal}">${dokter.namadokter}</option>`);
+                        $('.dokter').append(`<option value="${dokter.kodedokter}" data-jadwal="${dokter.jadwal}">${dokter.namadokter}</option>`);
                     });
                 },
                 error: function(xhr, status, error) {
@@ -251,13 +251,13 @@ $page = "Poli";
             });
         });
 
-        $('#dokter').on('change', function() {
+        $('.dokter').on('change', function() {
             // Get the selected category value
             var selectedOption = $(this).find('option:selected');
 
             var jadwal = selectedOption.data('jadwal');
 
-            $('#jadwal').val(jadwal);
+            $('.jadwal').val(jadwal);
         });
     </script>
 </body>

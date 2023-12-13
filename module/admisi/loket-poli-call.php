@@ -77,7 +77,7 @@ $datainfo = mysqli_fetch_array($data);
                                                 $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE status=1");
                                                 $panggil = mysqli_fetch_array($callantrian);
                                                 ?>
-                                                <h1><?= $panggil['loket'] ?>-<?= $panggil['nomor'] ?></h1>
+                                                <h1><?= @$panggil['loket'] ?>-<?= @$panggil['nomor'] ?></h1>
                                                 <p>
                                                     <?php
                                                     $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_loket");

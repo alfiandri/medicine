@@ -17,8 +17,27 @@ $tanggal = date("d-m-Y");
 </style>
 <?php
 require '../../db/connect.php';
+require '../../controller/base/integrasi.php';
+
 $tipe = $_POST['tipe']; //1 KTP, 2 BPJS
 $nomor = $_POST['nomor'];
+
+$apiUrl = "$baseUrl/$serviceNameVclaim/Rujukan/Peserta/$nomor";
+$response = post($apiUrl, $data, $consIdVclaim, $secretKeyVclaim, $userKeyVclaim);
+
+$jsonData = json_decode($response[0], true);
+// Check if metadata->code is equal to 1
+if (isset($jsonData['metadata']['code'])) {
+   $message = $jsonData['metadata']['message'];
+   if ($jsonData['metadata']['code'] != 200) {
+      mysqli_rollback($koneksi);
+      echo " <script>alert (`$message`);
+             document.location='$previousUrl'</script>";
+   } else {
+
+   }
+}
+
 if ($tipe == 1) {
     $checkdata = mysqli_query($koneksi, "SELECT * FROM pasien WHERE nik='$nomor'");
     $getdata = mysqli_fetch_array($checkdata);

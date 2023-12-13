@@ -5,7 +5,7 @@ require 'view.php';
 require '../../controller/admisi/admisi.php';
 $id = $_GET['id'];
 $status = $_GET['status'];
-$visit = $_GET['visit'];
+$visit = @$_GET['visit'];
 $info = mysqli_query($koneksi, "SELECT * FROM pasien WHERE uid_pasien='$id'");
 $data = mysqli_fetch_array($info);
 ?>
@@ -117,7 +117,7 @@ $data = mysqli_fetch_array($info);
                                                 <form method="POST" action="../controller/admisi/validasi-rm?&tipe=<?= $_GET['tipe'] ?>">
                                                    <div class="input-group">
                                                       <?php
-                                                      $rm = $_GET['rm'];
+                                                      $rm = @$_GET['rm'];
                                                       if ($rm != NULL) {
                                                          $rm = 0;
                                                       } else {
@@ -308,7 +308,7 @@ $data = mysqli_fetch_array($info);
                                  <div <?php if ($status == 2) echo "class='tab-pane fade show active'";
                                        echo "class='tab-pane fade'" ?> id="pills-warningprofile" role="tabpanel" aria-labelledby="pills-warningprofile-tab">
                                     <?php
-                                    $visit = $_GET['visit'];
+                                    $visit = @$_GET['visit'];
                                     $infovisit = mysqli_query($koneksi, "SELECT * FROM pasien_visit WHERE nomor_visit='$visit'");
                                     $datavisit = mysqli_fetch_array($infovisit);
                                     ?>
@@ -337,6 +337,20 @@ $data = mysqli_fetch_array($info);
                                                       <?php foreach ($query as $row) : ?>
                                                          <option value="<?= $row['jenis'] ?>"><?= $row['jenis'] ?></option>
                                                       <?php endforeach ?>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-12">
+                                             <div class="mb-2 row">
+                                                <label for="jeniskunjungan" class="col-sm-2 col-form-label">Jenis Kunjungan</label>
+                                                <div class="col-sm-3">
+                                                   <select name="jeniskunjungan" id="jeniskunjungan" class="form-select form-select-sm" required>
+                                                      <option value="">--PILIH--</option>
+                                                      <option value="1">Rujukan FKTP</option>
+                                                      <option value="2">Rujukan Internal</option>
+                                                      <option value="3">Kontrol</option>
+                                                      <option value="4">Rujukan Antar RS</option>
                                                    </select>
                                                 </div>
                                              </div>
@@ -413,7 +427,7 @@ $data = mysqli_fetch_array($info);
                                                       $query = tampildata("SELECT * FROM poli");
                                                       ?>
                                                       <?php foreach ($query as $row) : ?>
-                                                         <option value="<?= $row['nmpoli'] ?>"><?= $row['nmpoli'] ?></option>
+                                                         <option value="<?= $row['kdpoli'] ?>"><?= $row['nmpoli'] ?></option>
                                                       <?php endforeach ?>
                                                    </select>
                                                 </div>
@@ -428,13 +442,17 @@ $data = mysqli_fetch_array($info);
                                                       }
                                                       ?>
                                                       <option value="<?= $ket_dokter ?>"><?= $ket_dokter ?></option>
-                                                      <?php
-                                                      $query = tampildata("SELECT * FROM dokter");
-                                                      ?>
-                                                      <?php foreach ($query as $row) : ?>
-                                                         <option value="<?= $row['nama'] ?>"><?= $row['nama'] ?></option>
-                                                      <?php endforeach ?>
+
                                                    </select>
+                                                </div>
+                                                <input type="hidden" name="jadwal" class="jadwal">
+                                                <div class="col-12">
+                                                   <div class="mb-2 row">
+                                                      <label for="kodebooking" class="col-sm-2 col-form-label">Kode Booking</label>
+                                                      <div class="col-sm-10">
+                                                         <input type="text" class="form-control form-control-sm" name="kodebooking" id="kodebooking" value="<?= @$data['kodebooking'] ?>" placeholder="Kode Booking">
+                                                      </div>
+                                                   </div>
                                                 </div>
                                              </div>
                                           </div>
@@ -1165,9 +1183,49 @@ $data = mysqli_fetch_array($info);
             })
          })
       })
+
+      $('#layanan').on('change', function() {
+         // Get the selected category value
+         const poli = $(this).val();
+         console.log(poli)
+
+         // Make an AJAX request
+         $.ajax({
+            url: '../controller/antrian/ambil-dokter',
+            type: 'POST',
+            data: {
+               poli: poli
+            },
+            dataType: 'json',
+            success: function(data) {
+               // Clear existing options
+               $('#dokter').empty();
+
+               // Populate options based on the response
+               $('#dokter').append(`<option value="">-- Pilih Dokter --</option>`);
+
+               $.each(data, function(index, dokter) {
+                  $('#dokter').append(`<option value="${dokter.kodedokter}" data-jadwal="${dokter.jadwal}">${dokter.namadokter}</option>`);
+               });
+            },
+            error: function(xhr, status, error) {
+               console.error('Error:', error);
+            }
+         });
+      });
+
+      $('#dokter').on('change', function() {
+         // Get the selected category value
+         var selectedOption = $(this).find('option:selected');
+
+         var jadwal = selectedOption.data('jadwal');
+
+         $('.jadwal').val(jadwal);
+      });
    </script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
    </script>
+
 </body>
 
 </html>

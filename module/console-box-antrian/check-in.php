@@ -22,7 +22,7 @@ if (isset($_POST['carijkn'])) {
     $nomor = $_POST['nomor'];
     $check = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE kodebooking='$nomor'");
     $datacheck = mysqli_fetch_array($check);
-    $data = $datacheck['kodebooking'];
+    $data = @$datacheck['kodebooking'];
     if ($data == NULL) {
         echo " <script>alert ('Kode Booking Anda Tidak Tersedia');
         document.location='../../module/console-box-antrian/index'</script>";

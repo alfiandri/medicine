@@ -118,6 +118,9 @@ $totaldata = mysqli_num_rows($data);
                                                             <td class="text-center"><?= $row['mulai'] ?></td>
                                                             <td class="text-center"><?= $row['selesai'] ?></td>
                                                             <td class="text-center col-3">
+                                                                <a href="admisi/loket-admisi-call?id=<?= $row['id'] ?>">
+                                                                    <button class="btn btn-primary">Buka Loket</button>
+                                                                </a>
                                                                 <a href="admisi/loket-admisi-list?id=<?= $row['id'] ?>">
                                                                     <button class="btn btn-success">Lihat Antrian</button>
                                                                 </a>

@@ -156,7 +156,7 @@
                </li>
                <li class="sidebar-list"> <label class="badge badge-success">Update</label><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="file-text"></i><span>I-Care</span></a>
                   <ul class="sidebar-submenu">
-                     <li><a href="javascript:;">Rekam Medis</a></li>
+                     <li><a href="integrasi/icare-rekam-medis">Rekam Medis</a></li>
                   </ul>
                </li>
                <li class="sidebar-main-title">

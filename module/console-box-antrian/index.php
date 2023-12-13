@@ -1,6 +1,8 @@
 <?php
 $page = "BO";
 require 'view.php';
+$jenisPasien = $_GET['jenispasien'] ?? null;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,49 +34,104 @@ require 'view.php';
                         </div>
                      </div>
                   </div>
-                  <div class="row">
-                     <div class="col-6">
-                        <div class="card" data-bs-toggle="modal" data-bs-target="#admisibpjs">
-                           <div class="card-body bg-primary">
-                              <h5 class="card-title">BPJS</h5>
-                              <p class="card-text">Pasien yang terdaftar di BPJS Kesehatan dengan kepesertaan aktif dapat langsung menunggu panggilan antrian di loket BPJS</p>
+
+                  <?php
+
+                  if (!$jenisPasien) {
+                  ?>
+                     <div class="row">
+                        <div class="col-6">
+                           <a href="../module/console-box-antrian/index?jenispasien=bpjs" class="card">
+                              <div class="card-body bg-primary">
+                                 <h5 class="card-title">BPJS</h5>
+                                 <p class="card-text">Pasien yang terdaftar di BPJS Kesehatan dengan kepesertaan aktif dapat langsung menunggu panggilan antrian di loket BPJS</p>
+                              </div>
+                           </a>
+                        </div>
+                        <div class="col-6">
+                           <a href="console-box-antrian/print/print-umum" class="card">
+                              <div class="card-body bg-success">
+                                 <h5 class="card-title">Non BPJS</h5>
+                                 <p class="card-text">Pasien umum yang tidak menggunakan layanan jaminan kesehatan BPJS/Asuransi ini digunakan untuk pasien baru atau umum</p>
+                              </div>
+                           </a>
+                        </div>
+
+                        <div class="col-6">
+                           <div class="card" data-bs-toggle="modal" data-bs-target="#mjkn">
+                              <div class="card-body bg-danger">
+                                 <h5 class="card-title">M-JKN</h5>
+                                 <p class="card-text">Pasien dengan registrasi layanan kesehatan M-JKN untuk check in onsite</p>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6">
+                           <div class="card" data-bs-toggle="modal" data-bs-target="#loketfarmasi">
+                              <div class="card-body bg-warning">
+                                 <h5 class="card-title">Farmasi</h5>
+                                 <p class="card-text">Antrian untuk pasien telah selesai dilakukan pemeriksaan di poliklinik </p>
+                              </div>
                            </div>
                         </div>
                      </div>
-                     <div class="col-6">
-                        <div class="card" data-bs-toggle="modal" data-bs-target="#admisiumum">
-                           <div class="card-body bg-success">
-                              <h5 class="card-title">Non BPJS</h5>
-                              <p class="card-text">Pasien umum yang tidak menggunakan layanan jaminan kesehatan BPJS/Asuransi ini digunakan untuk pasien baru atau umum</p>
+                  <?php
+                  }
+
+                  if (@$jenisPasien == 'bpjs') {
+                  ?>
+                     <div class="row" id="jenis-pasien">
+                        <div class="col-6">
+                           <a href="console-box-antrian/print/print-bpjs?tipe=B" class="card">
+                              <div class="card-body bg-primary">
+                                 <h5 class="card-title">Pasien Baru</h5>
+                                 <p class="card-text">Pasien yang belum terdaftar silakan menunggu antrian pendaftaran admisi.</p>
+                              </div>
+                           </a>
+                        </div>
+
+                        <div class="col-6">
+                           <div class="card" data-bs-toggle="modal" data-bs-target="#admisibpjslama">
+                              <div class="card-body bg-success">
+                                 <h5 class="card-title">Pasien Lama</h5>
+                                 <p class="card-text">Pasien lama yang sudah terdaftar pada sistem.</p>
+                              </div>
                            </div>
                         </div>
                      </div>
-                     <div class="col-6">
-                        <div class="card" data-bs-toggle="modal" data-bs-target="#mjkn">
-                           <div class="card-body bg-danger">
-                              <h5 class="card-title">M-JKN</h5>
-                              <p class="card-text">Pasien dengan registarsi layanan kesehatan M-JKN untuk check in onsite</p>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-6">
-                        <div class="card" data-bs-toggle="modal" data-bs-target="#loketfarmasi">
-                           <div class="card-body bg-warning">
-                              <h5 class="card-title">Farmasi</h5>
-                              <p class="card-text">Antrian untuk pasien telah selesai dilakukan pemeriksaan di poliklinik </p>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
+                  <?php
+                  }
+                  ?>
                </div>
             </div>
          </div>
       </div>
 
-
+      <!-- Modal -->
+      <div class="modal fade" id="admisibpjsbaru" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Pasien BPJS Baru</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <form action="console-box-antrian/check-bpjs" method="POST">
+                  <div class="modal-body">
+                     <div class="mb-3">
+                        <label for="nomor" class="form-label">No.Kartu Identitas</label>
+                        <input type="text" class="form-control" id="nomor" name="nomor" required="">
+                     </div>
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                     <button type="submit" name="caripasienbpjsbaru" class="btn btn-primary">Proses</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
 
       <!-- Modal -->
-      <div class="modal fade" id="admisibpjs" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="admisibpjslama" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                <div class="modal-header">
@@ -86,28 +143,42 @@ require 'view.php';
                      <div class="mb-3">
                         <label for="tipe" class="form-label">Identitas</label>
                         <select class="form-select" aria-label="Default select example" name="tipe" id="tipe">
-                           <option selected>Tipe Identitas </option>
-                           <option value="1">KTP</option>
+                           <option value="">Tipe Identitas </option>
+                           <option value="1">NIK</option>
                            <option value="2">No.Kartu BPJS</option>
                         </select>
                      </div>
                      <div class="mb-3">
                         <label for="nomor" class="form-label">No.Kartu Identitas</label>
-                        <input type="text" class="form-control" id="nomor" name="nomor" required="">
+                        <div class="input-group">
+                           <input type="text" class="form-control" id="nomor" name="nomor" required="">
+                           <div class="input-group-append">
+                              <button class="btn btn-outline-primary" type="button">Cari</button>
+                           </div>
+                        </div>
                      </div>
+
+                     <div class="mb-3">
+                        <label for="tipe" class="form-label">Nomor Rujukan</label>
+                        <select class="form-select" aria-label="Default select example" name="tipe" id="tipe">
+                           <option value="" selected>Pilih </option>
+                           <option value="1">NIK</option>
+                           <option value="2">No.Kartu BPJS</option>
+                        </select>
+                     </div>
+
                   </div>
                   <div class="modal-footer">
                      <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                     <button type="submit" name="caripasienbpjs" class="btn btn-primary">Proses</button>
+                     <button type="submit" name="caripasienbpjslama" class="btn btn-primary">Proses</button>
                   </div>
                </form>
             </div>
          </div>
       </div>
 
-
       <!-- Modal -->
-      <div class="modal fade" id="admisiumum" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="pasienlama" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                <div class="modal-header">
@@ -130,8 +201,6 @@ require 'view.php';
             </div>
          </div>
       </div>
-
-
 
       <!-- Modal -->
       <div class="modal fade" id="loketfarmasi" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -181,8 +250,6 @@ require 'view.php';
          </div>
       </div>
 
-
-
       <!-- latest jquery-->
       <script src="../assets/js/jquery-3.5.1.min.js"></script>
       <!-- Bootstrap js-->
@@ -199,6 +266,10 @@ require 'view.php';
       <script src="../assets/js/script.js"></script>
       <!-- login js-->
       <!-- Plugin used-->
+
+      <script>
+
+      </script>
    </div>
 </body>
 

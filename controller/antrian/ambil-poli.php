@@ -78,50 +78,66 @@ if (isset($_POST['caridatanonjkn'])) {
 			$sisakuotanonjkn = $sisakuotanonjkn - $row['count'];
 		}
 
-		$insert = mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, kodepoli, nomor, tipe, nokartu, tanggalperiksa, jenispasien) VALUES('$kodebooking', '$poli[kdpoli]','$angkaantrean','$prefix','$nomor', '$tanggalperiksa', 'NON JKN') ");
+		// Start the transaction
+		mysqli_begin_transaction($koneksi);
+		try {
 
-		$data = [
-			"kodebooking" => $kodebooking,
-			"jenispasien" => 'NON JKN',
-			"nomorkartu" => $pasien['nomor_kartu'],
-			"nik" => $_POST["nomor"],
-			"nohp" => $pasien['no_handphone'],
-			"kodepoli" => $_POST["poli"],
-			"namapoli" => $poli['nmpoli'],
-			"pasienbaru" => 0,
-			"norm" => $pasien['nomor_rm'],
-			"tanggalperiksa" => $tanggalperiksa,
-			"kodedokter" => $dokter['kode_dokter'],
-			"namadokter" => $dokter['nama'],
-			"jampraktek" => $_POST["jadwal"],
-			"jeniskunjungan" => $_POST['jeniskunjungan'],
-			"nomorreferensi" => @$_POST['nomorreferensi'],
-			"nomorantrean" => $nomorantrean,
-			"angkaantrean" => $angkaantrean,
-			"estimasidilayani" => $estimasidilayani,
-			"sisakuotajkn" => $sisakuotajkn,
-			"kuotajkn" => $kuotajkn,
-			"sisakuotanonjkn" => $sisakuotanonjkn,
-			"kuotanonjkn" => $kuotanonjkn,
-			"keterangan" => @$_POST["keterangan"],
-		];
+			mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, kodepoli, nomor, tipe, nokartu, tanggalperiksa, jenispasien) VALUES('$kodebooking', '$poli[kdpoli]','$angkaantrean','$prefix','$nomor', '$tanggalperiksa', 'NON JKN') ");
 
-		$response = post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
+			// update pasien
+			mysqli_query($koneksi, "UPDATE pasien SET status_pasien = 0 WHERE id = $pasien[id]");
 
-		$jsonData = json_decode($response[0], true);
-		// Check if metadata->code is equal to 1
-		if (isset($jsonData['metadata']['code'])) {
-			$message = $jsonData['metadata']['message'];
-			if ($jsonData['metadata']['code'] != 200) {
-				echo " <script>alert (`$message`);
-            document.location='../../module/antrian/ambil-poli'</script>";
+			$data = [
+				"kodebooking" => $kodebooking,
+				"jenispasien" => 'NON JKN',
+				"nomorkartu" => $pasien['nomor_kartu'],
+				"nik" => $_POST["nomor"],
+				"nohp" => $pasien['no_handphone'],
+				"kodepoli" => $_POST["poli"],
+				"namapoli" => $poli['nmpoli'],
+				"pasienbaru" => $pasien['status_pasien'],
+				"norm" => $pasien['nomor_rm'],
+				"tanggalperiksa" => $tanggalperiksa,
+				"kodedokter" => $dokter['kode_dokter'],
+				"namadokter" => $dokter['nama'],
+				"jampraktek" => $_POST["jadwal"],
+				"jeniskunjungan" => $_POST['jeniskunjungan'],
+				"nomorreferensi" => @$_POST['nomorreferensi'],
+				"nomorantrean" => $nomorantrean,
+				"angkaantrean" => $angkaantrean,
+				"estimasidilayani" => $estimasidilayani,
+				"sisakuotajkn" => $sisakuotajkn,
+				"kuotajkn" => $kuotajkn,
+				"sisakuotanonjkn" => $sisakuotanonjkn,
+				"kuotanonjkn" => $kuotanonjkn,
+				"keterangan" => @$_POST["keterangan"],
+			];
+
+			$response = post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
+
+			$jsonData = json_decode($response[0], true);
+			// Check if metadata->code is equal to 1
+			if (isset($jsonData['metadata']['code'])) {
+				$message = $jsonData['metadata']['message'];
+				if ($jsonData['metadata']['code'] != 200) {
+					echo " <script>alert (`$message`);
+				document.location='../../module/antrian/ambil-poli'</script>";
+				} else {
+					// sukses
+					mysqli_commit($koneksi);
+
+					echo " <script>alert ('$message');
+				document.location='../../module/antrian/ambil-poli'</script>";
+				}
 			} else {
-				echo " <script>alert ('$message');
-            document.location='../../module/antrian/ambil-poli'</script>";
+				echo " <script>alert ('Terjadi kesalahan');
+		  document.location='../../module/antrian/ambil-poli'</script>";
 			}
-		} else {
-			echo " <script>alert ('Terjadi kesalahan');
-      document.location='../../module/antrian/ambil-poli'</script>";
+		} catch (\Throwable $th) {
+			mysqli_rollback($koneksi);
+			$msg = $th->getMessage();
+			echo " <script>alert (`$msg`);
+			document.location='../../module/antrian/ambil-poli'</script>";
 		}
 	}
 }

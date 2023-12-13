@@ -90,9 +90,9 @@ require 'view.php';
                                                             <td><?= $row['create_at'] ?></td>
                                                             <td><?= $row['estimasi'] ?></td>
                                                             <td class="text-center">
-                                                                <button class="btn btn-primary">Panggil</button>
-                                                                <button class="btn btn-success">Selesaikan</button>
-                                                                <button class="btn btn-danger">Batal</button>
+                                                                <a href="../controller/antrian/call-poli" class="btn btn-primary">Panggil</a>
+                                                                <a href="../controller/antrian/call-poli" class="btn btn-success">Selesaikan</a>
+                                                                <a data-batal="<?=$row['kodebooking']?>" class="btn btn-danger batal">Batal</a>
                                                             </td>
                                                         </tr>
                                                     <?php endforeach ?>
@@ -108,6 +108,29 @@ require 'view.php';
                 </div>
                 <!-- Container-fluid Ends-->
             </div>
+            <div class="modal fade" id="batal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Batal Antrian</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="../controller/antrian/batal-poli" method="POST">
+                            <div class="modal-body">
+                                <input type="text" name="kodebooking">
+                                <div class="mb-3">
+                                    <label for="keterangan" class="form-label">Keterangan (opsional)</label>
+                                    <textarea class="form-control" name="keterangan"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" name="caridatajkn" class="btn btn-primary">Proses</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!-- footer start-->
             <?php
             require '../../template/footer.php';
@@ -115,6 +138,14 @@ require 'view.php';
         </div>
     </div>
     <script type="text/javascript">
+        $('.batal').click(function() {
+         // Show the modal
+         const kodebooking = $(this).data('kodebooking');
+         console.log(kodebooking)
+         $('[name="kodebooking"]').val(kodebooking)
+         $('#batal').modal('show');
+      });
+
         function panggil() {
             let open = new Audio('antrian/sound/open.mp3');
             let nomor = new Audio('antrian/sound/a1.mp3');

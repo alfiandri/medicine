@@ -92,11 +92,11 @@ $page = "Loket";
                               <?php
                               $kode = $row['kode_loket'];
                               $status = 1;
-                              $data = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE loket='$kode' AND status='$status' ");
+                              $data = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE loket='Loket $kode' AND status='$status' ");
                               $dataantrian = mysqli_fetch_array($data);
                               ?>
                               <div class="nomor" style="width: 100%; height: 150px; background-color:#edf6f9; color:#14213d; justify-content: center; align-items: center; display: flex;">
-                                 <span style="font-size:50px;"><span><?= $dataantrian['loket'] ?>-<?= $dataantrian['nomor'] ?></span></span>
+                                 <span style="font-size:50px;"><span><?= @$dataantrian['loket'] ?>-<?= @$dataantrian['nomor'] ?></span></span>
                               </div>
                               <h5 class="text-center">LOKET : <?= $row['loket'] ?></h5>
                            </div>

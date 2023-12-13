@@ -20,10 +20,14 @@ $tanggal = date("d-m-Y");
 </style>
 <?php
 
-require '../../../db/connect.php';
+require_once __DIR__ . '/../../../db/connect.php';
+require_once __DIR__ . '/../view.php';
 $tipe = $_GET['tipe'];
-$nomor = $_GET['nomor'];
-if ($tipe == "BB") {
+$nomor = @$_GET['nomor'];
+
+$kodebooking = generateKodeBooking();
+
+if ($tipe == "B") {
     $check = mysqli_query($koneksi, "SELECT * FROM antrian_loket");
     $dataantrian = mysqli_num_rows($check);
     $antrian = $dataantrian + 1;
@@ -31,7 +35,6 @@ if ($tipe == "BB") {
     $dataloket = mysqli_fetch_array($checkloket);
     $loket = $dataloket['loket'];
     $kode = $dataloket['kode_loket'];
-    $kodebooking = date('Ymd') . rand(111, 999);
     $insert = mysqli_query($koneksi, "INSERT INTO antrian_loket(kodebooking, loket, nomor, tipe, nokartu)VALUES('$kodebooking','$loket','$antrian','$tipe','$nomor') ");
 } else {
     $check = mysqli_query($koneksi, "SELECT * FROM antrian_poli");
@@ -41,7 +44,6 @@ if ($tipe == "BB") {
     $dataloket = mysqli_fetch_array($checkloket);
     $loket = $dataloket['loket'];
     $kode = $dataloket['kode_loket'];
-    $kodebooking = date('Ymd') . rand(111, 999);
     $insert = mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, loket, nomor, tipe, nokartu)VALUES('$kodebooking','$loket','$antrian','$tipe','$nomor') ");
 }
 ?>

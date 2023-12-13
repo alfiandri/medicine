@@ -1,5 +1,6 @@
 <?php
 require '../../db/connect.php';
+require '../../controller/base/integrasi.php';
 if (isset($_POST['simpancheck'])) {
    $id = $_POST['id'];
    $dokter = $_POST['dokter'];
@@ -104,6 +105,7 @@ if (isset($_POST['simpanpasien'])) {
    $tipe = $_POST['tipe'];
    $uid = md5(rand(1111, 9999));
    $nomorrm = $_POST['nomorrm'];
+   $kodebooking = @$_POST['kodebooking'];
    $sebutan = $_POST['sebutan'];
    $nama = $_POST['nama'];
    $nokartu = $_POST['nokartu'];
@@ -126,9 +128,13 @@ if (isset($_POST['simpanpasien'])) {
    $checkdata = mysqli_query($koneksi, "SELECT * FROM pasien WHERE nik='$nokartu' or nomor_rm='$nomorrm'");
    $datacheck = mysqli_fetch_array($checkdata);
    if ($datacheck == NULL) {
-      $insert = mysqli_query($koneksi, "INSERT INTO pasien (uid_pasien, nik, nomor_kartu, nomor_rm, sebutan, nama_pasien, tempat_lahir, tanggal_lahir, gender,  agama, no_handphone, email, status_kawin, pendidikan, pekerjaan, golongan_darah)
-      VALUES ('$uid','$nokartu','$nobpjs','$nomorrm','$sebutan','$nama','$tempatlahir','$tanggallahir','$gender','$agama','$notelepon','$email','$statuskawin','$pendidikan','$pekerjaan','$golongandarah')");
+
+      $insert = mysqli_query($koneksi, "INSERT INTO pasien (uid_pasien, nik, nomor_kartu, kodebooking, nomor_rm, sebutan, nama_pasien, tempat_lahir, tanggal_lahir, gender,  agama, no_handphone, email, status_kawin, pendidikan, pekerjaan, golongan_darah)
+      VALUES ('$uid','$nokartu','$nobpjs','$kodebooking','$nomorrm','$sebutan','$nama','$tempatlahir','$tanggallahir','$gender','$agama','$notelepon','$email','$statuskawin','$pendidikan','$pekerjaan','$golongandarah')");
       if ($insert) {
+         $task = "2";
+         $inserttask = mysqli_query($koneksi, "INSERT INTO admisi_taskid (kodebooking, task_id)VALUES('$kodebooking','$task')");
+
          echo " <script>alert ('Berhasil Menambah Pasien Registrasi $ket');
          document.location='../admisi/admisi-add-detail?tipe=$tipe&id=$uid&status=1'</script>";
       } else {
@@ -173,6 +179,7 @@ if (isset($_POST['ubahpasien'])) {
 if (isset($_POST['simpanlayanan'])) {
    $uid = $_POST['id'];
    $nomorrm = $_POST['nomorRM'];
+   $kodebooking = @$_POST['kodebooking'];
    $jenislayanan = $_POST['jenislayanan'];
    $rujukan = $_POST['rujukan'];
    $catatanrujukan = $_POST['catatanrujukan'];
@@ -189,16 +196,190 @@ if (isset($_POST['simpanlayanan'])) {
    } else if ($tipe == 2) {
       $sumber = "UGD";
    }
+   $previousUrl = $_SERVER["HTTP_REFERER"];
+
+   if (!$kodebooking) {
+      // kode booking start
+      $isUnique = false;
+      $date = date('Ymd');
+
+      while (!$isUnique) {
+         // Generate the unique code
+         $unique = rand(0, 999);
+
+         $kodebooking = $date . sprintf('%03d', $unique);
+
+         // Check if the code already exists in the database
+         $checkQuery = "SELECT COUNT(*) as count FROM antrian_loket WHERE kodebooking = '$kodebooking'";
+         $result = mysqli_query($koneksi, $checkQuery);
+
+         $row = mysqli_fetch_array($result);
+         $count = $row['count'];
+
+         // If the code is not unique, regenerate it
+         if ($count == 0) {
+            $isUnique = true; // Exit the loop if the code is unique
+         }
+      }
+      // kode booking end
+   }
+
+   $check = mysqli_query($koneksi, "SELECT * FROM pasien WHERE uid_pasien='$uid'");
+   $pasien = mysqli_fetch_array($check);
+   if ($pasien == NULL) {
+      echo " <script>alert ('Data pasien tidak ditemukan');
+      document.location='$previousUrl'</script>";
+   }
+   // poli
+   $check = mysqli_query($koneksi, "SELECT * FROM poli WHERE kdpoli='$_POST[layanan]'");
+   $poli = mysqli_fetch_array($check);
+   if ($poli == NULL) {
+      echo " <script>alert ('Poli tidak ditemukan');
+            document.location='$previousUrl'</script>";
+   }
+
+   // dokter
+   $check = mysqli_query($koneksi, "SELECT * FROM dokter WHERE kode_dokter='$_POST[dokter]'");
+   $dokter = mysqli_fetch_array($check);
+   if ($dokter == NULL) {
+      echo " <script>alert ('Dokter tidak ditemukan');
+            document.location='$previousUrl'</script>";
+   }
+
+   $estimasidilayani = (time() + 600) * 1000;
+
+   // get last antrean
+   $check = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE kodepoli='$poli[kdpoli]' AND tanggalperiksa = '$tanggalperiksa' ORDER BY nomor DESC LIMIT 1");
+   $antrian_poli = mysqli_fetch_array($check);
+   if ($antrian_poli === null) {
+      $angkaantrean = 1;
+      $nomorantrean = $poli['kode_antri'] . '-' . $angkaantrean;
+   } else {
+      $angkaantrean = ($antrian_poli['nomor'] + 1);
+      $nomorantrean = $poli['kode_antri'] . '-' . $angkaantrean;
+   }
+   $kuotajkn = $poli['kuotajkn'];
+   $sisakuotajkn = $kuotajkn;
+   $kuotanonjkn = $poli['kuotanonjkn'];
+   $sisakuotanonjkn = $kuotanonjkn;
+
+   // get sisa kuota jkn
+   $check = mysqli_query($koneksi, "SELECT COUNT(*) as count FROM antrian_poli WHERE kodepoli = '$poli[kdpoli]' AND tanggalperiksa = '$tanggalperiksa' AND batal = 0 AND sudah_dilayani = 0 AND jenispasien = 'JKN'");
+   $row = mysqli_fetch_array($check);
+   if ($row) {
+      $sisakuotajkn = $sisakuotajkn - $row['count'];
+   }
+
+   // get sisa kuota non jkn
+   $check = mysqli_query($koneksi, "SELECT COUNT(*) as count FROM antrian_poli WHERE kodepoli = '$poli[kdpoli]' AND tanggalperiksa = '$tanggalperiksa' AND batal = 0 AND sudah_dilayani = 0 AND jenispasien = 'NON JKN'");
+   $row = mysqli_fetch_array($check);
+   if ($row) {
+      $sisakuotanonjkn = $sisakuotanonjkn - $row['count'];
+   }
+
+   $jenispasien = 'NON JKN';
+   if ($_POST['jaminan'] == 'BPJS Kesehatan') {
+      $jenispasien = 'JKN';
+   }
+
+   mysqli_begin_transaction($koneksi);
+
+   $status = 1;
+   $task = 3;
+   $waktu = date('Y-m-d H:i:s');
+   $tanggalperiksa = date('Y-m-d');
+   $prefix = $poli['kode_antri'];
+
+   $insertantrian = mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, kodepoli, nomor, tipe, nokartu, tanggalperiksa, jenispasien) VALUES('$kodebooking', '$poli[kdpoli]','$angkaantrean','$prefix','$pasien[nik]', '$tanggalperiksa', '$jenispasien') ");
+
+
+   $insert = mysqli_query($koneksi, "INSERT INTO admisi_taskid (kodebooking, task_id, waktu)VALUES('$kodebooking','$task','$waktu')");
 
    $insert = mysqli_query($koneksi, "INSERT INTO pasien_visit (uid_pasien, nomor_rm, nomor_visit, tanggal, waktu, jenis_layanan, rujukan, rujukan_catatan, layanan,  jenis_bayar, catatan_bayar, dokter, sumber)
    VALUES ('$uid','$nomorrm','$noregistrasi','$tanggal','$waktu','$jenislayanan','$rujukan','$catatanrujukan','$layanan','$jenisbayar','$catatanbayar','$dokter','$sumber')");
-   if ($insert) {
-      echo " <script>alert ('Berhasil Menambah Layanan');
-      document.location='../admisi/admisi-add-detail?id=$uid&status=2&visit=$noregistrasi'</script>";
+
+   // add to WS BPJS
+   $data = [
+      "kodebooking" => $kodebooking,
+      "jenispasien" => $jenispasien,
+      "nomorkartu" => $pasien['nomor_kartu'],
+      "nik" => $pasien["nik"],
+      "nohp" => $pasien['no_handphone'],
+      "kodepoli" => $_POST["layanan"],
+      "namapoli" => $poli['nmpoli'],
+      "pasienbaru" => $pasien['status_pasien'],
+      "norm" => $pasien['nomor_rm'],
+      "tanggalperiksa" => $tanggalperiksa,
+      "kodedokter" => $dokter['kode_dokter'],
+      "namadokter" => $dokter['nama'],
+      "jampraktek" => $_POST["jadwal"],
+      "jeniskunjungan" => $_POST['jeniskunjungan'],
+      "nomorreferensi" => @$_POST['nomorreferensi'],
+      "nomorantrean" => $nomorantrean,
+      "angkaantrean" => $angkaantrean,
+      "estimasidilayani" => $estimasidilayani,
+      "sisakuotajkn" => $sisakuotajkn,
+      "kuotajkn" => $kuotajkn,
+      "sisakuotanonjkn" => $sisakuotanonjkn,
+      "kuotanonjkn" => $kuotanonjkn,
+      "keterangan" => @$_POST["keterangan"],
+   ];
+
+   $apiUrl = "$baseUrl/$serviceNameAntrean/antrean/add";
+   $response = post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
+
+   $jsonData = json_decode($response[0], true);
+   // Check if metadata->code is equal to 1
+   if (isset($jsonData['metadata']['code'])) {
+      $message = $jsonData['metadata']['message'];
+      if ($jsonData['metadata']['code'] != 200) {
+         mysqli_rollback($koneksi);
+         echo " <script>alert (`$message`);
+				document.location='$previousUrl'</script>";
+      } else {
+         // sukses
+         mysqli_commit($koneksi);
+         $apiUrl = "$baseUrl/$serviceNameAntrean/antrean/updatewaktu";
+
+         // insert task id 1 and/or 2 if exists
+         $check = mysqli_query($koneksi, "SELECT * FROM admisi_taskid WHERE kodebooking='$kodebooking' AND task_id = 1");
+         $taskid = mysqli_fetch_array($check);
+         if ($taskid != NULL) {
+            $data = [
+               "kodebooking" => $kodebooking,
+               "taskid" => 1,
+               "waktu" => strtotime($taskid['waktu']) * 1000,
+            ];
+            post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
+         }
+         $check = mysqli_query($koneksi, "SELECT * FROM admisi_taskid WHERE kodebooking='$kodebooking' AND task_id = 2");
+         $taskid = mysqli_fetch_array($check);
+         if ($taskid != NULL) {
+            $data = [
+               "kodebooking" => $kodebooking,
+               "taskid" => 2,
+               "waktu" => strtotime($taskid['waktu']) * 1000,
+            ];
+            post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
+         }
+
+         // update task id ws bpjs
+         $data = [
+            "kodebooking" => $kodebooking,
+            "taskid" => 3,
+            "waktu" => time() * 1000,
+         ];
+         post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
+
+         echo " <script>alert ('Berhasil Menambah Layanan');
+				document.location='$previousUrl'</script>";
+      }
    } else {
-      echo " <script>alert ('Gagal Simpan');
-      document.location='../admisi/admisi-add-detail?id=$uid&status=2'</script>";
+      mysqli_rollback($koneksi);
+      echo " <script>alert ('Terjadi kesalahan');
+		  document.location='$previousUrl'</script>";
    }
+   exit;
 }
 
 

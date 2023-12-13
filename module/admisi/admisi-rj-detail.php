@@ -5,7 +5,7 @@ require 'view.php';
 require '../../controller/admisi/admisi.php';
 $id = $_GET['id'];
 $status = $_GET['status'];
-$visit = $_GET['visit'];
+$visit = @$_GET['visit'];
 $info = mysqli_query($koneksi, "SELECT * FROM pasien WHERE uid_pasien='$id'");
 $data = mysqli_fetch_array($info);
 ?>
@@ -117,7 +117,7 @@ $data = mysqli_fetch_array($info);
                                                 <form method="POST" action="../controller/admisi/validasi-rm?&tipe=<?= $_GET['tipe'] ?>">
                                                    <div class="input-group">
                                                       <?php
-                                                      $rm = $_GET['rm'];
+                                                      $rm = @$_GET['rm'];
                                                       if ($rm != NULL) {
                                                          $rm = 0;
                                                       } else {
@@ -308,14 +308,14 @@ $data = mysqli_fetch_array($info);
                                  <div <?php if ($status == 2) echo "class='tab-pane fade show active'";
                                        echo "class='tab-pane fade'" ?> id="pills-warningprofile" role="tabpanel" aria-labelledby="pills-warningprofile-tab">
                                     <?php
-                                    $visit = $_GET['visit'];
+                                    $visit = @$_GET['visit'];
                                     $infovisit = mysqli_query($koneksi, "SELECT * FROM pasien_visit WHERE nomor_visit='$visit'");
                                     $datavisit = mysqli_fetch_array($infovisit);
                                     ?>
                                     <form action="" method="POST">
                                        <input type="hidden" name="id" value="<?= $id ?>">
                                        <input type="hidden" name="nomorRM" value="<?= $data['nomor_rm'] ?>">
-                                       <input type="hidden" name="tipe" value="<?= $_GET['tipe'] ?>">
+                                       <input type="hidden" name="tipe" value="<?= @$_GET['tipe'] ?>">
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-2 row">
@@ -428,13 +428,16 @@ $data = mysqli_fetch_array($info);
                                                       }
                                                       ?>
                                                       <option value="<?= $ket_dokter ?>"><?= $ket_dokter ?></option>
-                                                      <?php
-                                                      $query = tampildata("SELECT * FROM dokter");
-                                                      ?>
-                                                      <?php foreach ($query as $row) : ?>
-                                                         <option value="<?= $row['nama'] ?>"><?= $row['nama'] ?></option>
-                                                      <?php endforeach ?>
                                                    </select>
+                                                </div>
+                                                <input type="hidden" name="jadwal" class="jadwal">
+                                             </div>
+                                          </div>
+                                          <div class="col-12">
+                                             <div class="mb-2 row">
+                                                <label for="kodebooking" class="col-sm-2 col-form-label">Kode Booking</label>
+                                                <div class="col-sm-10">
+                                                   <input type="text" class="form-control form-control-sm" name="kodebooking" id="kodebooking" value="<?=@$data['kodebooking']?>" placeholder="Kode Booking">
                                                 </div>
                                              </div>
                                           </div>
@@ -594,8 +597,8 @@ $data = mysqli_fetch_array($info);
                                        echo "class='tab-pane fade'" ?> id="pills-keluarga" role="tabpanel" aria-labelledby="pills-keluarga-tab">
                                     <form action="" method="POST">
                                        <input type="hidden" name="id" value="<?= $id ?>">
-                                       <input type="hidden" name="nomorRM" value="<?= $data['nomor_rm'] ?>">
-                                       <input type="hidden" name="visit" value="<?= $_GET['visit'] ?>">
+                                       <input type="hidden" name="nomorRM" value="<?= @$data['nomor_rm'] ?>">
+                                       <input type="hidden" name="visit" value="<?= @$_GET['visit'] ?>">
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-2 row">
@@ -761,8 +764,8 @@ $data = mysqli_fetch_array($info);
                                        echo "class='tab-pane fade'" ?> id="pills-idcard" role="tabpanel" aria-labelledby="pills-idcard-tab">
                                     <form action="" method="POST">
                                        <input type="hidden" name="id" value="<?= $id ?>">
-                                       <input type="hidden" name="nomorRM" value="<?= $data['nomor_rm'] ?>">
-                                       <input type="hidden" name="visit" value="<?= $_GET['visit'] ?>">
+                                       <input type="hidden" name="nomorRM" value="<?= @$data['nomor_rm'] ?>">
+                                       <input type="hidden" name="visit" value="<?= @$_GET['visit'] ?>">
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-3 row">
@@ -869,14 +872,14 @@ $data = mysqli_fetch_array($info);
                                        echo "class='tab-pane fade'" ?> id="pills-catatan" role="tabpanel" aria-labelledby="pills-catatan-tab">
                                     <form action="" method="POST">
                                        <input type="hidden" name="id" value="<?= $id ?>">
-                                       <input type="hidden" name="nomorRM" value="<?= $data['nomor_rm'] ?>">
-                                       <input type="hidden" name="visit" value="<?= $_GET['visit'] ?>">
+                                       <input type="hidden" name="nomorRM" value="<?= @$data['nomor_rm'] ?>">
+                                       <input type="hidden" name="visit" value="<?= @$_GET['visit'] ?>">
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-3 row">
                                                 <label for="catatan" class="col-sm-2 col-form-label">Catatan</label>
                                                 <div class="col-sm-10">
-                                                   <textarea name="catatan" class="form-control form-control-sm" id="" cols="30" rows="10"><?= $data['catatan'] ?></textarea>
+                                                   <textarea name="catatan" class="form-control form-control-sm" id="" cols="30" rows="10"><?= @$data['catatan'] ?></textarea>
                                                 </div>
                                              </div>
                                              <div class="mb-3 row">
@@ -893,15 +896,15 @@ $data = mysqli_fetch_array($info);
                                        echo "class='tab-pane fade'" ?> id="pills-datalain" role="tabpanel" aria-labelledby="pills-idcard-tab">
                                     <form action="" method="POST">
                                        <input type="hidden" name="id" value="<?= $id ?>">
-                                       <input type="hidden" name="nomorRM" value="<?= $data['nomor_rm'] ?>">
-                                       <input type="hidden" name="visit" value="<?= $visit ?>">
+                                       <input type="hidden" name="nomorRM" value="<?= @$data['nomor_rm'] ?>">
+                                       <input type="hidden" name="visit" value="<?= @$visit ?>">
                                        <div class="row">
                                           <div class="col">
                                              <div class="col-12">
                                                 <div class="mb-3 row">
                                                    <label for="nomorKK" class="col-sm-2 col-form-label">No.KK</label>
                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control form-control-sm" name="nomorKK" id="nomorKK" value="<?= $data['nomor_kk'] ?>">
+                                                      <input type="text" class="form-control form-control-sm" name="nomorKK" id="nomorKK" value="<?= @$data['nomor_kk'] ?>">
                                                    </div>
                                                 </div>
                                              </div>
@@ -977,7 +980,7 @@ $data = mysqli_fetch_array($info);
                                                 <a href="admisi/capture?id=<?= $id ?>&status=8" target="_blank" class="btn btn-primary">Webcam</a>
                                                 <br>
                                                 <?php
-                                                $foto = $data['foto'];
+                                                $foto = @$data['foto'];
                                                 if ($foto == NULL) {
                                                    $pathfoto = '../assets/notfoundimage.jpeg';
                                                 } else {
@@ -996,7 +999,7 @@ $data = mysqli_fetch_array($info);
                                                 <p class="card-text">Tanda tangan dapat dilakukan langsung di mediapad area yang telah disediakan untuk dapat digunakan sebagai identitas assesment</p>
                                                 <a href="tandatangan?id=<?= $id ?>&status=8" target="blank" class="btn btn-primary">Tanda Tangan</a>
                                                 <?php
-                                                $ttd = $data['tandatangan'];
+                                                $ttd = @$data['tandatangan'];
                                                 if ($ttd == NULL) {
                                                    $pathttd = '../assets/notfoundimage.jpeg';
                                                 } else {
@@ -1164,7 +1167,47 @@ $data = mysqli_fetch_array($info);
                }
             })
          })
-      })
+      });
+
+
+      $('#layanan').on('change', function() {
+         // Get the selected category value
+         const poli = $(this).val();
+         console.log(poli)
+
+         // Make an AJAX request
+         $.ajax({
+            url: '../controller/antrian/ambil-dokter',
+            type: 'POST',
+            data: {
+               poli: poli
+            },
+            dataType: 'json',
+            success: function(data) {
+               // Clear existing options
+               $('#dokter').empty();
+
+               // Populate options based on the response
+               $('#dokter').append(`<option value="">-- Pilih Dokter --</option>`);
+
+               $.each(data, function(index, dokter) {
+                  $('#dokter').append(`<option value="${dokter.kodedokter}" data-jadwal="${dokter.jadwal}">${dokter.namadokter}</option>`);
+               });
+            },
+            error: function(xhr, status, error) {
+               console.error('Error:', error);
+            }
+         });
+      });
+
+      $('#dokter').on('change', function() {
+            // Get the selected category value
+            var selectedOption = $(this).find('option:selected');
+
+            var jadwal = selectedOption.data('jadwal');
+
+            $('.jadwal').val(jadwal);
+        });
    </script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
    </script>

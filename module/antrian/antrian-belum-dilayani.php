@@ -82,6 +82,7 @@ require '../../controller/base/integrasi.php';
                                                         <th>Jenis Kunjungan</th>
                                                         <th>No.Ref</th>
                                                         <th>Sumber Data</th>
+                                                        <th>Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -119,6 +120,9 @@ require '../../controller/base/integrasi.php';
                                                                 <td><?= $row['jeniskunjungan'] ?></td>
                                                                 <td><?= $row['nomorreferensi'] ?></td>
                                                                 <td><?= $row['sumberdata'] ?></td>
+                                                                <td>
+                                                                    
+                                                                </td>
                                                             </tr>
                                                     <?php endforeach;
                                                     } ?>

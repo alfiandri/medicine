@@ -45,5 +45,5 @@ if (isset($jsonData['metadata']['code'])) {
    }
 }
 echo " <script>alert ('Terjadi kesalahan');
-document.location='../module/integrasi/aplicares-tt'</script>";
+document.location='../integrasi/aplicares-tt'</script>";
 exit;

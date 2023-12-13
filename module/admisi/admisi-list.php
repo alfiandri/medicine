@@ -1,6 +1,6 @@
 <?php
 session_start();
-$id = $_GET['id'];
+$id = @$_GET['id'];
 if ($id == 1) {
    $point = "admisi-rj";
    $ket = "Rawat Jalan";
@@ -10,6 +10,9 @@ if ($id == 1) {
 } else if ($id == 3) {
    $point = "rawat-inap";
    $ket = "Rawat Inap";
+} else {
+   $point = 'admisi/admisi-list';
+   $ket = 'Semua Pasien';
 }
 $page = "List Pasien";
 require '../../db/connect.php';

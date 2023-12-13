@@ -3,7 +3,7 @@ require "../../db/connect.php";
 session_start();
 if (empty($_SESSION['username'])) {
    echo "<script>alert('Akses halaman ini diabatasi, silahkan login terlebih dahulu');
-document.location='../index'</script>";
+document.location='../../index'</script>";
 }
 
 function tampildata($query)
