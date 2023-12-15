@@ -12,7 +12,7 @@ function validateFieldNotEmpty($request, $fieldName)
 
 function getSetting($key, $table)
 {
-    require "../../db/connect.php";
+    require __DIR__ . "/../../db/connect.php";
 
     $sql = "SELECT * FROM $table WHERE status = 1";
 

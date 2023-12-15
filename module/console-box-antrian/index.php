@@ -13,7 +13,21 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
    require 'head.php';
    ?>
    <style>
+      .rujukan {
+         border: 1px solid #0d6efd !important;
+         width: 100%;
+      }
 
+      .rujukan-header {
+         background-color: rgba(76, 160, 247, 0.6) !important;
+         padding: 10px !important;
+         font-weight: 700;
+         text-align: center;
+      }
+
+      .rujukan-body {
+         padding: 0px !important;
+      }
    </style>
 </head>
 
@@ -81,7 +95,7 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
                   ?>
                      <div class="row" id="jenis-pasien">
                         <div class="col-6">
-                           <a href="console-box-antrian/print/print-bpjs?tipe=B" class="card">
+                           <a href="console-box-antrian/print/print-bpjs?tipe=baru" class="card">
                               <div class="card-body bg-primary">
                                  <h5 class="card-title">Pasien Baru</h5>
                                  <p class="card-text">Pasien yang belum terdaftar silakan menunggu antrian pendaftaran admisi.</p>
@@ -106,24 +120,17 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
          </div>
       </div>
 
-      <!-- Modal -->
-      <div class="modal fade" id="admisibpjsbaru" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- Modal Rujukan -->
+      <div class="modal fade" id="getrujukan" data-bs-backdrop="static" tabindex="-2" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Pasien BPJS Baru</h1>
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Pilih Rujukan</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                </div>
-               <form action="console-box-antrian/check-bpjs" method="POST">
-                  <div class="modal-body">
-                     <div class="mb-3">
-                        <label for="nomor" class="form-label">No.Kartu Identitas</label>
-                        <input type="text" class="form-control" id="nomor" name="nomor" required="">
-                     </div>
-                  </div>
-                  <div class="modal-footer">
-                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                     <button type="submit" name="caripasienbpjsbaru" class="btn btn-primary">Proses</button>
+               <form action="">
+                  <div class="modal-body" id='container-rujukan'>
+
                   </div>
                </form>
             </div>
@@ -153,20 +160,26 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
                         <div class="input-group">
                            <input type="text" class="form-control" id="nomor" name="nomor" required="">
                            <div class="input-group-append">
-                              <button class="btn btn-outline-primary" type="button">Cari</button>
+                              <button class="btn btn-outline-primary" type="button" id="carirujukan">Cari</button>
                            </div>
                         </div>
                      </div>
 
                      <div class="mb-3">
                         <label for="tipe" class="form-label">Nomor Rujukan</label>
-                        <select class="form-select" aria-label="Default select example" name="tipe" id="tipe">
-                           <option value="" selected>Pilih </option>
-                           <option value="1">NIK</option>
-                           <option value="2">No.Kartu BPJS</option>
-                        </select>
+                        <input type="text" name="no_rujukan" id="no_rujukan" class="form-control" readonly>
+                        <input type="hidden" name="poli" id="poli">
+                        <input type="hidden" name="nik" id="nik">
+                        <input type="hidden" name="no_kartu" id="noKartu">
+                        <input type="hidden" name="jadwal" id="jadwal">
+                        <input type="hidden" name="jeniskunjungan" id="jeniskunjungan">
                      </div>
 
+                     <div class="mb-3">
+                        <label for="dokter" class="form-label">Dokter</label>
+                        <select class="form-select dokter" aria-label="Default select example" name="dokter" id="dokter">
+                        </select>
+                     </div>
                   </div>
                   <div class="modal-footer">
                      <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
@@ -268,7 +281,136 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
       <!-- Plugin used-->
 
       <script>
+         $('#carirujukan').on('click', function() {
+            // Get the selected category value
+            const tipe = $('#tipe').val();
+            const nomor = $('#nomor').val();
+            if (!tipe) {
+               alert('Tipe identitas tidak boleh kosong!');
+               return;
+            }
 
+            if (!nomor) {
+               alert('Nomor kartu identitas tidak boleh kosong!');
+               return;
+            }
+            // // Make an AJAX request
+            $.ajax({
+               url: '../module/console-box-antrian/check-rujukan',
+               type: 'POST',
+               data: {
+                  tipe: tipe,
+                  nomor: nomor
+               },
+               dataType: 'json',
+               success: function(data) {
+                  const metadata = data.metadata;
+                  if (metadata.code == 201) {
+                     alert(metadata.message);
+                     return;
+                  }
+                  const container = document.getElementById("container-rujukan");
+                  container.innerHTML = null;
+
+                  data.data.forEach(function(item) {
+                     const itemHTML = createHtmlRujukan(item);
+                     container.innerHTML += itemHTML;
+                  });
+
+                  $('#admisibpjslama').modal('hide');
+                  $('#getrujukan').modal('show');
+               },
+               error: function(xhr, status, error) {
+                  console.error('Error:', error);
+               }
+            });
+         });
+
+         $(document).on("click", ".pilihrujuk", function(e) {
+            e.preventDefault();
+
+            const noRujukan = $(this).data('norujuk');
+            const poli = $(this).data('poli');
+            const noKartu = $(this).data('nokartu');
+            const nik = $(this).data('nik');
+            const jeniskunjungan = $(this).data('jeniskunjungan');
+
+            $('#no_rujukan').val(noRujukan);
+            $('#poli').val(poli);
+            $('#nik').val(nik);
+            $('#noKartu').val(noKartu);
+            $('#jeniskunjungan').val(jeniskunjungan);
+
+            // Make an AJAX request
+            $.ajax({
+               url: '../controller/antrian/ambil-dokter',
+               type: 'POST',
+               data: {
+                  poli: poli,
+               },
+               dataType: 'json',
+               success: function(data) {
+                  $('#getrujukan').modal('hide');
+                  $('#admisibpjslama').modal('show');
+
+                  // Clear existing options
+                  $('#dokter').empty();
+
+                  // Populate options based on the response
+                  $('#dokter').append(`<option value="">-- Pilih Dokter --</option>`);
+
+                  $.each(data, function(index, dokter) {
+                     $('#dokter').append(`<option value="${dokter.kodedokter}" data-jadwal="${dokter.jadwal}">${dokter.namadokter}</option>`);
+                  });
+               },
+               error: function(xhr, status, error) {
+                  console.error('Error:', error);
+               }
+            });
+         });
+
+         $('.dokter').on('change', function() {
+            // Get the selected category value
+            var selectedOption = $(this).find('option:selected');
+
+            var jadwal = selectedOption.data('jadwal');
+
+            $('#jadwal').val(jadwal);
+         });
+
+         function createHtmlRujukan(item) {
+            var html = `
+    <div class="rujukan card border-primary mb-3">
+        <div class="card-header rujukan-header">${item.no_kunjungan}</div>
+        <div class="card-body rujukan-body">
+           <table class="table">
+              <tr>
+                 <th>Jenis Rujukan</th>
+                 <td>${item.jenis_rujukan}</td>
+              </tr>
+              <tr>
+                 <th>Nama RS</th>
+                 <td>${item.nama_rs}</td>
+              </tr>
+              <tr>
+                 <th>Tgl Rujukan</th>
+                 <td>${item.tgl_rujukan}</td>
+              </tr>
+              <tr>
+                 <th>Poli</th>
+                 <td>${item.nama_poli}</td>
+              </tr>
+              <tr>
+                 <td colspan="2">
+                    <button class="btn btn-success form-control pilihrujuk" data-poli="${item.kode_poli}" data-norujuk="${item.no_kunjungan}" data-nokartu="${item.no_kartu}" data-nik="${item.nik}" data-jeniskunjungan="${item.jeniskunjungan}">PILIH</button>
+                 </td>
+              </tr>
+           </table>
+        </div>
+     </div>
+  `;
+            return html;
+         }
       </script>
    </div>
 </body>
