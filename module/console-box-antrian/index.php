@@ -173,6 +173,9 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
                         <input type="hidden" name="no_kartu" id="noKartu">
                         <input type="hidden" name="jadwal" id="jadwal">
                         <input type="hidden" name="jeniskunjungan" id="jeniskunjungan">
+                        <input type="hidden" name="jenis_rujukan" id="jenis_rujukan">
+                        <input type="hidden" name="provperujuk" id="provperujuk">
+                        <input type="hidden" name="jenispeserta" id="jenispeserta">
                      </div>
 
                      <div class="mb-3">
@@ -334,12 +337,18 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
             const noKartu = $(this).data('nokartu');
             const nik = $(this).data('nik');
             const jeniskunjungan = $(this).data('jeniskunjungan');
+            const jenis_rujukan = $(this).data('jenis_rujukan');
+            const provperujuk = $(this).data('provperujuk');
+            const jenispeserta = $(this).data('jenispeserta');
 
             $('#no_rujukan').val(noRujukan);
             $('#poli').val(poli);
             $('#nik').val(nik);
             $('#noKartu').val(noKartu);
             $('#jeniskunjungan').val(jeniskunjungan);
+            $('#jenis_rujukan').val(jenis_rujukan);
+            $('#provperujuk').val(provperujuk);
+            $('#jenispeserta').val(jenispeserta);
 
             // Make an AJAX request
             $.ajax({
@@ -360,7 +369,7 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
                   $('#dokter').append(`<option value="">-- Pilih Dokter --</option>`);
 
                   $.each(data, function(index, dokter) {
-                     $('#dokter').append(`<option value="${dokter.kodedokter}" data-jadwal="${dokter.jadwal}">${dokter.namadokter}</option>`);
+                     $('#dokter').append(`<option value="${dokter.kodedokter}" data-jadwal="${dokter.jadwal}">${dokter.namadokter} (${dokter.jadwal})</option>`);
                   });
                },
                error: function(xhr, status, error) {
@@ -402,7 +411,7 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
               </tr>
               <tr>
                  <td colspan="2">
-                    <button class="btn btn-success form-control pilihrujuk" data-poli="${item.kode_poli}" data-norujuk="${item.no_kunjungan}" data-nokartu="${item.no_kartu}" data-nik="${item.nik}" data-jeniskunjungan="${item.jeniskunjungan}">PILIH</button>
+                    <button class="btn btn-success form-control pilihrujuk" data-poli="${item.kode_poli}" data-norujuk="${item.no_kunjungan}" data-nokartu="${item.no_kartu}" data-nik="${item.nik}" data-jeniskunjungan="${item.jeniskunjungan}" data-jenis_rujukan="${jenis_rujukan}" data-provperujuk="${provperujuk}" data-jenispeserta="${jenispeserta}">PILIH</button>
                  </td>
               </tr>
            </table>

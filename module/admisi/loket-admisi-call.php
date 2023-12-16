@@ -74,13 +74,17 @@ $datainfo = mysqli_fetch_array($data);
                                             </div>
                                             <div class="card-body">
                                                 <?php
-                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE status=1");
+                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE status = 1 AND loket = '$datainfo[loket]'");
                                                 $panggil = mysqli_fetch_array($callantrian);
+
+                                                $nextCallAntrian = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE status=0 AND loket = '$datainfo[loket]' ORDER BY nomor");
+                                                $nextPanggil = mysqli_fetch_array($nextCallAntrian);
+
                                                 ?>
-                                                <h1><?= $panggil['loket'] ?>-<?= $panggil['nomor'] ?></h1>
+                                                <h1><?= @$panggil['loket'] ?>-<?= @$panggil['nomor'] ?></h1>
                                                 <p>
                                                     <?php
-                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_loket");
+                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_loket where status = 0");
                                                     $dataantrian = mysqli_num_rows($antrian);
                                                     ?>
                                                     <hr>
@@ -96,10 +100,10 @@ $datainfo = mysqli_fetch_array($data);
                                             </div>
                                             <div class="card-body">
                                                 <h4><?= $datainfo['loket'] ?></h4>
-                                                <a href="../controller/antrian/loket?actions=1&loket?id=<?= $panggil['id'] ?>">
+                                                <a href="../controller/antrian/loket?actions=1&loket?id=<?= $nextPanggil['id'] ?>">
                                                     <button class="btn btn-success mb-2 col-12">Panggil Berikutnya</button>
                                                 </a>
-                                                <a href="../controller/antrian/loket?actions=2&loket?id=<?= $panggil['id'] ?>">
+                                                <a href="../controller/antrian/loket?actions=2&loket?id=<?= @$panggil['id'] ?>">
                                                     <button class="btn btn-primary mb-2 col-12">Panggil Ulang</button>
                                                 </a>
                                                 <a href="admisi/print-antrian?id=<?= $panggil['id'] ?>" target="_blank">

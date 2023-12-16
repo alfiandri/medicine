@@ -21,9 +21,8 @@ $tanggal = date("d-m-Y");
 <?php
 
 require '../../../db/connect.php';
-$tipe = $_GET['tipe'];
 $nomor = $_GET['nomor'];
-$check = mysqli_query($koneksi, "SELECT * FROM antrian_poli");
+$check = mysqli_query($koneksi, "SELECT * FROM antrian_poli where kodebooking ='$nomor'");
 $dataantrian = mysqli_fetch_array($check);
 $kodebooking = $dataantrian['kodebooking'];
 $tipe = $dataantrian['tipe'];
@@ -37,7 +36,7 @@ $loket = $dataantrian['loket'];
         <div class="garis"></div>
         <p>NO BOOKING : <?= $kodebooking ?></p>
         <p style="font-size:50px;"><b><?= $tipe ?>-<?= $antrian ?></b></p>
-        <h4><?= $loket ?></h4>
+        <!-- <h4><?= $loket ?></h4> -->
         <p><b><?php echo $tanggal . " " . $waktu; ?></b></p>
         <p style="margin-top: 20px;">.</p>
     </div>

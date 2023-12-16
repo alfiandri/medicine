@@ -119,7 +119,7 @@ $totaldata = mysqli_num_rows($data);
                                                             <td class="text-center"><?= $row['create_at'] ?></td>
                                                             <td class="text-center"><?= $row['update_at'] ?></td>
                                                             <td class="text-center col-3">
-                                                                <button class="btn btn-primary" onclick="panggil()">Panggil Ulang</button>
+                                                                <button class="btn btn-primary" onclick="panggil('Antrian nomor ' + <?= $row['nomor'] ?> + ' silakan ke loket')">Panggil Ulang</button>
                                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bst-target="#hapus">Batal</button>
                                                             </td>
                                                         </tr>
@@ -170,17 +170,33 @@ $totaldata = mysqli_num_rows($data);
         </div>
     </div>
     <script type="text/javascript">
-        function panggil() {
-            let open = new Audio('antrian/sound/open.mp3');
-            let nomor = new Audio('antrian/sound/a1.mp3');
-            let loket = new Audio('antrian/sound/loket.mp3');
-            open.play();
-            setTimeout(function() {
-                nomor.play();
-            }, 1900);
-            setTimeout(function() {
-                loket.play();
-            }, 3000);
+        function panggil(text) {
+            // let open = new Audio('antrian/sound/open.mp3');
+            // let nomor = new Audio('antrian/sound/a1.mp3');
+            // let loket = new Audio('antrian/sound/loket.mp3');
+            // open.play();
+            // setTimeout(function() {
+            //     nomor.play();
+            // }, 1900);
+            // setTimeout(function() {
+            //     loket.play();
+            // }, 3000);
+            if (text.trim() != "") {
+                var katakata = text.split(' ');
+                console.log(katakata)
+                for (var i =
+                        0; i < katakata.length; i++) {
+                    setTimeout(function(kata) {
+                        return function() {};
+                        var suara = new SpeechSynthesisUtterance(kata);
+                        suara.lang = 'id-ID';
+                        window.speechSynthesis.speak(suara);
+                                    console.log(text);
+
+                    }(katakata[i]), i * 10);
+                }
+            }
+
         }
     </script>
     <?php

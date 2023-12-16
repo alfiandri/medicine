@@ -83,7 +83,24 @@ try {
     $dataloket = mysqli_fetch_array($checkloket);
     $kode = $dataloket['kode_loket'];
 
-    mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, loket, kodepoli, nomor, tipe, nokartu, tanggalperiksa, jenispasien) VALUES('$kodebooking', '$kode', '$poli[kdpoli]','$angkaantrean','$prefix','$nokartu', '$tanggalperiksa', 'JKN') ");
+    mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, loket, kodepoli, nomor, tipe, nokartu, nik, tanggalperiksa, jenispasien) VALUES('$kodebooking', '$kode', '$poli[kdpoli]','$angkaantrean','$prefix','$nokartu', '$nik', '$tanggalperiksa', 'JKN') ");
+
+    $uid = $pasien['uid_pasien'];
+    $nomorrm = $pasien['nomor_rm'];
+    $noregistrasi = "RJ-" . date('Ymd') . rand(111, 999);
+    $tanggal = date('Y-m-d');
+    $waktu = date('H:i:s');
+    $jenislayanan = 'Poliklinik';
+    $rujukan = $_POST['jenis_rujukan'];
+    $catatanrujukan = $_POST['provperujuk'];
+    $layanan = $poli['nmpoli'];
+    $jenisbayar = 'BPJS Kesehatan';
+    $catatanbayar = $_POST['jenispeserta'];
+    $dokter = $dokter['nama'];
+    $sumber = 'RJ';
+
+    $insertRawatJalan = mysqli_query($koneksi, "INSERT INTO pasien_visit (uid_pasien, nomor_rm, nomor_visit, tanggal, waktu, jenis_layanan, rujukan, rujukan_catatan, layanan,  jenis_bayar, catatan_bayar, dokter, sumber)
+    VALUES ('$uid','$nomorrm','$noregistrasi','$tanggal','$waktu','$jenislayanan','$rujukan','$catatanrujukan','$layanan','$jenisbayar','$catatanbayar','$dokter','$sumber')");
 
     $data = [
         "kodebooking" => $kodebooking,
@@ -149,5 +166,3 @@ try {
     echo " <script>alert (`$msg`);
 			document.location='$previousUrl'</script>";
 }
-
-?>

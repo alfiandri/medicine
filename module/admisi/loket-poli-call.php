@@ -74,13 +74,13 @@ $datainfo = mysqli_fetch_array($data);
                                             </div>
                                             <div class="card-body">
                                                 <?php
-                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE status=1");
+                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE status=1");
                                                 $panggil = mysqli_fetch_array($callantrian);
                                                 ?>
                                                 <h1><?= @$panggil['loket'] ?>-<?= @$panggil['nomor'] ?></h1>
                                                 <p>
                                                     <?php
-                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_loket");
+                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_poli");
                                                     $dataantrian = mysqli_num_rows($antrian);
                                                     ?>
                                                     <hr>

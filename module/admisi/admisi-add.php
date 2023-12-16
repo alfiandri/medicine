@@ -77,7 +77,7 @@ require '../../controller/admisi/admisi.php';
                                                 <?php
                                                 $rm = @$_GET['rm'];
                                                 if ($rm == NULL) {
-                                                   $rm = 0;
+                                                   $rm = generateUniqueNRM();
                                                 } else {
                                                    $rm = $rm;
                                                 }

@@ -54,6 +54,8 @@ if (isset($jsonData['metaData']['code']) && $jsonData['metaData']['code'] == 200
             'nama_poli' => $row['poliRujukan']['nama'],
             'kode_poli' => $row['poliRujukan']['kode'],
             'jeniskunjungan' => $row['pelayanan']['kode'],
+            'provperujuk' => $row['provPerujuk']['nama'],
+            'jenispeserta' => $row['peserta']['jenisPeserta']['keterangan'],
         ];
     }
 }
@@ -81,6 +83,8 @@ if (isset($jsonData['metaData']['code']) && $jsonData['metaData']['code'] == 200
             'nama_poli' => $row['poliRujukan']['nama'],
             'kode_poli' => $row['poliRujukan']['kode'],
             'jeniskunjungan' => $row['pelayanan']['kode'],
+            'provperujuk' => $row['provPerujuk']['nama'],
+            'jenispeserta' => $row['peserta']['jenisPeserta']['keterangan'],
         ];
     }
 }
