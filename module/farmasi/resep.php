@@ -86,7 +86,6 @@ require '../../controller/farmasi/resep.php';
                                                 <th>Tgl.Masuk</th>
                                                 <th>No.Pendaftaran</th>
                                                 <th>No.RM</th>
-                                                <th>Kode Booking</th>
                                                 <th>Nama Pasien</th>
                                                 <th>Catatan</th>
                                                 <th class="text-center">Actions</th>
@@ -94,7 +93,7 @@ require '../../controller/farmasi/resep.php';
                                           </thead>
                                           <tbody>
                                              <?php
-                                             $query = tampildata("SELECT * FROM permintaan_resep LEFT OUTER JOIN pasien ON pasien.nomor_rm =  permintaan_resep.nomor_rm LEFT OUTER JOIN pasien_visit ON pasien_visit.nomor_rm = permintaan_resep.nomor_rm
+                                             $query = tampildata("SELECT * FROM permintaan_resep LEFT OUTER JOIN pasien ON pasien.nomor_rm =  permintaan_resep.nomor_rm 
                                             WHERE tipe='RJ' AND status=0")
                                              ?>
                                              <?php foreach ($query as $row) : ?>
@@ -123,7 +122,6 @@ require '../../controller/farmasi/resep.php';
                                                    <td>
                                                       <a href="pasien"><?= $row['nomor_rm'] ?></a>
                                                    </td>
-                                                   <td><?= $row['kodebooking'] ?></td>
                                                    <td><?= $row['nama_pasien'] ?></td>
                                                    <td><?= $row['catatan'] ?></td>
                                                    <td class="text-center col-1">

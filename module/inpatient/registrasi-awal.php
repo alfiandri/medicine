@@ -1,5 +1,4 @@
 <?php
-session_start();
 $page = "Registrasi Awal";
 require 'view.php';
 $query = tampildata("SELECT * FROM pasien_visit LEFT OUTER JOIN pasien ON pasien.uid_pasien = pasien_visit.uid_pasien WHERE status_visit=0");

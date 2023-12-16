@@ -50,17 +50,17 @@
                   <ul class="sidebar-submenu">
                      <li><a href="inpatient/registrasi-awal">Registrasi Awal</a></li>
                      <li><a href="inpatient/rujukan-internal">Rujukan Internal Poli</a></li>
-                     <li><a href="inpatient/rujukan-internal">Antrian</a></li>
+                     <li><a href="inpatient/antrian">Antrian</a></li>
                      <li><a href="inpatient/tindakan-rj">Tindakan</a></li>
                      <li><a href="inpatient/pembatalan-rj">Pembatalan</a></li>
-                     <li><a class="submenu-title" href="javascript:;">P. Khusus Mata<span class="sub-arrow"><i class="fa fa-angle-right"></i></span></a>
+                     <!-- <li><a class="submenu-title" href="javascript:;">P. Khusus Mata<span class="sub-arrow"><i class="fa fa-angle-right"></i></span></a>
                         <ul class="nav-sub-childmenu submenu-content">
                            <li><a href="inpatient/bdr-pasien">BDR</a></li>
                            <li><a href="inpatient/bdr-pasien">RO</a></li>
                            <li><a href="inpatient/konsul-pasien">R. Konsul Mata</a></li>
                            <li><a href="inpatient/cdc">CDC</a></li>
                         </ul>
-                     </li>
+                     </li> -->
                   </ul>
 
                </li>
@@ -78,7 +78,7 @@
                      <li><a href="inpatient/bukti-edukasi">Edukasi Integrasi</a></li>
                      <li><a href="inpatient/konsultasi-internal">Konsultasi Internal</a></li>
                      <li><a href="inpatient/permintaan-privasi">Permintaan Privasi</a></li>
-                     <li><a href="inpatientpenerimaan-kondisi-pasien">Informasi Kondisi Pasien</a></li>
+                     <li><a href="inpatient/penerimaan-kondisi-pasien">Informasi Kondisi Pasien</a></li>
                      <li><a href="inpatient/penggantian-dpjp">Form Penggantian DPJP</a></li>
                      <li><a href="inpatient/data-order-penunjang">Pemeriksaan Penunjang</a></li>
                      <li><a href="inpatient/sitemarking">Site Marking</a></li>

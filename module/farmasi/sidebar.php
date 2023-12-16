@@ -38,7 +38,7 @@
                   </div>
                </li>
                <li class="sidebar-list">
-                  <label class="badge badge-success">New</label><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="home"></i><span>Front Office </span></a>
+                  <label class="badge badge-success"></label><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="home"></i><span>Front Office </span></a>
                   <ul class="sidebar-submenu">
                      <li><a href="farmasi/resep">Resep</a></li>
                      <li><a href="farmasi/non-resep">Non-Resep</a></li>

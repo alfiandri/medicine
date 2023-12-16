@@ -1,17 +1,17 @@
 <?php
 $page = "Askep RJ";
-require '../db/connect.php';
-require '../controller/view.php';
+require 'view.php';
 $id = $_GET['id'];
-$info = mysqli_query($koneksi, "SELECT * FROM pasienVisit WHERE uidPasien='$id'");
+$info = mysqli_query($koneksi, "SELECT * FROM pasien_visit WHERE uid_pasien='$id'");
 $data = mysqli_fetch_array($info);
-$infopasien = mysqli_query($koneksi, "SELECT * FROM pasien WHERE uidPasien='$id'");
+$infopasien = mysqli_query($koneksi, "SELECT * FROM pasien WHERE uid_pasien='$id'");
 $datapasien = mysqli_fetch_array($infopasien);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+   <base href="../">
    <?php
    require 'head.php';
    ?>

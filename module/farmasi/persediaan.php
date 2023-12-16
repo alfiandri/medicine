@@ -116,7 +116,9 @@ $totaldata = mysqli_num_rows($data);
                                              <td><?= number_format(rand(20, 99)) ?></td>
                                              <td><?= number_format(rand(20, 99)) ?></td>
                                              <td class="text-center col-1">
-                                                <button class="btn btn-primary">Detail</button>
+                                                <a href="farmasi/persedian-so?id=<?= $row['id'] ?>">
+                                                   <button class="btn btn-primary">Detail</button>
+                                                </a>
                                              </td>
                                           </tr>
                                        <?php endforeach ?>
@@ -156,7 +158,7 @@ $totaldata = mysqli_num_rows($data);
                <div class="modal-body">
                   <div class="mb-3">
                      <label for="nik" class="form-label">Tanggal</label>
-                     <input type="text" required="" name="nik" id="nik" class="form-control">
+                     <input type="date" required="" name="nik" id="nik" class="form-control">
                   </div>
                   <div class="mb-3">
                      <label for="nik" class="form-label">Petugas</label>

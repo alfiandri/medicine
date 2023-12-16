@@ -1,6 +1,5 @@
 <?php
-session_start();
-$page = "Awal Keperawatan";
+$page = "Awal Keperawatan Umum";
 require '../../db/connect.php';
 require '../../controller/intpatient/ass-kep-umum.php';
 require 'view.php';
@@ -14,7 +13,7 @@ $kepumum = mysqli_query($koneksi, "SELECT * FROM assKepUmum_Keadaan WHERE uidPas
 $datakepumum = mysqli_fetch_array($kepumum);
 $nutrisi = mysqli_query($koneksi, "SELECT * FROM assKepUmum_Nutrisi WHERE uidPasien='$id' AND nomorRawat='$norawat'");
 $datanutrisi = mysqli_fetch_array($nutrisi);
-$kesehatan = mysqli_query($koneksi, "SELECT * FROM assKepUmum_Kesehatan WHERE uidPasien='$id' AND nomorRawat='$norawat'");
+$kesehatan = mysqli_query($koneksi, "SELECT * FROM assKepUmum_masalahKeperawatan WHERE uidPasien='$id' AND nomorRawat='$norawat'");
 $datakesehatan = mysqli_fetch_array($kesehatan);
 $fungsional = mysqli_query($koneksi, "SELECT * FROM assKepUmum_Fungisonal WHERE uidPasien='$id' AND nomorRawat='$norawat'");
 $datafungsional = mysqli_fetch_array($fungsional);
@@ -665,34 +664,18 @@ $dataperawatan = mysqli_fetch_array($perawatan);
                                                          <th>Kode</th>
                                                          <th>Diagnosa Menurut SDKI</th>
                                                          <th>Intervensi</th>
+                                                         <th>Actions</th>
                                                       </tr>
                                                    </thead>
                                                    <tbody>
                                                       <?php
-                                                      $query = tampildata("SELECT * FROM diagnosa_keperawatan");
+                                                      $query = tampildata("SELECT * FROM ass_masalah_keperawatan WHERE uid_pasien='$id' AND nomor_visit='$norawat'");
                                                       ?>
                                                       <?php foreach ($query as $row) : ?>
                                                          <tr>
                                                             <td><?= $row['kode'] ?></td>
                                                             <td><?= $row['diagnosa'] ?></td>
-                                                            <td class="">
-                                                               <?php
-                                                               $kode = $row['kode'];
-                                                               $query = tampildata("SELECT * FROM  diagnosa_keperawatan_detail WHERE kode='$kode'");
-                                                               ?>
-                                                               <ul class="list-group">
-                                                                  <?php foreach ($query as $d) : ?>
-                                                                     <li class="list-group-item">
-                                                                        <div class="form-check">
-                                                                           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                                           <label class="form-check-label" for="flexCheckDefault">
-                                                                              <?= $d['intervensi'] ?>
-                                                                           </label>
-                                                                        </div>
-                                                                     </li>
-                                                                  <?php endforeach ?>
-                                                               </ul>
-                                                            </td>
+                                                            <td><?= $row['intervensi'] ?></td>
                                                          </tr>
                                                       <?php endforeach ?>
                                                    </tbody>
@@ -720,10 +703,10 @@ $dataperawatan = mysqli_fetch_array($perawatan);
                                                          <div class="accordion-item">
                                                             <h2 class="accordion-header">
                                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                                  Tanggal : <?= $row['tanggalVisit'] ?> <?= $row['waktuVisit'] ?> | <?= $row['dokter'] ?>
+                                                                  Tanggal : <?= $row['tanggal'] ?> <?= $row['waktu'] ?> | Layanan : <?= $row['layanan'] ?> | <?= $row['dokter'] ?>
                                                                </button>
                                                             </h2>
-                                                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                                            <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
                                                                <div class="accordion-body">
                                                                   <h6>Keadaan Umum</h6>
                                                                   <?php
@@ -779,7 +762,7 @@ $dataperawatan = mysqli_fetch_array($perawatan);
                                                                   <hr>
                                                                   <h6>Riwayat Kesehatan</h6>
                                                                   <?php
-                                                                  $query = tampildata("SELECT * FROM assKepUmum_Kesehatan WHERE uidPasien='$id'");
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_masalahKeperawatan WHERE uidPasien='$id'");
                                                                   ?>
                                                                   <table class="table table-primary">
                                                                      <thead>

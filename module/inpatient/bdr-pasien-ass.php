@@ -3,20 +3,19 @@ session_start();
 $page = "BDR";
 $id = $_GET['id'];
 $no = $_GET['no'];
-require '../db/connect.php';
-require '../controller/view.php';
-require '../controller/ass-mata.php';
-$info = mysqli_query($koneksi, "SELECT * FROM pasienVisit LEFT OUTER JOIN pasien ON pasien.uidPasien = pasienVisit.uidPasien WHERE nomorRegistrasi='$no'");
+require 'view.php';
+$info = mysqli_query($koneksi, "SELECT * FROM pasien_visit LEFT OUTER JOIN pasien ON pasien.uid_pasien = pasien_visit.uid_pasien WHERE nomor_visit='$no'");
 $data = mysqli_fetch_array($info);
-$pemeriksaan = mysqli_query($koneksi, "SELECT * FROM assPemeriksaanFisik WHERE uidPasien='$id' AND nomorRawat='$no'");
-$datapemeriksaan = mysqli_fetch_array($pemeriksaan);
-$kesehatan = mysqli_query($koneksi, "SELECT * FROM assRiwayatKesehatan WHERE uidPasien='$id' AND nomorRawat='$no'");
-$datakesehatan = mysqli_fetch_array($kesehatan);
+// $pemeriksaan = mysqli_query($koneksi, "SELECT * FROM assPemeriksaanFisik WHERE uidPasien='$id' AND nomorRawat='$no'");
+// $datapemeriksaan = mysqli_fetch_array($pemeriksaan);
+// $kesehatan = mysqli_query($koneksi, "SELECT * FROM assRiwayatKesehatan WHERE uidPasien='$id' AND nomorRawat='$no'");
+// $datakesehatan = mysqli_fetch_array($kesehatan);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+   <base href="../">
    <?php
    require 'head.php';
    ?>

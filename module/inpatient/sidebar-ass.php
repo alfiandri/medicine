@@ -32,16 +32,16 @@ $path = 'id=' . $id . '&' . 'norawat=' . $norawat;
                            <li><a href="inpatient/awal-kep-umum?<?= $path ?>">Umum</a></li>
                            <li><a href="inpatient/awal-kep-gigi?<?= $path ?>">Gigi & Mulut</a></li>
                            <li><a href="inpatient/awal-kep-obg?<?= $path ?>">Kebidanan & Kandungan</a></li>
-                           <li><a href="inpatient/awal-kep-bayi-anak?<?= $path ?>">Bayi/Anak</a></li>
+                           <!-- <li><a href="inpatient/awal-kep-bayi-anak?<?= $path ?>">Bayi/Anak</a></li>
                            <li><a href="inpatient/awal-kep-psikiatri?<?= $path ?>">Psikiatri </a></li>
-                           <li><a href="inpatient/awal-kep-geriatri?<?= $path ?>">Geriatri </a></li>
+                           <li><a href="inpatient/awal-kep-geriatri?<?= $path ?>">Geriatri </a></li> -->
                         </ul>
                      </li>
                      <li><a class="submenu-title" href="javascript:;">Awal Medis<span class="sub-arrow"><i class="fa fa-angle-right"></i></span></a>
                         <ul class="nav-sub-childmenu submenu-content">
                            <li><a href="inpatient/awal-med-umum?<?= $path ?>">Umum</a></li>
                            <li><a href="inpatient/awal-med-obg?<?= $path ?>">Kebidanan & Kandungan</a></li>
-                           <li><a href="javascript::">Bayi/Anak</a></li>
+                           <!-- <li><a href="javascript::">Bayi/Anak</a></li>
                            <li><a href="javascript::">THT</a></li>
                            <li><a href="javascript::">Psikiatri</a></li>
                            <li><a href="javascript::">Penyakit Dalam</a></li>
@@ -50,12 +50,19 @@ $path = 'id=' . $id . '&' . 'norawat=' . $norawat;
                            <li><a href="javascript::">Orthopedi</a></li>
                            <li><a href="javascript::">Bedah</a></li>
                            <li><a href="javascript::">Bedah Mulut</a></li>
-                           <li><a href="javascript::">Geriatri</a></li>
+                           <li><a href="javascript::">Geriatri</a></li> -->
                         </ul>
                      </li>
                      <li><a href="inpatient/hasil-usg?<?= $path ?>">Hasil Pemeriksaan USG</a></li>
                      <li><a href="inpatient/tindakan-eswl?<?= $path ?>">Tindakan ESWL</a></li>
                      <li><a href="inpatient/status?<?= $path ?>">Status Pasien</a></li>
+                  </ul>
+               </li>
+               <li class="sidebar-list">
+                  <label class="badge badge-success"></label><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="folder"></i><span>ICD Code </span></a>
+                  <ul class="sidebar-submenu">
+                     <li><a href="inpatient/icd-09?<?= $path ?>">ICD 09-Procedures</a></li>
+                     <li><a href="inpatient/icd-10?<?= $path ?>">ICD 10-Diagnose</a></li>
                   </ul>
                </li>
                <li class="sidebar-list">
@@ -161,10 +168,10 @@ $path = 'id=' . $id . '&' . 'norawat=' . $norawat;
                   </ul>
                </li>
                <li class="sidebar-list">
-                  <label class="badge badge-success">Update</label><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="folder"></i><span>Billing </span></a>
+                  <label class="badge badge-success"></label><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="folder"></i><span>Billing </span></a>
                   <ul class="sidebar-submenu">
-                     <li><a href="javascript:;">Parsial</a></li>
-                     <li><a href="javascript:;">Total</a></li>
+                     <li><a href="inpatient/billing-manual?<?= $path ?>">Manual Bill</a></li>
+                     <li><a href="javascript:;">Rekonsilisasi</a></li>
                   </ul>
                </li>
                <li class="sidebar-main-title">

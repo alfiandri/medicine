@@ -1,13 +1,26 @@
 <?php
-session_start();
-$page = "Awal Medis";
+$page = "Awal Medis Obgyn";
 require '../../db/connect.php';
+require '../../controller/intpatient/ass-medis-obgyn.php';
 require 'view.php';
 $id = $_GET['id'];
+$norawat = $_GET['norawat'];
 $info = mysqli_query($koneksi, "SELECT * FROM pasien_visit WHERE uid_pasien='$id'");
 $data = mysqli_fetch_array($info);
 $infopasien = mysqli_query($koneksi, "SELECT * FROM pasien WHERE uid_pasien='$id'");
 $datapasien = mysqli_fetch_array($infopasien);
+$kesehatan = mysqli_query($koneksi, "SELECT * FROM assKepUmum_Kesehatan WHERE uidPasien='$id' AND nomorRawat='$norawat'");
+$datakesehatan = mysqli_fetch_array($kesehatan);
+$kepumum = mysqli_query($koneksi, "SELECT * FROM assKepUmum_Keadaan WHERE uidPasien='$id' AND nomorRawat='$norawat'");
+$datakepumum = mysqli_fetch_array($kepumum);
+$nutrisi = mysqli_query($koneksi, "SELECT * FROM assKepUmum_Nutrisi WHERE uidPasien='$id' AND nomorRawat='$norawat'");
+$datanutrisi = mysqli_fetch_array($nutrisi);
+$fisik = mysqli_query($koneksi, "SELECT * FROM assMedUmum_Fisik WHERE uidPasien='$id' AND nomorRawat='$norawat'");
+$datafisik = mysqli_fetch_array($fisik);
+$kandungan = mysqli_query($koneksi, "SELECT * FROM ass_kebidanan WHERE uid_pasien='$id' AND nomor_rawat='$norawat'");
+$datakandungan = mysqli_fetch_array($kandungan);
+$medisobgyn = mysqli_query($koneksi, "SELECT * FROM ass_medis_obgyn WHERE uid_pasien='$id' AND nomor_rawat='$norawat'");
+$dataobyn = mysqli_fetch_array($medisobgyn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,435 +92,717 @@ $datapasien = mysqli_fetch_array($infopasien);
                            <div class="card-body file-manager">
                               <div class="tab-content" id="pills-warningtabContent">
                                  <div class="tab-pane fade show active" id="pills-warninghome" role="tabpanel" aria-labelledby="pills-warninghome-tab">
-                                    <div class="row">
-                                       <div class="col-5">
-                                          <div class="row">
-                                             <label for="noRegistrasi" class="col-sm-4 col-form-label">No.Registrasi</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="noRegistrasi" value=": <?= $data['nomor_visit'] ?>">
+                                    <form action="" method="POST">
+                                       <input type="hidden" name="id" value="<?= $id ?>">
+                                       <input type="hidden" name="norawat" value="<?= $norawat ?>">
+                                       <div class="row">
+                                          <div class="col-5">
+                                             <div class="row">
+                                                <label for="noRegistrasi" class="col-sm-4 col-form-label">No.Registrasi</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="noRegistrasi" value=": <?= $data['nomor_visit'] ?>">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="tglVisit" class="col-sm-4 col-form-label">Tgl.Registrasi</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="tglVisit" value=": <?= $data['tanggal'] ?>">
+                                             <div class="row">
+                                                <label for="tglVisit" class="col-sm-4 col-form-label">Tgl.Registrasi</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="tglVisit" value=": <?= $data['tanggal'] ?>">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="layanan" class="col-sm-4 col-form-label">Layanan Unit</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="layanan" value=": <?= $data['layanan'] ?>">
+                                             <div class="row">
+                                                <label for="layanan" class="col-sm-4 col-form-label">Layanan Unit</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="layanan" value=": <?= $data['layanan'] ?>">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="dokter" class="col-sm-4 col-form-label">Dokter</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="dokter" value=": <?= $data['dokter'] ?>">
+                                             <div class="row">
+                                                <label for="dokter" class="col-sm-4 col-form-label">Dokter</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="dokter" value=": <?= $data['dokter'] ?>">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="kondisiMasuk" class="col-sm-4 col-form-label">Kondisi Masuk</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="kondisiMasuk" value=": <?= $data['kondisi_masuk'] ?>">
+                                             <div class="row">
+                                                <label for="kondisiMasuk" class="col-sm-4 col-form-label">Kondisi Masuk</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="kondisiMasuk" value=": <?= $data['kondisi_masuk'] ?>">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="catatan" class="col-sm-4 col-form-label">Catatan</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="catatan" value=": <?= $data['catatan'] ?>">
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <div class="col-6">
-                                          <div class="row">
-                                             <label for="nomorRM" class="col-sm-4 col-form-label">No.Rekam Medik</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="nomorRM" value=": <?= $datapasien['nomor_rm'] ?>">
-                                             </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="namaPasien" class="col-sm-4 col-form-label">Nama Pasien</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="namaPasien" value=": <?= $datapasien['nama_pasien'] ?>">
-                                             </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="ttl" class="col-sm-4 col-form-label">TTL</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="ttl" value=": <?= $datapasien['tempat_lahir'] ?>/<?= $datapasien['tanggal_lahir'] ?>">
-                                             </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="agama" class="col-sm-4 col-form-label">Agama</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="agama" value=": <?= $datapasien['agama'] ?>">
-                                             </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="gender" class="col-sm-4 col-form-label">Jenis Kelamin</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="gender" value=": <?= $datapasien['gender'] ?>">
-                                             </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="alamat" class="col-sm-4 col-form-label">Alamat</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="alamat" value=": <?= $datapasien['alamat'] ?>">
-                                             </div>
-                                          </div>
-                                          <div class="row">
-                                             <label for="inputPassword" class="col-sm-4 col-form-label">Jenis Bayar</label>
-                                             <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="pj" value=": <?= $data['jenis_bayar'] ?>">
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <hr>
-                                       <h6>Riwayat Kesehatan</h6>
-                                       <div class="row mb-3">
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Keluhan Utama</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
+                                             <div class="row">
+                                                <label for="catatan" class="col-sm-4 col-form-label">Catatan</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="catatan" value=": <?= $data['catatan'] ?>">
+                                                </div>
                                              </div>
                                           </div>
                                           <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Riwayat Penyakit Sekarang</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
+                                             <div class="row">
+                                                <label for="nomorRM" class="col-sm-4 col-form-label">No.Rekam Medik</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="nomorRM" value=": <?= $datapasien['nomor_rm'] ?>">
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <label for="namaPasien" class="col-sm-4 col-form-label">Nama Pasien</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="namaPasien" value=": <?= $datapasien['nama_pasien'] ?>">
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <label for="ttl" class="col-sm-4 col-form-label">TTL</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="ttl" value=": <?= $datapasien['tempat_lahir'] ?>/<?= $datapasien['tanggal_lahir'] ?>">
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <label for="agama" class="col-sm-4 col-form-label">Agama</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="agama" value=": <?= $datapasien['agama'] ?>">
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <label for="gender" class="col-sm-4 col-form-label">Jenis Kelamin</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="gender" value=": <?= $datapasien['gender'] ?>">
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <label for="alamat" class="col-sm-4 col-form-label">Alamat</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="alamat" value=": <?= $datapasien['alamat'] ?>">
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <label for="inputPassword" class="col-sm-4 col-form-label">Jenis Bayar</label>
+                                                <div class="col-sm-8">
+                                                   <input type="text" readonly class="form-control-plaintext" id="pj" value=": <?= $data['jenis_bayar'] ?>">
+                                                </div>
                                              </div>
                                           </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Riwayat Penyakit Keluarga</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
+                                          <hr>
+                                          <h6>Riwayat Kesehatan</h6>
+                                          <div class="row mb-3">
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="keluhanutama" class="form-label">Keluhan Utama</label>
+                                                   <textarea name="keluhanutama" class="form-control" id="" cols="30" rows="4"><?= $datakesehatan['keluhanUtama'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="penyakitsekarang" class="form-label">Riwayat Penyakit Sekarang</label>
+                                                   <textarea name="penyakitsekarang" class="form-control" id="" cols="30" rows="4"><?= $datakesehatan['penyakitSekarang'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="penyakitkeluarga" class="form-label">Riwayat Penyakit Keluarga</label>
+                                                   <textarea name="penyakitkeluarga" class="form-control" id="" cols="30" rows="4"><?= $datakesehatan['penyakitKeluarga'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="penyakitdahulu" class="form-label">Riwayat Penyakit Dahulu</label>
+                                                   <textarea name="penyakitdahulu" class="form-control" id="" cols="30" rows="4"><?= $datakesehatan['penyakitDahulu'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="penggunaanobat" class="form-label">Riwayat Penggunaan Obat</label>
+                                                   <textarea name="penggunaanobat" class="form-control" id="" cols="30" rows="4"><?= $datakesehatan['penggunaanObat'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="alergi" class="form-label">Riwayat Alergi</label>
+                                                   <textarea name="alergi" class="form-control" id="" cols="30" rows="4"><?= $datakesehatan['alergi'] ?></textarea>
+                                                </div>
                                              </div>
                                           </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Riwayat Penyakit Dahulu</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
+                                          <h6>Pemeriksaan Fisik</h6>
+                                          <div class="row mb-3">
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="keadaanumum" class="form-label">Keadaan Umum</label>
+                                                   <select name="keadaanumum" class="form-select" id="keadaanumum">
+                                                      <option value="Sehat">Sehat</option>
+                                                      <option value="Sakit Ringan">Sakit Ringan</option>
+                                                      <option value="Sakit Sedang">Sakit Sedang</option>
+                                                      <option value="Sakit Berat">Sakit Berat</option>
+                                                   </select>
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Riwayat Penggunaan Obat</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="kesadaran" class="form-label">Kesadaran</label>
+                                                   <select name="kesadaran" class="form-select" id="kesadaran">
+                                                      <option value="Compos Mentis">Compos Mentis</option>
+                                                      <option value="Apatis">Apatis</option>
+                                                      <option value="Somnolen">Somnolen</option>
+                                                      <option value="Sopor">Sopor</option>
+                                                      <option value="Koma">Koma</option>
+                                                   </select>
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Riwayat Alergi</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="td" class="form-label">TD</label>
+                                                   <input type="text" class="form-control form-sm" name="td" value="<?= $datakepumum['td'] ?>" placeholder="mmHg">
+                                                </div>
                                              </div>
-                                          </div>
-                                       </div>
-                                       <h6>Pemeriksaan Fisik</h6>
-                                       <div class="row mb-3">
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Keadaan Umum</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Sehat</option>
-                                                   <option value="">Sakit Ringan</option>
-                                                   <option value="">Sakit Sedang</option>
-                                                   <option value="">Sakit Beart</option>
-                                                </select>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="nadi" class="form-label">Nadi</label>
+                                                   <input type="text" class="form-control" name="nadi" id="nadi" value="<?= $datakepumum['nadi'] ?>" placeholder="x/menit">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Kesadaran</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Compos Mentis</option>
-                                                   <option value="">Apatis</option>
-                                                   <option value="">Somnolen</option>
-                                                   <option value="">Sopor</option>
-                                                   <option value="">Koma</option>
-                                                </select>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="rr" class="form-label">RR</label>
+                                                   <input type="text" class="form-control" name="rr" value="<?= $datakepumum['rr'] ?>" placeholder="x/menit">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">TD</label>
-                                                <input type="text" class="form-control form-sm" placeholder="mmHg">
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="suhu" class="form-label">Suhu</label>
+                                                   <input type="text" name="suhu" value="<?= $datakepumum['suhu'] ?>" class="form-control" placeholder="c">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Nadi</label>
-                                                <input type="text" class="form-control" placeholder="x/menit">
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="spo" class="form-label">Spo2</label>
+                                                   <input type="text" name="spo" value="<?= $datakepumum['spo'] ?>" class="form-control" placeholder="%">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">RR</label>
-                                                <input type="text" class="form-control" placeholder="x/menit">
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="bb" class="form-label">Berat Badan</label>
+                                                   <input type="text" class="form-control" name="bb" value="<?= $datanutrisi['bb'] ?>" placeholder="Kg">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Suhu</label>
-                                                <input type="text" class="form-control" placeholder="c">
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="tb" class="form-label">Tinggi Badan</label>
+                                                   <input type="text" name="tb" value="<?= $datanutrisi['tb'] ?>" class="form-control" placeholder="cm">
+                                                </div>
                                              </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Spo2</label>
-                                                <input type="text" class="form-control" placeholder="%">
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Berat Badan</label>
-                                                <input type="text" class="form-control" placeholder="Kg">
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Tinggi Badan</label>
-                                                <input type="text" class="form-control" placeholder="cm">
-                                             </div>
-                                          </div>
-                                          <div class="col-3">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">GCS</label>
-                                                <div class="row">
-                                                   <div class="col">
-                                                      <input type="text" class="form-control" placeholder="E">
-                                                   </div>
-                                                   <div class="col">
-                                                      <input type="text" class="form-control" placeholder="V">
-                                                   </div>
-                                                   <div class="col">
-                                                      <input type="text" class="form-control" placeholder="M">
+                                             <div class="col-3">
+                                                <div class="mb-3">
+                                                   <label for="gcs" class="form-label">GCS</label>
+                                                   <div class="row">
+                                                      <div class="col">
+                                                         <input type="text" name="gcsE" value="<?= $datakepumum['gcsE'] ?>" class="form-control" placeholder="E">
+                                                      </div>
+                                                      <div class="col">
+                                                         <input type="text" name="gcsV" value="<?= $datakepumum['gcsV'] ?>" class="form-control" placeholder="V">
+                                                      </div>
+                                                      <div class="col">
+                                                         <input type="text" name="gcsM" value="<?= $datakepumum['gcsM'] ?>" class="form-control" placeholder="M">
+                                                      </div>
                                                    </div>
                                                 </div>
                                              </div>
                                           </div>
+                                          <div class="row">
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="kepala" class="form-label">Kepala</label>
+                                                   <select name="kepala" class="form-select" id="kepala">
+                                                      <option value="<?= $datafisik['kepala'] ?>"><?= $datafisik['kepala'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="gigi" class="form-label">Gigi & Mulut</label>
+                                                   <select name="gigi" class="form-select" id="gigi">
+                                                      <option value="<?= $datafisik['gigimulut'] ?>"><?= $datafisik['gigimulut'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="tht" class="form-label">THT</label>
+                                                   <select name="tht" class="form-select" id="tht">
+                                                      <option value="<?= $datafisik['THT'] ?>"><?= $datafisik['THT'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="thoraks" class="form-label">Thoraks</label>
+                                                   <select name="thoraks" class="form-select" id="thoraks">
+                                                      <option value="<?= $datafisik['thorax'] ?>"><?= $datafisik['thorax'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="exampleFormControlInput1" class="form-label">Abdomen</label>
+                                                   <select name="abdomen" class="form-select" id="abdomen">
+                                                      <option value="<?= $datafisik['abdomen'] ?>"><?= $datafisik['abdomen'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="genital" class="form-label">Genital & Anus</label>
+                                                   <select name="genital" class="form-select" id="genital">
+                                                      <option value="<?= $datafisik['genital'] ?>"><?= $datafisik['genital'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="ekstremitas" class="form-label">Ekstremitas</label>
+                                                   <select name="ekstremitas" class="form-select" id="ekstremitas">
+                                                      <option value="<?= $datafisik['ekstremitas'] ?>"><?= $datafisik['ekstremitas'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="kulit" class="form-label">Kulit</label>
+                                                   <select name="kulit" class="form-select" id="kulit">
+                                                      <option value="<?= $datafisik['kulit'] ?>"><?= $datafisik['kulit'] ?></option>
+                                                      <option value="Normal">Normal</option>
+                                                      <option value="Abnormal">Abnormal</option>
+                                                      <option value="Tidak Diperiksa">Tidak Diperiksa</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-8">
+                                                <div class="mb-3">
+                                                   <label for="catatan" class="form-label">Catatan</label>
+                                                   <textarea name="catatan" class="form-control" id="catatan" cols="30" rows="4"><?= $datafisik['catatan'] ?></textarea>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <h6>Status Obstetri/Ginekologi</h6>
+                                          <div class="row">
+                                             <div class="col-3">
+                                                <div class="mb-3">
+                                                   <label for="tfu" class="form-label">TFU</label>
+                                                   <input type="text" class="form-control" name="tfu" value="<?= $datakandungan['tfu'] ?>" id="" placeholder="cm">
+                                                </div>
+                                             </div>
+                                             <div class="col-3">
+                                                <div class="mb-3">
+                                                   <label for="tbj" class="form-label">TBJ</label>
+                                                   <input type="text" class="form-control" name="tbj" value="<?= $datakandungan['tbj'] ?>" id="" placeholder="gram">
+                                                </div>
+                                             </div>
+                                             <div class="col-3">
+                                                <div class="mb-3">
+                                                   <label for="his" class="form-label">HIS</label>
+                                                   <input type="text" class="form-control" name="his" value="<?= $datakandungan['his'] ?>" id="" placeholder="x/10 menit">
+                                                </div>
+                                             </div>
+                                             <div class="col-2">
+                                                <div class="mb-3">
+                                                   <label for="kontraksi" class="form-label">Kontraksi</label>
+                                                   <select name="kontraksi" class="form-select" id="kontraksi">
+                                                      <option value="<?= $datakandungan['kontraksi'] ?>"><?= $datakandungan['kontraksi'] ?></option>
+                                                      <option value="Ada">Ada</option>
+                                                      <option value="Tidak Ada">Tidak Ada</option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-1">
+                                                <div class="mb-3">
+                                                   <label for="djj" class="form-label">DJJ</label>
+                                                   <input type="text" class="form-control" name="djj" value="<?= $datakandungan['djj'] ?>" id="" placeholder="dpm">
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="inspeksi" class="form-label">Inspeksi</label>
+                                                   <textarea name="inspeksi" class="form-control" id="" cols="30" rows="4"><?= $datakandungan['inspeksi'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="vt" class="form-label">VT</label>
+                                                   <textarea name="vt" class="form-control" id="" cols="30" rows="4"><?= $datakandungan['vt'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="inspekulo" class="form-label">Inspekulo</label>
+                                                   <textarea name="inspekulo" class="form-control" id="" cols="30" rows="4"><?= $datakandungan['inspekulo'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-6">
+                                                <div class="mb-3">
+                                                   <label for="rt" class="form-label">RT</label>
+                                                   <textarea name="rt" class="form-control" id="" cols="30" rows="4"><?= $datakandungan['rt'] ?></textarea>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <h6>Pemeriksaan Penunjang</h6>
+                                          <div class="row mb-3">
+                                             <div class="col-4">
+                                                <div class="mb-3">
+                                                   <label for="usg" class="form-label">Ultrasonografi</label>
+                                                   <textarea name="usg" class="form-control" id="" cols="30" rows="4"><?= $dataobyn['usg'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-4">
+                                                <div class="mb-3">
+                                                   <label for="kardio" class="form-label">Kardiotokografi</label>
+                                                   <textarea name="kardio" class="form-control" id="" cols="30" rows="4"><?= $dataobyn['kardio'] ?></textarea>
+                                                </div>
+                                             </div>
+                                             <div class="col-4">
+                                                <div class="mb-3">
+                                                   <label for="lab" class="form-label">Laboratorium</label>
+                                                   <textarea name="lab" class="form-control" id="" cols="30" rows="4"><?= $dataobyn['lab'] ?></textarea>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <h6>Diagnosis / Assemen</h6>
+                                          <div class="row mb-3">
+                                             <div class="col-12">
+                                                <textarea name="diagnosis" class="form-control" id="" cols="30" rows="3"><?= $dataobyn['diagnosis'] ?></textarea>
+                                             </div>
+                                          </div>
+                                          <h6>Tatalaksana</h6>
+                                          <div class="row mb-3">
+                                             <div class="col-12">
+                                                <textarea name="tatalaksana" class="form-control" id="" cols="30" rows="3"><?= $dataobyn['tatalaksana'] ?></textarea>
+                                             </div>
+                                          </div>
+                                          <h6>Konsul/Rujuk </h6>
+                                          <div class="row mb-3">
+                                             <div class="col-12">
+                                                <textarea name="konsul" class="form-control" id="" cols="30" rows="3"><?= $dataobyn['konsul'] ?></textarea>
+                                             </div>
+                                          </div>
                                        </div>
-                                       <div class="row">
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Kepala</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Gigi & Mulut</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">THT</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Thoraks</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Abdomen</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Genital & Anus</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Ekstremitas</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Kulit</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Normal</option>
-                                                   <option value="">Abnormal</option>
-                                                   <option value="">Tidak Diperiksa</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-8">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Catatan</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-
-                                       </div>
-                                       <h6>Status Obstetri/Ginekologi</h6>
-                                       <div class="row">
-                                          <div class="col-3">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">TFU</label>
-                                                <input type="text" class="form-control" name="" id="" placeholder="cm">
-                                             </div>
-                                          </div>
-                                          <div class="col-3">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">TBJ</label>
-                                                <input type="text" class="form-control" name="" id="" placeholder="gram">
-                                             </div>
-                                          </div>
-                                          <div class="col-3">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">HIS</label>
-                                                <input type="text" class="form-control" name="" id="" placeholder="x/10 menit">
-                                             </div>
-                                          </div>
-                                          <div class="col-2">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Kontraksi</label>
-                                                <select name="" class="form-select" id="">
-                                                   <option value="">Ada</option>
-                                                   <option value="">Tidak Ada</option>
-                                                </select>
-                                             </div>
-                                          </div>
-                                          <div class="col-1">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">DJJ</label>
-                                                <input type="text" class="form-control" name="" id="" placeholder="dpm">
-                                             </div>
-                                          </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Inspeksi</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">VT</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Inspekulo</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-                                          <div class="col-6">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">RT</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <h6>Pemeriksaan Penunjang</h6>
-                                       <div class="row mb-3">
-                                          <div class="col-4">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Ultrasonografi</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-                                          <div class="col-4">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Kardiotokografi</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-                                          <div class="col-4">
-                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Laboratorium</label>
-                                                <textarea name="" class="form-control" id="" cols="30" rows="4"></textarea>
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <h6>Diagnosis / Assemen</h6>
-                                       <div class="row mb-3">
-                                          <div class="col-12">
-                                             <textarea name="" class="form-control" id="" cols="30" rows="3"></textarea>
-                                          </div>
-                                       </div>
-                                       <h6>Tatalaksana</h6>
-                                       <div class="row mb-3">
-                                          <div class="col-12">
-                                             <textarea name="" class="form-control" id="" cols="30" rows="3"></textarea>
-                                          </div>
-                                       </div>
-                                       <h6>Konsul/Rujuk </h6>
-                                       <div class="row mb-3">
-                                          <div class="col-12">
-                                             <textarea name="" class="form-control" id="" cols="30" rows="3"></textarea>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <button class="btn btn-success">Simpan</button>
+                                       <button class="btn btn-success" type="submit" name="simpanpemeriksaan">Simpan</button>
+                                    </form>
                                  </div>
-
                                  <div class="tab-pane fade" id="pills-warningprofile" role="tabpanel" aria-labelledby="pills-warningprofile-tab">
                                     <div class="row">
                                        <div class="col-xl-12 col-md-12 box-col-12">
                                           <div class="file-content">
                                              <div class="card">
                                                 <div class="card-body file-manager">
-                                                   <div class="table-responsive">
-                                                      <table class="display" id="basic-1">
-                                                         <thead>
-                                                            <tr>
-                                                               <th>Tanggal</th>
-                                                               <th>Keadaan Umum</th>
-                                                               <th>Status Nutrisi</th>
-                                                               <th>Riwayat Kesehatan</th>
-                                                               <th>Fungsional</th>
-                                                               <th>Riwayat Psiko-Sosial-Spritual-Budaya</th>
-                                                               <th>Penilaian Resiko Jatuh</th>
-                                                               <th>Skrining Gizi</th>
-                                                               <th>Penilaian Tingkat Nyeri</th>
-                                                               <th>Masalah Keparawatan</th>
-                                                            </tr>
-                                                         </thead>
-                                                         <tbody>
-                                                            <?php foreach ($query as $row) : ?>
-                                                               <tr>
-
-                                                               </tr>
-                                                            <?php endforeach ?>
-                                                         </tbody>
-                                                      </table>
+                                                   <?php
+                                                   $query = tampildata("SELECT * FROM pasien_visit WHERE uid_pasien='$id' AND nomor_visit='$norawat' ");
+                                                   ?>
+                                                   <div class="accordion" id="accordionExample">
+                                                      <?php foreach ($query as $row) : ?>
+                                                         <div class="accordion-item">
+                                                            <h2 class="accordion-header">
+                                                               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                                  Tanggal : <?= $row['tanggalVisit'] ?> <?= $row['waktuVisit'] ?> | <?= $row['dokter'] ?>
+                                                               </button>
+                                                            </h2>
+                                                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                                               <div class="accordion-body">
+                                                                  <h6>Keadaan Umum</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_Keadaan WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>TD</td>
+                                                                           <td>Nadi</td>
+                                                                           <td>RR</td>
+                                                                           <td>Suhu</td>
+                                                                           <td>GCS</td>
+                                                                           <td>SPO</td>
+                                                                           <td>Kedaaan Umum</td>
+                                                                           <td>Kesadaran</td>
+                                                                           <td>Rilis</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['td']; ?> mmHg</td>
+                                                                              <td><?= $row['nadi']; ?>x/menit</td>
+                                                                              <td><?= $row['rr']; ?>x/menit</td>
+                                                                              <td><?= $row['suhu']; ?>c</td>
+                                                                              <td>
+                                                                                 E : <?= $row['gcsE'] ?> V : <?= $row['gcsV'] ?> M : <?= $row['gcsM'] ?>
+                                                                              </td>
+                                                                              <td><?= $row['spo']; ?>%</td>
+                                                                              <td><?= $row['keadaanUmum']; ?></td>
+                                                                              <td><?= $row['kesadaran']; ?></td>
+                                                                              <td><?= $row['createAt']; ?></td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Status Nutrisi</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_Nutrisi WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Berat Badan</td>
+                                                                           <td>Tinggi Badan</td>
+                                                                           <td>BMI</td>
+                                                                           <td>Rilis Data</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['tb']; ?>cm</td>
+                                                                              <td><?= $row['bb']; ?>Kg</td>
+                                                                              <td><?= $row['bmi']; ?>Kg/m2</td>
+                                                                              <td><?= $row['createAt'] ?></td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Riwayat Kesehatan</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_Kesehatan WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Keluhan Utama</td>
+                                                                           <td>Penyakit Keluarga</td>
+                                                                           <td>Penyakit Dahulu</td>
+                                                                           <td>Pengobatan</td>
+                                                                           <td>Alergi</td>
+                                                                           <td>Penyakit Sekarang</td>
+                                                                           <td>Penggunaan Obat</td>
+                                                                           <td>Rilis Data</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['keluhanUtama']; ?></td>
+                                                                              <td><?= $row['penyakitKeluarga']; ?></td>
+                                                                              <td><?= $row['penyakutDahulu']; ?></td>
+                                                                              <td><?= $row['pengobatan']; ?></td>
+                                                                              <td><?= $row['alergi']; ?></td>
+                                                                              <td><?= $row['penyakitSekarang']; ?></td>
+                                                                              <td><?= $row['penggunaanObat']; ?></td>
+                                                                              <td><?= $row['createAt']; ?></td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Fungsional</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_Fungisonal WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Alat Bantu</td>
+                                                                           <td>Prothesa</td>
+                                                                           <td>Cacat Fisik</td>
+                                                                           <td>ADL</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['alatBantu']; ?> | Catatan : <?= $row['alatBantuCatatan'] ?></td>
+                                                                              <td><?= $row['prothesa']; ?> | Catatan : <?= $row['prothesaCatatan'] ?></td>
+                                                                              <td><?= $row['cacatFisik']; ?></td>
+                                                                              <td><?= $row['ADL']; ?></td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Riwayat Psiko-Sosial-Spritual-Budaya</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_Psikolog WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Psikologis</td>
+                                                                           <td>Bahasa</td>
+                                                                           <td>Hubungan</td>
+                                                                           <td>Tinggal</td>
+                                                                           <td>Ekonomi</td>
+                                                                           <td>Kepercayaan</td>
+                                                                           <td>Edukasi</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['statusPsikologis']; ?> | Catatan : <?= $row['catatanPsikologis'] ?></td>
+                                                                              <td><?= $row['bahasa']; ?> | Catatan : <?= $row['catatanBahasa'] ?></td>
+                                                                              <td><?= $row['hubunganKeluarga']; ?></td>
+                                                                              <td><?= $row['tinggal']; ?></td>
+                                                                              <td><?= $row['ekonomi']; ?></td>
+                                                                              <td><?= $row['kepercayaan']; ?> | Catatan : <?= $row['catatanKepercayaan'] ?></td>
+                                                                              <td><?= $row['edukasi']; ?> | Catatan : <?= $row['catatanEdukasi'] ?></td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Penilaian Resiko Jatuh</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_Jatuh WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Tidak Seimbang</td>
+                                                                           <td>Alat Bantu</td>
+                                                                           <td>Menopang</td>
+                                                                           <td>Hasil</td>
+                                                                           <td>Dilaporkan</td>
+                                                                           <td>Jam</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['seimbang']; ?> </td>
+                                                                              <td><?= $row['alatBantu']; ?> </td>
+                                                                              <td><?= $row['menopang']; ?></td>
+                                                                              <td><?= $row['hasil']; ?></td>
+                                                                              <td><?= $row['dilaporkan']; ?></td>
+                                                                              <td><?= $row['jam']; ?> </td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Skrining Gizi</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_Gizi WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Penurunan BB</td>
+                                                                           <td>Nafsu Makan</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['penurunanBB']; ?> </td>
+                                                                              <td><?= $row['nafsuMakan']; ?> </td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Penilaian Tingkat Nyeri</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assKepUmum_TingkatNyeri WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Rasa Nyeri</td>
+                                                                           <td>Penyebab</td>
+                                                                           <td>Kualitas</td>
+                                                                           <td>Lokasi</td>
+                                                                           <td>Menyebar</td>
+                                                                           <td>Severity Skala</td>
+                                                                           <td>Waktu Durasi</td>
+                                                                           <td>Nyeri hilang bila</td>
+                                                                           <td>Diberitahukan Dokter</td>
+                                                                           <td>Jam</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td><?= $row['rasaNyeri']; ?> </td>
+                                                                              <td><?= $row['penyebab']; ?> </td>
+                                                                              <td><?= $row['kualitas']; ?> </td>
+                                                                              <td><?= $row['lokasi']; ?> </td>
+                                                                              <td><?= $row['menyebar']; ?> </td>
+                                                                              <td><?= $row['skala']; ?> </td>
+                                                                              <td><?= $row['waktuDurasi']; ?> </td>
+                                                                              <td><?= $row['nyeriHilang']; ?> </td>
+                                                                              <td><?= $row['dilaporkan']; ?> </td>
+                                                                              <td><?= $row['jam']; ?> </td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                                  <hr>
+                                                                  <h6>Pemeriksaan Fisik</h6>
+                                                                  <?php
+                                                                  $query = tampildata("SELECT * FROM assMedUmum_Fisik WHERE uidPasien='$id'");
+                                                                  ?>
+                                                                  <table class="table table-primary">
+                                                                     <thead>
+                                                                        <tr>
+                                                                           <td>Fisik</td>
+                                                                           <td>Lokalis</td>
+                                                                           <td>Penunjang</td>
+                                                                           <td>Diagnosis</td>
+                                                                           <td>Tata Laksana</td>
+                                                                           <td>Konsul</td>
+                                                                           <td>Rilis Data</td>
+                                                                        </tr>
+                                                                     </thead>
+                                                                     <tbody>
+                                                                        <?php foreach ($query as $row) : ?>
+                                                                           <tr>
+                                                                              <td>
+                                                                                 Kepala : <?= $row['kepala'] ?> <br>
+                                                                                 Gigi & Mulut : <?= $row['gigimulut'] ?> <br>
+                                                                                 THT : <?= $row['THT'] ?> <br>
+                                                                                 Thorax : <?= $row['thorax'] ?> <br>
+                                                                                 Abdomen : <?= $row['abdomen'] ?> <br>
+                                                                                 Genital : <?= $row['genital'] ?> <br>
+                                                                                 Ekstremitas : <?= $row['ekstremitas'] ?> <br>
+                                                                                 kulit : <?= $row['kulit'] ?> <br>
+                                                                                 Catatan : <?= $row['catatan'] ?> <br>
+                                                                              </td>
+                                                                              <td><?= $row['lokalis'] ?></td>
+                                                                              <td><?= $row['penunjang'] ?></td>
+                                                                              <td><?= $row['diagnosa'] ?></td>
+                                                                              <td><?= $row['tatalaksana'] ?></td>
+                                                                              <td><?= $row['konsul'] ?></td>
+                                                                              <td><?= $row['createAt'] ?></td>
+                                                                           </tr>
+                                                                        <?php endforeach ?>
+                                                                     </tbody>
+                                                                  </table>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      <?php endforeach ?>
                                                    </div>
                                                 </div>
                                              </div>
@@ -515,7 +810,6 @@ $datapasien = mysqli_fetch_array($infopasien);
                                        </div>
                                     </div>
                                  </div>
-
                               </div>
                            </div>
                         </div>

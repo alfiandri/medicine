@@ -1,5 +1,5 @@
 <?php
-require '../db/connect.php';
+require '../../db/connect.php';
 if (isset($_POST['simpanmedisumum'])) {
    $uid = $_POST['id'];
    $norawat = $_POST['norawat'];

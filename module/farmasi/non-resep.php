@@ -153,28 +153,20 @@ $totaldata = mysqli_num_rows($data);
             <form action="" method="POST">
                <div class="modal-body">
                   <div class="mb-3">
-                     <label for="nik" class="form-label">Kode</label>
-                     <input type="text" required="" name="nik" id="nik" class="form-control">
+                     <label for="tanggal" class="form-label">Tanggal</label>
+                     <input type="date" required="" name="tanggal" id="tanggal" value="<?= date('Y-m-d') ?>" class="form-control">
                   </div>
                   <div class="mb-3">
-                     <label for="nik" class="form-label">Barcode</label>
-                     <input type="text" required="" name="nik" id="nik" class="form-control">
+                     <label for="nama" class="form-label">Nama</label>
+                     <input type="text" required="" name="nama" id="nama" class="form-control">
                   </div>
                   <div class="mb-3">
-                     <label for="nik" class="form-label">Nama Obat</label>
-                     <input type="text" required="" name="nik" id="nik" class="form-control">
+                     <label for="notelepon" class="form-label">No.Telepon</label>
+                     <input type="text" required="" name="notelepon" id="notelepon" class="form-control">
                   </div>
                   <div class="mb-3">
-                     <label for="nik" class="form-label">Satuan</label>
-                     <select name="" class="form-select" id="">
-                        <option value="">PILIH</option>
-                        <?php
-                        $query = tampildata("SELECT * FROM satuan");
-                        ?>
-                        <?php foreach ($query as $data) : ?>
-                           <option value="<?= $data['satuan'] ?>"><?= $data['satuan'] ?></option>
-                        <?php endforeach ?>
-                     </select>
+                     <label for="sumber" class="form-label">Sumber Resep</label>
+                     <input type="text" required="" name="sumber" id="sumber" class="form-control">
                   </div>
                   <div class="mb-3">
                      <label for="nik" class="form-label">Catatan</label>
@@ -184,7 +176,7 @@ $totaldata = mysqli_num_rows($data);
                </div>
                <div class="modal-footer">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                  <button type="submit" name="simpanpermintaan" class="btn btn-primary">Simpan</button>
+                  <button type="submit" name="simpanonresep" class="btn btn-primary">Simpan</button>
                </div>
             </form>
          </div>

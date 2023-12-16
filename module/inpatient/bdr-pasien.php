@@ -1,14 +1,14 @@
 <?php
 session_start();
 $page = "BDR";
-require '../db/connect.php';
-require '../controller/view.php';
-$query = tampildata("SELECT * FROM pasienVisit LEFT OUTER JOIN pasien ON pasien.uidPasien = pasienVisit.uidPasien");
+require 'view.php';
+$query = tampildata("SELECT * FROM pasien_visit LEFT OUTER JOIN pasien ON pasien.uid_pasien = pasien_visit.uid_pasien");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+   <base href="../">
    <?php
    require 'head.php';
    ?>
@@ -83,7 +83,7 @@ $query = tampildata("SELECT * FROM pasienVisit LEFT OUTER JOIN pasien ON pasien.
                                        <?php foreach ($query as $row) : ?>
                                           <tr>
                                              <?php
-                                             $status = $row['statusVisit'];
+                                             $status = $row['status_visit'];
                                              if ($status == 1) {
                                                 $color  = 'success';
                                              } else if ($status == 2) {
@@ -97,13 +97,13 @@ $query = tampildata("SELECT * FROM pasienVisit LEFT OUTER JOIN pasien ON pasien.
                                              }
                                              ?>
                                              <td class="bg-<?= $color ?>"></td>
-                                             <td><?= $row['nomorRM'] ?></td>
-                                             <td><?= $row['namaPasien'] ?></td>
-                                             <td><?= $row['createAt'] ?></td>
+                                             <td><?= $row['nomor_rm'] ?></td>
+                                             <td><?= $row['nama_pasien'] ?></td>
+                                             <td><?= $row['create_at'] ?></td>
                                              <td><?= $row['layanan'] ?></td>
-                                             <td><?= $row['jenisBayar'] ?></td>
+                                             <td><?= $row['jenis_bayar'] ?></td>
                                              <td class="text-center col-2">
-                                                <a href="bdr-pasien-ass?id=<?= $row['uidPasien'] ?>&no=<?= $row['nomorRegistrasi'] ?>">
+                                                <a href="inpatient/bdr-pasien-ass?id=<?= $row['uid_pasien'] ?>&no=<?= $row['nomor_visit'] ?>">
                                                    <button class="btn btn-sm btn-primary">Pemeriksaan</button>
                                                 </a>
                                              </td>

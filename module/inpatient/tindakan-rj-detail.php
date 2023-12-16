@@ -5,6 +5,7 @@ $page = "Tindakan RJ";
 <html lang="en">
 
 <head>
+   <base href="../">
    <?php
    require 'head.php';
    ?>
@@ -377,11 +378,6 @@ $page = "Tindakan RJ";
                                              </div>
                                              <div class="tab-pane fade" id="v-pills-headtotoe" role="tabpanel" aria-labelledby="v-pills-headtotoe-tab">
                                                 <div class="table-responsive table-sm">
-                                                   <?php
-                                                   require '../db/connect.php';
-                                                   require '../controller/view.php';
-                                                   $query = tampildata("SELECT * FROM rm_dokumen");
-                                                   ?>
                                                    <table class="display" id="basic-1">
                                                       <thead class="bg-warning text-dark">
                                                          <tr>
@@ -391,25 +387,12 @@ $page = "Tindakan RJ";
                                                          </tr>
                                                       </thead>
                                                       <tbody>
-                                                         <?php foreach ($query as $row) : ?>
-                                                            <tr>
-                                                               <td><?= $row['kode'] ?></td>
-                                                               <td><?= $row['dokumen'] ?></td>
-                                                               <td class="text-center">
-                                                                  <button class="btn btn-sm btn-outline-warning text-dark">Edit</button>
-                                                                  <button class="btn btn-sm btn-outline-danger text-dark">Buka RM</button>
-                                                               </td>
-                                                            </tr>
-                                                         <?php endforeach ?>
                                                       </tbody>
                                                    </table>
                                                 </div>
                                              </div>
                                              <div class="tab-pane fade" id="v-pills-belajar" role="tabpanel" aria-labelledby="v-pills-belajar-tab">
                                                 <div class="table-responsive table-sm">
-                                                   <?php
-                                                   $query = tampildata("SELECT * FROM surat_medis");
-                                                   ?>
                                                    <table class="table" id="basic-5">
                                                       <thead class="bg-warning text-dark">
                                                          <tr>
@@ -418,15 +401,7 @@ $page = "Tindakan RJ";
                                                          </tr>
                                                       </thead>
                                                       <tbody>
-                                                         <?php foreach ($query as $row) : ?>
-                                                            <tr>
-                                                               <td><?= $row['surat'] ?></td>
-                                                               <td class="text-center">
-                                                                  <button class="btn btn-sm btn-outline-warning text-dark">Edit</button>
-                                                                  <button class="btn btn-sm btn-outline-danger text-dark">Akses</button>
-                                                               </td>
-                                                            </tr>
-                                                         <?php endforeach ?>
+
                                                       </tbody>
                                                    </table>
                                                 </div>
@@ -2505,32 +2480,9 @@ $page = "Tindakan RJ";
          </div>
       </div>
    </div>
-   <!-- latest jquery-->
-   <script src="../assets/js/jquery-3.5.1.min.js"></script>
-   <!-- Bootstrap js-->
-   <script src="../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
-   <!-- feather icon js-->
-   <script src="../assets/js/icons/feather-icon/feather.min.js"></script>
-   <script src="../assets/js/icons/feather-icon/feather-icon.js"></script>
-   <!-- scrollbar js-->
-   <script src="../assets/js/scrollbar/simplebar.js"></script>
-   <script src="../assets/js/scrollbar/custom.js"></script>
-   <!-- Sidebar jquery-->
-   <script src="../assets/js/config.js"></script>
-   <!-- Plugins JS start-->
-   <script src="../assets/js/sidebar-menu.js"></script>
-   <script src="../assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
-   <script src="../assets/js/rating/jquery.barrating.js"></script>
-   <script src="../assets/js/rating/rating-script.js"></script>
-   <script src="../assets/js/owlcarousel/owl.carousel.js"></script>
-   <script src="../assets/js/ecommerce.js"></script>
-   <script src="../assets/js/product-list-custom.js"></script>
-   <script src="../assets/js/tooltip-init.js"></script>
-   <!-- Plugins JS Ends-->
-   <!-- Theme js-->
-   <script src="../assets/js/script.js"></script>
-   <script src="../assets/js/theme-customizer/customizer.js"></script>
-   <!-- Plugin used-->
+   <?php
+   include 'library.php';
+   ?>
 </body>
 
 </html>

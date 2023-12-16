@@ -74,7 +74,7 @@ $datapasien = mysqli_fetch_array($infopasien);
                            <div class="card-header">
                               <ul class="nav nav-tabs nav-primary" id="pills-warningtab" role="tablist">
                                  <li class="nav-item"><a class="nav-link active" id="pills-warninghome-tab" data-bs-toggle="pill" href="#pills-warninghome" role="tab" aria-controls="pills-warninghome" aria-selected="true"><i class="icofont icofont-ui-home"></i>Pemeriksaan</a></li>
-                                 <li class="nav-item"><a class="nav-link" id="pills-warningprofile-tab" data-bs-toggle="pill" href="#pills-warningprofile" role="tab" aria-controls="pills-warningprofile" aria-selected="false"><i class="icofont icofont-man-in-glasses"></i>Hasil Pemeriksaan</a></li>
+                                 <li class="nav-item"><a class="nav-link" id="pills-warningprofile-tab" data-bs-toggle="pill" href="#pills-warningprofile" role="tab" aria-controls="pills-warningprofile" aria-selected="false"><i class="icofont icofont-man-in-glasses"></i>History Resep</a></li>
                               </ul>
                            </div>
                            <div class="card-body file-manager">
@@ -187,7 +187,7 @@ $datapasien = mysqli_fetch_array($infopasien);
                                                 <tbody>
                                                    <?php
                                                    $rm = $datapasien['nomor_rm'];
-                                                   $query = tampildata("SELECT * FROM permintaan_resep WHERE nomor_rm='$rm'");
+                                                   $query = tampildata("SELECT * FROM permintaan_resep WHERE nomor_rm='$rm' AND status=0");
                                                    ?>
                                                    <?php foreach ($query as $row) : ?>
                                                       <tr>
@@ -298,20 +298,50 @@ $datapasien = mysqli_fetch_array($infopasien);
                                              <div class="card">
                                                 <div class="card-body file-manager">
                                                    <div class="table-responsive">
-                                                      <table class="table" id="basic-4">
+                                                      <table class="table" id="basic-1">
                                                          <thead>
                                                             <tr>
                                                                <th>No.Tiket</th>
-                                                               <th>Lab</th>
-                                                               <th>Hasil</th>
+                                                               <th>Tanggal</th>
+                                                               <th>Waktu</th>
+                                                               <th>Catatan</th>
+                                                               <th>Pemeriksaan</th>
                                                             </tr>
                                                          </thead>
                                                          <tbody>
-                                                            <tr>
-                                                               <td></td>
-                                                               <td></td>
-                                                               <td></td>
-                                                            </tr>
+                                                            <?php
+                                                            $rm = $datapasien['nomor_rm'];
+                                                            $query = tampildata("SELECT * FROM permintaan_resep WHERE nomor_rm='$rm' AND status!=0");
+                                                            ?>
+                                                            <?php foreach ($query as $row) : ?>
+                                                               <tr>
+                                                                  <td><?= $row['nopermintaan'] ?></td>
+                                                                  <td><?= $row['tanggal'] ?></td>
+                                                                  <td><?= $row['waktu'] ?></td>
+                                                                  <td><?= $row['catatan'] ?></td>
+                                                                  <td class="col-4">
+                                                                     <?php
+                                                                     $no = $row['nopermintaan'];
+                                                                     $query = tampildata("SELECT * FROM permintaan_resep_detail WHERE nopermintaan='$no'");
+                                                                     ?>
+                                                                     <ul class="list-group">
+                                                                        <?php foreach ($query as $data) : ?>
+                                                                           <ol class="list-group list-group-numbered">
+                                                                              <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                                                 <div class="ms-2 me-auto">
+                                                                                    <div class="fw-bold"><?= $data['resep'] ?></div>
+                                                                                    Catatan : <?= $data['catatan'] ?> <br>
+                                                                                    Signa : <?= $data['signa'] ?>
+                                                                                 </div>
+                                                                                 <span class="badge bg-primary rounded-pill"><?= $data['qty'] ?> <?= $data['satuan'] ?></span>
+                                                                              </li>
+                                                                           </ol>
+                                                                        <?php endforeach ?>
+                                                                     </ul>
+                                                                  </td>
+                                                               </tr>
+
+                                                            <?php endforeach ?>
                                                          </tbody>
                                                       </table>
                                                    </div>

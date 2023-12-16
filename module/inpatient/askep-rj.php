@@ -1,12 +1,13 @@
 <?php
 $page = "Askep RJ";
-require '../controller/view.php';
-$query = tampildata("SELECT * FROM pasienVisit INNER JOIN pasien ON pasien.uidPasien = pasienVisit.uidPasien");
+require 'view.php';
+$query = tampildata("SELECT * FROM pasien_visit INNER JOIN pasien ON pasien.uid_pasien = pasien_visit.uid_pasien");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+   <base href="../">
    <?php
    require 'head.php';
    ?>
@@ -82,7 +83,7 @@ $query = tampildata("SELECT * FROM pasienVisit INNER JOIN pasien ON pasien.uidPa
                                        <?php foreach ($query as $row) : ?>
                                           <tr>
                                              <?php
-                                             $status = $row['statusVisit'];
+                                             $status = $row['status_visit'];
                                              if ($status == 0) { //Belum Verifikasi
                                                 $color = 'warning';
                                              } else if ($status == 1) { //Daftar
@@ -98,13 +99,13 @@ $query = tampildata("SELECT * FROM pasienVisit INNER JOIN pasien ON pasien.uidPa
                                              }
                                              ?>
                                              <td class="bg-<?= $color ?>"></td>
-                                             <td><?= $row['nomorRM'] ?></td>
-                                             <td><?= $row['namaPasien'] ?></td>
-                                             <td><?= $row['createAt'] ?></td>
+                                             <td><?= $row['nomor_rm'] ?></td>
+                                             <td><?= $row['nama_pasien'] ?></td>
+                                             <td><?= $row['create_at'] ?></td>
                                              <td><?= $row['layanan'] ?></td>
-                                             <td><?= $row['jenisBayar'] ?></td>
+                                             <td><?= $row['jenis_bayar'] ?></td>
                                              <?php
-                                             $statusPasien = $row['statusPasien'];
+                                             $statusPasien = $row['status_pasien'];
                                              if ($statusPasien == 1) {
                                                 $ket = 'Baru';
                                              } else {
@@ -113,10 +114,10 @@ $query = tampildata("SELECT * FROM pasienVisit INNER JOIN pasien ON pasien.uidPa
                                              ?>
                                              <td><?= $ket ?></td>
                                              <td class="text-center col-2">
-                                                <a href="askep-rj-layani?id=<?= $row['uidPasien'] ?>">
+                                                <a href="inpatient/askep-rj-layani?id=<?= $row['uid_pasien'] ?>">
                                                    <button class="btn btn-sm btn-primary">Layani</button>
                                                 </a>
-                                                <a href="askep-rj-rm?id=<?= $row['uidPasien'] ?>">
+                                                <a href="inpatient/askep-rj-rm?id=<?= $row['uid_pasien'] ?>">
                                                    <button class="btn btn-sm btn-danger">Lihat RM</button>
                                                 </a>
                                              </td>
@@ -144,31 +145,9 @@ $query = tampildata("SELECT * FROM pasienVisit INNER JOIN pasien ON pasien.uidPa
          ?>
       </div>
    </div>
-   <!-- latest jquery-->
-   <script src="../assets/js/jquery-3.5.1.min.js"></script>
-   <!-- Bootstrap js-->
-   <script src="../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
-   <!-- feather icon js-->
-   <script src="../assets/js/icons/feather-icon/feather.min.js"></script>
-   <script src="../assets/js/icons/feather-icon/feather-icon.js"></script>
-   <!-- scrollbar js-->
-   <script src="../assets/js/scrollbar/simplebar.js"></script>
-   <script src="../assets/js/scrollbar/custom.js"></script>
-   <!-- Sidebar jquery-->
-   <script src="../assets/js/config.js"></script>
-   <!-- Plugins JS start-->
-   <script src="../assets/js/sidebar-menu.js"></script>
-   <script src="../assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
-   <script src="../assets/js/rating/jquery.barrating.js"></script>
-   <script src="../assets/js/rating/rating-script.js"></script>
-   <script src="../assets/js/owlcarousel/owl.carousel.js"></script>
-   <script src="../assets/js/ecommerce.js"></script>
-   <script src="../assets/js/product-list-custom.js"></script>
-   <script src="../assets/js/tooltip-init.js"></script>
-   <!-- Plugins JS Ends-->
-   <!-- Theme js-->
-   <script src="../assets/js/script.js"></script>
-   <!-- Plugin used-->
+   <?php
+   include 'library.php';
+   ?>
 </body>
 
 </html>

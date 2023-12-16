@@ -1,7 +1,7 @@
 <?php
-session_start();
-$page = "Awal Medis";
+$page = "Awal Medis Umum";
 require '../../db/connect.php';
+require '../../controller/intpatient/ass-medis-umum.php';
 require 'view.php';
 $id = $_GET['id'];
 $norawat = $_GET['norawat'];
@@ -82,6 +82,7 @@ $datafisik = mysqli_fetch_array($fisik);
                            <div class="card-header">
                               <ul class="nav nav-tabs nav-primary" id="pills-warningtab" role="tablist">
                                  <li class="nav-item"><a class="nav-link active" id="pills-warninghome-tab" data-bs-toggle="pill" href="#pills-warninghome" role="tab" aria-controls="pills-warninghome" aria-selected="true"><i class="icofont icofont-ui-home"></i>Penilaian</a></li>
+
                                  <li class="nav-item"><a class="nav-link" id="pills-warningprofile-tab" data-bs-toggle="pill" href="#pills-warningprofile" role="tab" aria-controls="pills-warningprofile" aria-selected="false"><i class="icofont icofont-man-in-glasses"></i>Data Penilaian</a></li>
                               </ul>
                            </div>
@@ -357,7 +358,7 @@ $datafisik = mysqli_fetch_array($fisik);
                                              <div class="col-2">
                                                 <div class="mb-3">
                                                    <label for="genital" class="form-label">Genital & Anus</label>
-                                                   <select name=genital" class="form-select" id="genital">
+                                                   <select name="genital" class="form-select" id="genital">
                                                       <option value="<?= $datafisik['genital'] ?>"><?= $datafisik['genital'] ?></option>
                                                       <option value="Normal">Normal</option>
                                                       <option value="Abnormal">Abnormal</option>

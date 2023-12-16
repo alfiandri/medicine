@@ -1,5 +1,4 @@
 <?php
-session_start();
 $page = "Asessment";
 require 'view.php';
 $query = tampildata("SELECT * FROM pasien_visit INNER JOIN pasien ON pasien.uid_pasien = pasien_visit.uid_pasien");
