@@ -12,7 +12,7 @@ function validateFieldNotEmpty($request, $fieldName)
 
 function getSetting($key, $table)
 {
-    require __DIR__ . "/../../db/connect.php";
+    global $koneksi;
 
     $sql = "SELECT * FROM $table WHERE status = 1";
 

@@ -1,22 +1,20 @@
 <?php
 $host = "localhost";
-$username = "root";
+$uname = "root";
 $password = "";
 // $database = "db_simrs";
 $database = "db_antrean";
-$koneksi = mysqli_connect($host, $username, $password, $database);
-
-
+$koneksi = mysqli_connect($host, $uname, $password, $database);
 
 function connectToDatabase()
 {
     global $host;
-    global $username;
+    global $uname;
     global $password;
     global $database;
 
     try {
-        $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+        $conn = new PDO("mysql:host=$host;dbname=$database", $uname, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
     } catch (Exception $e) {

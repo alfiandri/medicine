@@ -1,7 +1,7 @@
 <?php
-require_once '../../../database.php';
-require_once '../auth.php';
-require_once '../../../function.php';
+require_once __DIR__ . '/../../../db/connect.php';
+require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/../../../controller/base/integrasi.php';
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = executeQuery($connection, $sql, $params);
         $row = $result->fetch(PDO::FETCH_ASSOC);
         if ($row) {
-            $antreanpanggil = $row['nomorantrean'];
+            $antreanpanggil = $row['nomor'];
         }
 
         $sisaAntrean = 0;

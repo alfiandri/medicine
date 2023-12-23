@@ -1,11 +1,8 @@
 <?php
 
-require_once '../../../database.php';
-require_once '../auth.php';
-require_once '../../../function.php';
-require_once '../../../variable.php';
-require_once '../../../curl.php';
-require_once '../../../decrypt.php';
+require_once __DIR__ . '/../../db/connect.php';
+require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/../../../controller/base/integrasi.php';
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
