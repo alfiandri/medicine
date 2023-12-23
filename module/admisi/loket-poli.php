@@ -69,39 +69,19 @@ require 'view.php';
                                             <table class="display" id="basic-2">
                                                 <thead>
                                                     <tr>
-                                                        <th></th>
                                                         <th class="text-center">Loket</th>
                                                         <th class="text-center">Kode</th>
-                                                        <th class="text-center">Layanan</th>
-                                                        <th class="text-center">Mulai</th>
-                                                        <th class="text-center">Selesai</th>
                                                         <th class="text-center">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $query = tampildata("SELECT * FROM loket_poliklinik");
+                                                    $query = tampildata("SELECT kode_antri,nmpoli,id FROM poli group by kode_antri");
                                                     ?>
                                                     <?php foreach ($query as $row) : ?>
                                                         <tr>
-                                                            <td class="text-center">
-                                                                <?php
-                                                                $status = $row['status'];
-                                                                if ($status == 1) {
-                                                                    $color = 'success';
-                                                                    $note = "Buka";
-                                                                } else {
-                                                                    $color = 'danger';
-                                                                    $note = "Tutup";
-                                                                }
-                                                                ?>
-                                                                <span class="badge col-8 bg-<?= $color ?>"><?= $note ?></span>
-                                                            </td>
-                                                            <td class="text-center"><?= $row['loket'] ?></td>
-                                                            <td class="text-center"><?= $row['kode_loket'] ?></td>
-                                                            <td class="text-center"><?= $row['layanan'] ?></td>
-                                                            <td class="text-center"><?= $row['mulai'] ?></td>
-                                                            <td class="text-center"><?= $row['selesai'] ?></td>
+                                                            <td class="text-center"><?= $row['nmpoli'] ?></td>
+                                                            <td class="text-center"><?= $row['kode_antri'] ?></td>
                                                             <td class="text-center col-3">
                                                                 <a href="admisi/loket-poli-call?id=<?= $row['id'] ?>">
                                                                     <button class="btn btn-primary">Buka Loket</button>

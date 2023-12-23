@@ -154,9 +154,8 @@ $query = tampildata("SELECT * FROM dokter_sch WHERE uid='$id'");
                                                          </div>
                                                          <div class="mb-3">
                                                             <label for="catatan" class="form-label">Catatan</label>
-                                                            <textarea name="catatan" id="catatan" class="form-control" cols="30" rows="10"><?= $row['catatan'] ?></textarea>
+                                                            <textarea name="catatan" id="catatan" class="form-control" cols="30" rows="5"><?= $row['catatan'] ?></textarea>
                                                          </div>
-
                                                       </div>
                                                       <div class="modal-footer">
                                                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
@@ -256,7 +255,10 @@ $query = tampildata("SELECT * FROM dokter_sch WHERE uid='$id'");
                         </div>
                      </div>
                   </div>
-
+                  <div class="mb-3">
+                     <label for="catatan" class="form-label">Catatan</label>
+                     <textarea name="catatan" id="catatan" class="form-control" cols="30" rows="5"></textarea>
+                  </div>
                </div>
                <div class="modal-footer">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>

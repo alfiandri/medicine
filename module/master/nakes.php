@@ -201,7 +201,7 @@ $totaldata = mysqli_num_rows($data);
                      <label for="kategori" class="form-label">Kategori</label>
                      <select name="kategori" required="" class="form-select" id="kategori">
                         <?php
-                        $query = tampildata("SELECT * FROM kategori_nakes WHERE statusKategori=1");
+                        $query = tampildata("SELECT * FROM kategori_nakes WHERE status=1");
                         ?>
                         <option selected>Pilih</option>
                         <?php foreach ($query as $row) : ?>

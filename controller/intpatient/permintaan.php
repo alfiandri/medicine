@@ -1,5 +1,8 @@
 <?php
-require '../../db/connect.php';
+require __DIR__ . '/../../db/connect.php';
+require __DIR__ . '/../../controller/base/integrasi.php';
+date_default_timezone_set('Asia/Jakarta');
+
 if (isset($_POST['simpanoperasi'])) {
    $rm = $_POST['nomorrm'];
    $notiket = date('ymd') . "OK" . rand(111, 999);
@@ -60,7 +63,6 @@ if (isset($_POST['simpanpermintaanri'])) {
    $insert = mysqli_query($koneksi, "INSERT INTO permintaan_rawatinap (nomor_rm, nopermintaan, tanggal, waktu, kamar, bed, catatan) VALUES ('$rm','$notiket','$tanggal','$waktu','$kamar','$bed','$catatan')");
 }
 
-
 if (isset($_POST['simpanresep'])) {
    $notiket = date('ymd') . "RSP" . rand(111, 999);
    $tanggal = date('Y-m-d');
@@ -70,10 +72,18 @@ if (isset($_POST['simpanresep'])) {
    $kode = $_POST['kode'];
    $task = "6";
    $waktu = date('H:i:s');
-   $update = mysqli_query($koneksi, "UPDATE admisi_jkn SET task_id='$task', waktu='$waktu' WHERE kodebooking='$kode'");
+   // $update = mysqli_query($koneksi, "UPDATE admisi_jkn SET task_id='$task', waktu='$waktu' WHERE kodebooking='$kode'");
    $inserttask = mysqli_query($koneksi, "INSERT INTO admisi_taskid (kodebooking, task_id)VALUES('$kode','$task')");
    $insertresep = mysqli_query($koneksi, "INSERT INTO permintaan_resep (nopermintaan, nomor_rm, tanggal, waktu, catatan) VALUES('$notiket','$nomorrm','$tanggal','$waktu','$catatan')");
-   $insertantrian = mysqli_query($koneksi, "INSERT INTO antrian_farmasi (kodebooking, nomorrm )VALUES('$kode','$nomorrm')");
+   // $insertantrian = mysqli_query($koneksi, "INSERT INTO antrian_farmasi (kodebooking, tanggal, keterangan, nomor, tipe)VALUES('$kode','$tanggal', '$catatan', '1', 'F')");
+
+   $data = [
+      "kodebooking" => $kode,
+      "taskid" => $task,
+      "waktu" => strtotime(date('Y-m-d H:i:s')) * 1000,
+   ];
+   $apiUrl = "$baseUrl/$serviceNameAntrean/antrean/updatewaktu";
+   post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean)[0];
 }
 
 if (isset($_POST['simpanresepdetail'])) {

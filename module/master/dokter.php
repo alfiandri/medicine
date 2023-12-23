@@ -142,7 +142,7 @@ $totaldata = mysqli_num_rows($data);
                                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                    </div>
                                                    <form action="" method="POST">
-                                                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                      <input type="hidden" name="id" value="<?= $row['uid_dokter'] ?>">
                                                       <div class="modal-body">
                                                          <p>Apakah anda yakin menghapus data dokter <strong><?= $row['nama'] ?></strong>secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
                                                       </div>

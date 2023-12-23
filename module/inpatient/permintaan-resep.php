@@ -115,7 +115,7 @@ $datapasien = mysqli_fetch_array($infopasien);
                                           <div class="row">
                                              <label for="catatan" class="col-sm-4 col-form-label">Catatan</label>
                                              <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext" id="catatan" value=": <?= $data['catatan'] ?>">
+                                                <input type="text" readonly class="form-control-plaintext" id="catatan" value=": <?= @$data['catatan'] ?>">
                                              </div>
                                           </div>
                                        </div>
@@ -379,7 +379,7 @@ $datapasien = mysqli_fetch_array($infopasien);
             </div>
             <form action="" method="POST">
                <input type="hidden" name="nomorrm" value="<?= $datapasien['nomor_rm'] ?>">
-               <input type="hidden" name="kode" value="<?= $data['kodebooking'] ?>" id="">
+               <input type="hidden" name="kode" value="<?= $datapasien['kodebooking'] ?>" id="">
                <div class="modal-body">
                   <div class="mb-3">
                      <label for="catatan" class="form-label">Catatan</label>

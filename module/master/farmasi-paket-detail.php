@@ -4,8 +4,8 @@ $page = "Paket Obat";
 require '../admin/view.php';
 require '../../controller/master/farmasi.php';
 $id = $_GET['id'];
-$query = tampildata("SELECT * FROM obat_paket_detail WHERE id='$id'");
-$data = mysqli_query($koneksi, "SELECT id FROM obat_paket_detail WHERE id='$id'");
+$query = tampildata("SELECT * FROM obat_paket_detail WHERE kode='$id'");
+$data = mysqli_query($koneksi, "SELECT id FROM obat_paket_detail WHERE kode='$id'");
 $totaldata = mysqli_num_rows($data);
 ?>
 <!DOCTYPE html>
@@ -16,6 +16,8 @@ $totaldata = mysqli_num_rows($data);
    <?php
    require '../admin/head.php';
    ?>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </head>
 
 <body onload="startTime()">
@@ -51,7 +53,7 @@ $totaldata = mysqli_num_rows($data);
                <div class="page-title">
                   <div class="row">
                      <div class="col-6">
-                        <h3>Farmasi Obat Racikan</h3>
+                        <h3>Farmasi Obat Paket</h3>
                      </div>
                      <div class="col-6">
                         <ol class="breadcrumb">
@@ -91,8 +93,10 @@ $totaldata = mysqli_num_rows($data);
                                           <th class="col-1"></th>
                                           <th>Obat</th>
                                           <th>Satuan</th>
+                                          <th>Dosis</th>
+                                          <th>Frekuensi</th>
+                                          <th>Cara Pakai</th>
                                           <th>Qty</th>
-                                          <th>Signa</th>
                                           <th class="text-center col-1">Actions</th>
                                        </tr>
                                     </thead>
@@ -110,74 +114,16 @@ $totaldata = mysqli_num_rows($data);
                                              <td class="<?= $warna ?>"></td>
                                              <td><?= $row['obat'] ?></td>
                                              <td><?= $row['satuan'] ?></td>
+                                             <td><?= $row['dosis'] ?></td>
+                                             <td><?= $row['frekuensi'] ?></td>
+                                             <td><?= $row['cara_pakai'] ?></td>
                                              <td><?= number_format($row['qty']) ?></td>
-                                             <td><?= $row['signa'] ?></td>
-                                             <td class="text-center col-2">
-                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
+                                             <td class="text-center col-1">
                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id'] ?>">Hapus</button>
                                              </td>
                                           </tr>
 
-                                          <!-- Modal -->
-                                          <div class="modal fade" id="ubah<?= $row['ubah'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                             <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                   <div class="modal-header">
-                                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Perubahan Data</h1>
-                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                   </div>
-                                                   <form action="" method="POST">
-                                                      <input type="hidden" name="kode" value="<?= $id ?>">
-                                                      <div class="modal-body">
-                                                         <div class="mb-3">
-                                                            <label for="nama" class="form-label">Nama Obat</label>
-                                                            <select name="nama" id="nama" class="form-select" required="">
-                                                               <?php
-                                                               $query = tampildata("SELECT * FROM obat");
-                                                               ?>
-                                                               <option value="">PILIH</option>
-                                                               <?php foreach ($query as $data) : ?>
-                                                                  <option value="<?= $data['nama'] ?>"><?= $data['nama'] ?></option>
-                                                               <?php endforeach ?>
-                                                            </select>
-                                                         </div>
-                                                         <div class="mb-3">
-                                                            <label for="satuan" class="form-label">Satuan</label>
-                                                            <select name="satuan" id="satuan" class="form-select" required="">
-                                                               <?php
-                                                               $query = tampildata("SELECT * FROM satuan WHERE tipe=1");
-                                                               ?>
-                                                               <option value="">PILIH</option>
-                                                               <?php foreach ($query as $data) : ?>
-                                                                  <option value="<?= $data['satuan'] ?>"><?= $data['satuan'] ?></option>
-                                                               <?php endforeach ?>
-                                                            </select>
-                                                         </div>
-                                                         <div class="mb-3">
-                                                            <label for="qty" class="form-label">Qty</label>
-                                                            <input type="number" name="qty" id="qty" class="form-control">
-                                                         </div>
-                                                         <div class="mb-3">
-                                                            <label for="signa" class="form-label">Signa</label>
-                                                            <select name="signa" id="signa" class="form-select" required="">
-                                                               <?php
-                                                               $query = tampildata("SELECT * FROM farmasi_signa");
-                                                               ?>
-                                                               <option value="">PILIH</option>
-                                                               <?php foreach ($query as $data) : ?>
-                                                                  <option value="<?= $data['signa'] ?>"><?= $data['signa'] ?></option>
-                                                               <?php endforeach ?>
-                                                            </select>
-                                                         </div>
-                                                      </div>
-                                                      <div class="modal-footer">
-                                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                                         <button type="submit" name="ubahpaketdetail" class="btn btn-primary">Simpan</button>
-                                                      </div>
-                                                   </form>
-                                                </div>
-                                             </div>
-                                          </div>
+
                                           <!-- Modal -->
                                           <div class="modal fade" id="hapus<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                              <div class="modal-dialog">
@@ -189,7 +135,7 @@ $totaldata = mysqli_num_rows($data);
                                                    <form action="" method="POST">
                                                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                       <div class="modal-body">
-                                                         <p>Apakah anda yakin menghapus data paket <strong><?= $row['paket'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
+                                                         <p>Apakah anda yakin menghapus data obat <strong><?= $row['obat'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
                                                       </div>
                                                       <div class="modal-footer">
                                                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
@@ -215,6 +161,12 @@ $totaldata = mysqli_num_rows($data);
             </div>
             <!-- Container-fluid Ends-->
          </div>
+         <?php if (@$_SESSION['sukses']) { ?>
+            <script>
+               swal("Good job!", "<?php echo $_SESSION['sukses']; ?>", "success");
+            </script>
+         <?php unset($_SESSION['sukses']);
+         } ?>
          <!-- footer start-->
          <?php
          require '../../template/footer.php';
@@ -236,44 +188,68 @@ $totaldata = mysqli_num_rows($data);
                <input type="hidden" name="kode" value="<?= $id ?>">
                <div class="modal-body">
                   <div class="mb-3">
-                     <label for="nama" class="form-label">Nama Obat</label>
-                     <select name="nama" id="nama" class="form-select" required="">
-                        <?php
-                        $query = tampildata("SELECT * FROM obat");
-                        ?>
-                        <option value="">PILIH</option>
+                     <label for="obat" class="form-label">Nama Obat</label>
+                     <input class="form-control" list="dataobat" id="obat" name="obat" placeholder="Cari Obat ....">
+                     <?php
+                     $query = tampildata("SELECT * FROM obat");
+                     ?>
+                     <datalist id="dataobat">
                         <?php foreach ($query as $data) : ?>
-                           <option value="<?= $data['nama'] ?>"><?= $data['nama'] ?></option>
-                        <?php endforeach ?>
-                     </select>
+                           <option value="<?= $data['nama'] ?>">
+                           <?php endforeach ?>
+                     </datalist>
                   </div>
                   <div class="mb-3">
                      <label for="satuan" class="form-label">Satuan</label>
-                     <select name="satuan" id="satuan" class="form-select" required="">
-                        <?php
-                        $query = tampildata("SELECT * FROM satuan WHERE tipe=1");
-                        ?>
-                        <option value="">PILIH</option>
+                     <input class="form-control" list="datasatuan" id="satuan" name="satuan" placeholder="Cari Satuan ....">
+                     <?php
+                     $query = tampildata("SELECT * FROM satuan WHERE tipe=1");
+                     ?>
+                     <datalist id="datasatuan">
                         <?php foreach ($query as $data) : ?>
-                           <option value="<?= $data['satuan'] ?>"><?= $data['satuan'] ?></option>
-                        <?php endforeach ?>
-                     </select>
+                           <option value="<?= $data['satuan'] ?>">
+                           <?php endforeach ?>
+                     </datalist>
                   </div>
                   <div class="mb-3">
                      <label for="qty" class="form-label">Qty</label>
                      <input type="number" name="qty" id="qty" class="form-control">
                   </div>
                   <div class="mb-3">
-                     <label for="signa" class="form-label">Signa</label>
-                     <select name="signa" id="signa" class="form-select" required="">
-                        <?php
-                        $query = tampildata("SELECT * FROM farmasi_signa");
-                        ?>
-                        <option value="">PILIH</option>
+                     <label for="dosis" class="form-label">Dosis</label>
+                     <input class="form-control" list="datadosis" id="dosis" name="dosis" placeholder="Cari Dosis ....">
+                     <?php
+                     $query = tampildata("SELECT * FROM farmasi_dosis");
+                     ?>
+                     <datalist id="datadosis">
                         <?php foreach ($query as $data) : ?>
-                           <option value="<?= $data['signa'] ?>"><?= $data['signa'] ?></option>
-                        <?php endforeach ?>
-                     </select>
+                           <option value="<?= $data['dosis'] ?>">
+                           <?php endforeach ?>
+                     </datalist>
+                  </div>
+                  <div class="mb-3">
+                     <label for="frekuensi" class="form-label">Frekuensi</label>
+                     <input class="form-control" list="datafrekuensi" id="frekuensi" name="frekuensi" placeholder="Cari Frekuensi ....">
+                     <?php
+                     $query = tampildata("SELECT * FROM farmasi_signa");
+                     ?>
+                     <datalist id="datafrekuensi">
+                        <?php foreach ($query as $data) : ?>
+                           <option value="<?= $data['signa'] ?>">
+                           <?php endforeach ?>
+                     </datalist>
+                  </div>
+                  <div class="mb-3">
+                     <label for="cara_pakai" class="form-label">Cara Pakai</label>
+                     <input class="form-control" list="datapakai" id="cara_pakai" name="cara_pakai" placeholder="Cari Cara Pakai ....">
+                     <?php
+                     $query = tampildata("SELECT * FROM farmasi_cara_pemberian");
+                     ?>
+                     <datalist id="datapakai">
+                        <?php foreach ($query as $data) : ?>
+                           <option value="<?= $data['cara_pemberian'] ?>">
+                           <?php endforeach ?>
+                     </datalist>
                   </div>
                </div>
                <div class="modal-footer">

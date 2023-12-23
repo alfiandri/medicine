@@ -28,6 +28,8 @@ $antrian = $dataantrian + 1;
 $kodebooking = generateKodeBooking();
 
 $insert = mysqli_query($koneksi, "INSERT INTO antrian_loket(kodebooking, nomor, tipe) VALUES('$kodebooking','$antrian','$tipe') ");
+mysqli_query($koneksi, "INSERT INTO admisi_taskid (kodebooking, task_id)VALUES('$kodebooking','1')");
+
 ?>
 
 <body>

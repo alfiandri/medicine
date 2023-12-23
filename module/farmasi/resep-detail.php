@@ -13,6 +13,13 @@ if ($id == 1) {
 } else {
    $pathroute = "non-resep";
 }
+if (empty($rm)) {
+   $permintaanresep = mysqli_query($koneksi, "SELECT * FROM permintaan_resep WHERE nopermintaan='$nopermintaan'");
+   $permintaanresep = mysqli_fetch_array($permintaanresep);
+   $rm = $permintaanresep['nomor_rm'];
+}
+// var_dump($permintaanresep);
+// echo $rm;die;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +115,7 @@ if ($id == 1) {
                                        <?php foreach ($query as $row) : ?>
                                           <tr>
                                              <?php
-                                             $status = $row['status'];
+                                             $status = @$row['status'];
                                              if ($status == 1) {
                                                 $warna = 'bg-success'; //Active
                                              } else if ($status == 0) {
@@ -116,15 +123,15 @@ if ($id == 1) {
                                              }
                                              ?>
                                              <td class="<?= $warna ?>"></td>
-                                             <td><?= $row['resep'] ?></td>
-                                             <td><?= $row['signa'] ?></td>
-                                             <td><?= $row['satuan'] ?></td>
+                                             <td><?= @$row['resep'] ?></td>
+                                             <td><?= @$row['signa'] ?></td>
+                                             <td><?= @$row['satuan'] ?></td>
                                              <td><?= number_format($row['qty']) ?></td>
                                              <td class="col-3"><?= $row['catatan'] ?></td>
                                              <td class="text-center col-3">
-                                                <a href="../controller/farmasi/approve-list-obat?tipe=1&id=<?= $row['id'] ?>&nopermintaan=<?= $_GET['nopermintaan'] ?>&rm=<?= $_GET['rm'] ?>">
+                                                <!-- <a href="../controller/farmasi/approve-list-obat?tipe=1&id=<?= $row['id'] ?>&nopermintaan=<?= $_GET['nopermintaan'] ?>&rm=<?= $_GET['rm'] ?>">
                                                    <button class="btn btn-success">Approve</button>
-                                                </a>
+                                                </a> -->
                                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#resep<?= $row['id'] ?>">Ganti</button>
                                                 <a href="../controller/farmasi/approve-list-obat?tipe=2&id=<?= $row['id'] ?>&nopermintaan=<?= $_GET['nopermintaan'] ?>&rm=<?= $_GET['rm'] ?>">
                                                    <button class="btn btn-danger">Hapus</button>
@@ -286,10 +293,11 @@ if ($id == 1) {
                      $datapasien = mysqli_query($koneksi, "SELECT * FROM pasien_visit WHERE nomor_rm='$rm'");
                      $datainfo = mysqli_fetch_array($datapasien);
                      $kode = $datainfo['kodebooking'];
+
                      $checkdata = mysqli_query($koneksi, "SELECT * FROM antrian_farmasi WHERE kodebooking='$kode'");
                      $check = mysqli_fetch_array($checkdata);
                      ?>
-                     <h1 class="card-title"><?= $check['loket'] ?>-<?= $check['nomor'] ?></h1>
+                     <h1 class="card-title"><?= $check['tipe'] ?>-<?= $check['nomor'] ?></h1>
                      <p class="card-text">Apabila pasien tidak datang klik panggil lagi untuk melakukan pemanggilan ulang, dan untuk pasien yang hadir klik obat diterima untuk menyelesaikan alur farmasi</p>
                      <input type="hidden" name="rm" value="<?= $_GET['rm'] ?>">
                      <input type="hidden" name="kode" value="<?= $kode ?>">
@@ -299,7 +307,7 @@ if ($id == 1) {
                <div class="modal-footer">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                   <button type="submit" name="simpanterimaobat" class="btn btn-danger">Obat Terima</button>
-                  <button type="submit" name="" class="btn btn-primary">Panggil Ulang</button>
+                  <button type="button" onclick="panggil('Antrian Nomor <?php echo $check['tipe']. '-'. $check['nomor']; ?> Dipanggil Ke loket farmasi');" class="btn btn-primary">Panggil Ulang</button>
                </div>
             </form>
          </div>
@@ -308,6 +316,23 @@ if ($id == 1) {
    <?php
    include '../admin/library.php';
    ?>
+
+   <script type="text/javascript">
+      function panggil(text) {
+         if (text.trim() !== "") {
+            var kataKata = text.split(' ');
+            for (var i = 0; i < kataKata.length; i++) {
+               setTimeout(function(kata) {
+                  return function() {
+                     var suara = new SpeechSynthesisUtterance(kata);
+                     suara.lang = 'id-ID';
+                     window.speechSynthesis.speak(suara);
+                  };
+               }(kataKata[i]), i * 1000);
+            }
+         }
+      }
+   </script>
 </body>
 
 </html>

@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 $page = "Kode Pos";
 require '../admin/view.php';
 require '../../controller/master/wilayah.php';

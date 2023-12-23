@@ -96,8 +96,10 @@
                   <label class="badge badge-success"></label><a class="sidebar-link sidebar-title" href="javascript:;"><i data-feather="airplay"></i><span>Loket</span></a>
                   <ul class="sidebar-submenu">
                      <li><a href="admisi/loket-admisi">Loket Admisi</a></li>
-                     <li><a href="admisi/loket-poli">Loket Poli</a></li>
+                     <li><a href="admisi/loket-bpjs">Loket BPJS</a></li>
                      <li><a href="admisi/loket-farmasi">Loket Farmasi</a></li>
+                     <li><a href="admisi/loket-mjkn">Loket M-JKN</a></li>
+                     <li><a href="admisi/loket-poli">Loket Poli</a></li>
                   </ul>
                </li>
                <li class="sidebar-main-title">

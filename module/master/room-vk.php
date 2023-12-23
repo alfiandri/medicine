@@ -179,7 +179,7 @@ $totaldata = mysqli_num_rows($data);
                                                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                       <input type="hidden" name="tipe" value="<?= $tipe ?>">
                                                       <div class="modal-body">
-                                                         <p>Apakah anda yakin menghapus data Kelas <strong><?= $row['kelas'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
+                                                         <p>Apakah anda yakin menghapus data Kelas <strong><?= $row['kamar'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
                                                       </div>
                                                       <div class="modal-footer">
                                                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>

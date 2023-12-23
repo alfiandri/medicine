@@ -3,8 +3,8 @@ $path = 'master';
 $page = "Farmasi Racikan";
 require '../admin/view.php';
 require '../../controller/master/farmasi.php';
-$query = tampildata("SELECT * FROM obat_paket");
-$data = mysqli_query($koneksi, "SELECT id FROM obat_paket");
+$query = tampildata("SELECT * FROM obat_racikan");
+$data = mysqli_query($koneksi, "SELECT id FROM obat_racikan");
 $totaldata = mysqli_num_rows($data);
 ?>
 <!DOCTYPE html>
@@ -15,6 +15,7 @@ $totaldata = mysqli_num_rows($data);
    <?php
    require '../admin/head.php';
    ?>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body onload="startTime()">
@@ -85,7 +86,8 @@ $totaldata = mysqli_num_rows($data);
                                     <thead>
                                        <tr>
                                           <th class="col-1"></th>
-                                          <th>Nama Paket</th>
+                                          <th>Nama Racikan</th>
+                                          <th>Metode</th>
                                           <th>Catatan</th>
                                           <th>Obat</th>
                                           <th class="text-center col-1">Actions</th>
@@ -103,12 +105,13 @@ $totaldata = mysqli_num_rows($data);
                                              }
                                              ?>
                                              <td class="<?= $warna ?>"></td>
-                                             <td><?= $row['paket'] ?></td>
+                                             <td><?= $row['nama_racikan'] ?></td>
+                                             <td><?= $row['metode'] ?></td>
                                              <td><?= $row['catatan'] ?></td>
                                              <td>
                                                 <?php
                                                 $kode = $row['id'];
-                                                $query = tampildata("SELECT * FROM obat_paket_detail WHERE kode='$kode'");
+                                                $query = tampildata("SELECT * FROM obat_racikan_detail WHERE kode='$kode'");
                                                 ?>
                                                 <table class="table">
                                                    <thead>
@@ -116,23 +119,24 @@ $totaldata = mysqli_num_rows($data);
                                                          <th>Obat</th>
                                                          <th>Satuan</th>
                                                          <th>QTY</th>
-                                                         <th>Signa</th>
                                                       </tr>
                                                    </thead>
                                                    <tbody>
                                                       <?php foreach ($query as $data) : ?>
                                                          <tr>
-                                                            <td><?= $data['obat'] ?></td>
+                                                            <td><?= $data['obat'] ?>
+                                                               <br>
+                                                               <p>Alias : <?= $data['alias'] ?></p>
+                                                            </td>
                                                             <td><?= $data['satuan'] ?></td>
                                                             <td><?= number_format($data['qty']) ?></td>
-                                                            <td><?= $data['signa'] ?></td>
                                                          </tr>
                                                       <?php endforeach ?>
                                                    </tbody>
                                                 </table>
                                              </td>
                                              <td class="text-center col-3">
-                                                <a href="<?= $path ?>/farmasi-paket-detail?id=<?= $row['id'] ?>">
+                                                <a href="<?= $path ?>/farmasi-racikan-detail?id=<?= $row['id'] ?>">
                                                    <button class="btn btn-primary">Obat</button>
                                                 </a>
                                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
@@ -153,8 +157,20 @@ $totaldata = mysqli_num_rows($data);
                                                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                       <div class="modal-body">
                                                          <div class="mb-3">
-                                                            <label for="nama" class="form-label">Nama Paket</label>
-                                                            <input type="text" required="" value="<?= $row['paket'] ?>" name="nama" id="nama" class="form-control">
+                                                            <label for="nama" class="form-label">Nama Racikan</label>
+                                                            <input type="text" required="" name="nama" value="<?= $row['nama_racikan'] ?>" id="nama" class="form-control">
+                                                         </div>
+                                                         <div class="mb-3">
+                                                            <label for="metode" class="form-label">Metode Racikan</label>
+                                                            <select name="metode" id="metode" class="form-control" required="">
+                                                               <option value="<?= $row['metode'] ?>"><?= $row['metode'] ?></option>
+                                                               <?php
+                                                               $query = tampildata("SELECT * FROM farmasi_buatracikan");
+                                                               ?>
+                                                               <?php foreach ($query as $rows) : ?>
+                                                                  <option value="<?= $rows['metode'] ?>"><?= $rows['metode'] ?></option>
+                                                               <?php endforeach ?>
+                                                            </select>
                                                          </div>
                                                          <div class="mb-3">
                                                             <label for="catatan" class="form-label">Catatan</label>
@@ -163,7 +179,7 @@ $totaldata = mysqli_num_rows($data);
                                                       </div>
                                                       <div class="modal-footer">
                                                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                                         <button type="submit" name="ubahpaket" class="btn btn-primary">Simpan</button>
+                                                         <button type="submit" name="ubahracikan" class="btn btn-primary">Simpan</button>
                                                       </div>
                                                    </form>
                                                 </div>
@@ -181,11 +197,11 @@ $totaldata = mysqli_num_rows($data);
                                                    <form action="" method="POST">
                                                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                       <div class="modal-body">
-                                                         <p>Apakah anda yakin menghapus data paket <strong><?= $row['paket'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
+                                                         <p>Apakah anda yakin menghapus data racikan <strong><?= $row['nama_racikan'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
                                                       </div>
                                                       <div class="modal-footer">
                                                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                                         <button type="submit" name="hapuspaket" class="btn btn-danger">Ya, Hapus</button>
+                                                         <button type="submit" name="hapusracikan" class="btn btn-danger">Ya, Hapus</button>
                                                       </div>
                                                    </form>
                                                 </div>
@@ -207,6 +223,12 @@ $totaldata = mysqli_num_rows($data);
             </div>
             <!-- Container-fluid Ends-->
          </div>
+         <?php if (@$_SESSION['sukses']) { ?>
+            <script>
+               swal("Good job!", "<?php echo $_SESSION['sukses']; ?>", "success");
+            </script>
+         <?php unset($_SESSION['sukses']);
+         } ?>
          <!-- footer start-->
          <?php
          require '../../template/footer.php';
@@ -227,8 +249,20 @@ $totaldata = mysqli_num_rows($data);
             <form action="" method="POST">
                <div class="modal-body">
                   <div class="mb-3">
-                     <label for="nama" class="form-label">Nama Paket</label>
+                     <label for="nama" class="form-label">Nama Racikan</label>
                      <input type="text" required="" name="nama" id="nama" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                     <label for="metode" class="form-label">Metode Racikan</label>
+                     <select name="metode" id="metode" class="form-control" required="">
+                        <option value="">PILIH</option>
+                        <?php
+                        $query = tampildata("SELECT * FROM farmasi_buatracikan");
+                        ?>
+                        <?php foreach ($query as $rows) : ?>
+                           <option value="<?= $rows['metode'] ?>"><?= $rows['metode'] ?></option>
+                        <?php endforeach ?>
+                     </select>
                   </div>
                   <div class="mb-3">
                      <label for="catatan" class="form-label">Catatan</label>
@@ -237,7 +271,7 @@ $totaldata = mysqli_num_rows($data);
                </div>
                <div class="modal-footer">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                  <button type="submit" name="simpanpaket" class="btn btn-primary">Simpan</button>
+                  <button type="submit" name="simpanracikan" class="btn btn-primary">Simpan</button>
                </div>
             </form>
          </div>

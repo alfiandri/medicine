@@ -56,7 +56,7 @@ $totaldata = mysqli_num_rows($data);
                         <ol class="breadcrumb">
                            <li class="breadcrumb-item"><a href="index"> <i data-feather="home"></i></a></li>
                            <li class="breadcrumb-item">Master Data</li>
-                           <li class="breadcrumb-item">Dokter</li>
+                           <li class="breadcrumb-item">Tenaga Kesehatan</li>
                            <li class="breadcrumb-item active">Dokumen </li>
                         </ol>
                      </div>

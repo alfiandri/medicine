@@ -112,7 +112,7 @@ $totaldata = mysqli_num_rows($data);
                                                       <ol class="list-group list-group-numbered">
                                                          <?php
                                                          $kode = $row['kodebooking'];
-                                                         $query = tampildata("SELECT * FROM admisi_taskid WHERE kodebooking='$kode'");
+                                                         $query = tampildata("SELECT * FROM check WHERE kodebooking='$kode'");
                                                          ?>
                                                          <?php foreach ($query as $data) : ?>
                                                             <li class="list-group-item d-flex justify-content-between align-items-start">

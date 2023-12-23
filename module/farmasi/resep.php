@@ -94,12 +94,12 @@ require '../../controller/farmasi/resep.php';
                                           <tbody>
                                              <?php
                                              $query = tampildata("SELECT * FROM permintaan_resep LEFT OUTER JOIN pasien ON pasien.nomor_rm =  permintaan_resep.nomor_rm 
-                                            WHERE tipe='RJ' AND status=0")
+                                            WHERE tipe='RJ' AND (status=1 or status =0)")
                                              ?>
                                              <?php foreach ($query as $row) : ?>
                                                 <tr>
                                                    <?php
-                                                   $status = $row['status_visit'];
+                                                   $status = @$row['status_visit'];
                                                    if ($status == 0) {
                                                       $color = 'warning';
                                                    } else if ($status == 1) {

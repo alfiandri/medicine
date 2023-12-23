@@ -87,7 +87,7 @@ $totaldata = mysqli_num_rows($data);
                                           <th>Code</th>
                                           <th>EN</th>
                                           <th>DESC</th>
-                                          <th class="text-center col-1">Actions</th>
+                                          <th class="text-center col-2">Actions</th>
                                        </tr>
                                     </thead>
                                     <tbody>

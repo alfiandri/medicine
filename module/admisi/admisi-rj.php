@@ -4,8 +4,9 @@ $page = "Admisi Rawat Jalan";
 require '../../db/connect.php';
 require '../../controller/admisi/admisi.php';
 require 'view.php';
-$query = tampildata("SELECT * FROM pasien_visit LEFT OUTER JOIN pasien ON pasien.uid_pasien = pasien_visit.uid_pasien WHERE sumber='RJ' AND status_visit=0");
-$data = mysqli_query($koneksi, "SELECT id FROM pasien_visit WHERE sumber='RJ'  AND status_visit=0");
+$query = tampildata("SELECT * FROM pasien_visit LEFT OUTER JOIN pasien ON pasien.uid_pasien = pasien_visit.uid_pasien WHERE sumber='RJ' ORDER BY status_visit asc, pasien_visit.create_at desc");
+
+$data = mysqli_query($koneksi, "SELECT id FROM pasien_visit WHERE sumber='RJ'");
 $totaldata = mysqli_num_rows($data);
 ?>
 <!DOCTYPE html>
@@ -137,7 +138,7 @@ $totaldata = mysqli_num_rows($data);
                                                    </button>
                                                    <ul class="dropdown-menu">
                                                       <li><a class="dropdown-item" href="admisi/admisi-add-detail?tipe=1&id=<?= $row['uid_pasien'] ?>&status=1">Lihat Data</a></li>
-                                                      <li><a class="dropdown-item" href="admisi/admisi-ri-detail?tipe=1&id=<?= $row['uid_pasien'] ?>&status=1">Lengkapi Pendaftaran</a></li>
+                                                      <li><a class="dropdown-item" href="admisi/admisi-rj-detail?tipe=1&id=<?= $row['uid_pasien'] ?>&status=1">Lengkapi Pendaftaran</a></li>
                                                       <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#batal<?= $row['id'] ?>" href="javascript:;">Batal</a></li>
                                                    </ul>
                                                 </div>

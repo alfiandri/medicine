@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../../db/connect.php';
 require_once __DIR__ . '/view.php';
 require __DIR__ . '/../../controller/base/integrasi.php';
+date_default_timezone_set('Asia/Jakarta');
+
 $previousUrl = $_SERVER["HTTP_REFERER"];
 
 $tanggalperiksa = date('Y-m-d');

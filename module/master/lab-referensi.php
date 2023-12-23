@@ -77,7 +77,6 @@ $query = tampildata("SELECT * FROM laboratorium_detail LEFT OUTER JOIN laborator
                                           <th>Pemeriksaan</th>
                                           <th>Assesmen Lab</th>
                                           <th class="text-center">Referensi</th>
-                                          <th class="text-center col-1">Actions</th>
                                        </tr>
                                     </thead>
                                     <tbody>
@@ -117,59 +116,9 @@ $query = tampildata("SELECT * FROM laboratorium_detail LEFT OUTER JOIN laborator
                                                    </tbody>
                                                 </table>
                                              </td>
-                                             <td class="text-center col-2">
-                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
-                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id'] ?>">Hapus</button>
-                                             </td>
                                           </tr>
 
 
-                                          <!-- Modal -->
-                                          <div class="modal fade" id="ubah<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                             <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                   <div class="modal-header">
-                                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Perubahan Data</h1>
-                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                   </div>
-                                                   <form action="" method="POST">
-                                                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                      <div class="modal-body">
-                                                         <div class="mb-3">
-                                                            <label for="satuan" class="form-label">Satuan</label>
-                                                            <input type="text" value="<?= $row['satuan'] ?>" required="" name="satuan" id="satuan" class="form-control">
-                                                         </div>
-                                                      </div>
-                                                      <div class="modal-footer">
-                                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                                         <button type="submit" name="ubahsatuan" class="btn btn-primary">Simpan</button>
-                                                      </div>
-                                                   </form>
-                                                </div>
-                                             </div>
-                                          </div>
-
-                                          <!-- Modal -->
-                                          <div class="modal fade" id="hapus<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                             <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                   <div class="modal-header">
-                                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Data</h1>
-                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                   </div>
-                                                   <form action="" method="POST">
-                                                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                      <div class="modal-body">
-                                                         <p>Apakah anda yakin menghapus data satuan <strong><?= $row['satuan'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
-                                                      </div>
-                                                      <div class="modal-footer">
-                                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                                         <button type="submit" name="hapussatuan" class="btn btn-danger">Ya, Hapus</button>
-                                                      </div>
-                                                   </form>
-                                                </div>
-                                             </div>
-                                          </div>
 
                                        <?php endforeach ?>
                                     </tbody>

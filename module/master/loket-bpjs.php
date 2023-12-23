@@ -129,6 +129,7 @@ $totaldata = mysqli_num_rows($data);
                                                             <input type="text" required="" name="nama" id="nama" class="form-control" value="<?= $row['loket'] ?>">
                                                          </div>
                                                          <input type="hidden" name="tipe_loket" value="BPJS">
+                                                         <input type="hidden" name="kode_loket" value="B">
                                                          <div class="row">
                                                             <div class="col">
                                                                <div class="mb-3">
@@ -212,6 +213,7 @@ $totaldata = mysqli_num_rows($data);
                      <input type="text" required="" name="nama" id="nama" class="form-control">
                   </div>
                   <input type="hidden" name="tipe_loket" value="BPJS">
+                  <input type="hidden" name="kode_loket" value="B">
                   <div class="row">
                      <div class="col">
                         <div class="mb-3">

@@ -3,7 +3,7 @@ $page = "Admisi";
 require '../../db/connect.php';
 require 'view.php';
 $id = $_GET['id'];
-$data = mysqli_query($koneksi, "SELECT * FROM loket_admisi WHERE id='$id'");
+$data = mysqli_query($koneksi, "SELECT * FROM loket WHERE id='$id'");
 $datainfo = mysqli_fetch_array($data);
 ?>
 <!DOCTYPE html>
@@ -108,7 +108,6 @@ $datainfo = mysqli_fetch_array($data);
                                                 <a href="../controller/antrian/loket?actions=3&loket?id=<?= $panggil['id'] ?>">
                                                     <button class="btn btn-danger mb-2 col-12">Batal</button>
                                                 </a>
-
                                             </div>
                                         </div>
                                     </div>

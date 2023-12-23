@@ -319,6 +319,17 @@ $data = mysqli_fetch_array($info);
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-2 row">
+                                                <label for="nomorreferensi" class="col-sm-2 col-form-label">Nomor Referensi</label>
+                                                <div class="col-sm-10">
+                                                   <div class="input-group">
+                                                      <input type="text" name="nomorreferensi" id="nomorreferensi" class="form-control form-control-sm" placeholder="Nomor Referensi" aria-describedby="basic-addon2">
+                                                      <button class="btn btn-outline-danger carireferensi">Cari</button>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-12">
+                                             <div class="mb-2 row">
                                                 <label for="jenislayanan" class="col-sm-2 col-form-label">Jenis Layanan</label>
                                                 <div class="col-sm-3">
                                                    <select name="jenislayanan" class="form-select form-select-sm" id="jenislayanan" required="">
@@ -1100,6 +1111,7 @@ $data = mysqli_fetch_array($info);
    require 'library.php';
    ?>
 
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
    <script>
       var kab = document.getElementById('a');
       var kec = document.getElementById('b');
@@ -1184,11 +1196,7 @@ $data = mysqli_fetch_array($info);
          })
       })
 
-      $('#layanan').on('change', function() {
-         // Get the selected category value
-         const poli = $(this).val();
-         console.log(poli)
-
+      function caridokter(poli) {
          // Make an AJAX request
          $.ajax({
             url: '../controller/antrian/ambil-dokter',
@@ -1212,6 +1220,12 @@ $data = mysqli_fetch_array($info);
                console.error('Error:', error);
             }
          });
+      }
+
+      $('#layanan').on('change', function() {
+         // Get the selected category value
+         const poli = $(this).val();
+         caridokter(poli);
       });
 
       $('#dokter').on('change', function() {
@@ -1221,6 +1235,36 @@ $data = mysqli_fetch_array($info);
          var jadwal = selectedOption.data('jadwal');
 
          $('.jadwal').val(jadwal);
+      });
+
+      $('.carireferensi').on('click', function(e) {
+         e.preventDefault();
+
+         const nomorreferensi = $('#nomorreferensi').val();
+
+         $.ajax({
+            url: '../controller/admisi/cari-referensi',
+            type: 'POST',
+            data: {
+               nomorreferensi: nomorreferensi,
+            },
+            dataType: 'json',
+            success: function(data) {
+               const metadata = data.metadata;
+               if (metadata.code != 200) {
+                  swal(metadata.message);
+                  return;
+               }
+               $('#jenislayanan').val(data.data.jenislayanan);
+               $('#layanan').val(data.data.layanan);
+               $('#jenisbayar').val(data.data.jenisbayar);
+
+               caridokter(data.data.layanan);
+            },
+            error: function(xhr, status, error) {
+               console.error('Error:', error);
+            }
+         });
       });
    </script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">

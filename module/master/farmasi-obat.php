@@ -14,6 +14,7 @@ $totaldata = mysqli_num_rows($data);
    <?php
    require '../admin/head.php';
    ?>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body onload="startTime()">
@@ -84,10 +85,11 @@ $totaldata = mysqli_num_rows($data);
                                     <thead>
                                        <tr>
                                           <th class="col-1"></th>
+                                          <th>Kategori</th>
+                                          <th>Jenis</th>
                                           <th>Golongan</th>
                                           <th>Nama Obat</th>
                                           <th>Kandungan</th>
-                                          <th>Alias</th>
                                           <th>Unit</th>
                                           <th class="text-center col-1">Actions</th>
                                        </tr>
@@ -105,12 +107,20 @@ $totaldata = mysqli_num_rows($data);
                                              ?>
                                              <td class="<?= $warna ?>"></td>
                                              <td><?= $row['kategori'] ?></td>
-                                             <td><?= $row['nama'] ?></td>
+                                             <td><?= $row['jenis'] ?></td>
+                                             <td><?= $row['golongan'] ?></td>
+                                             <td><?= $row['nama'] ?>
+                                                <br>
+                                                <p>
+                                                   Alias : <?= $row['alias'] ?>
+                                                </p>
+                                             </td>
                                              <td><?= $row['kandungan'] ?></td>
-                                             <td><?= $row['alias'] ?></td>
                                              <td><?= $row['unit'] ?></td>
                                              <td class="text-center col-2">
-                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
+                                                <a href="master/obat-detail?tipe=1&id=<?= $row['id'] ?>">
+                                                   <button class="btn btn-primary">Detail</button>
+                                                </a>
                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id'] ?>">Hapus</button>
                                              </td>
                                           </tr>
@@ -127,41 +137,77 @@ $totaldata = mysqli_num_rows($data);
                                                    <form action="" method="POST">
                                                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                       <div class="modal-body">
-                                                         <div class="mb-3">
-                                                            <label for="kategori" class="form-label">Golongan</label>
-                                                            <select name="kategori" id="kategori" class="form-select" required>
-                                                               <?php
-                                                               $query = tampildata("SELECT * FROM farmasi_golonganobat");
-                                                               ?>
-                                                               <option value="<?= $row['kategori'] ?>"><?= $row['kategori'] ?></option>
-                                                               <?php foreach ($query as $data) : ?>
-                                                                  <option value="<?= $data['golongan'] ?>"><?= $data['golongan'] ?></option>
-                                                               <?php endforeach ?>
-                                                            </select>
+                                                         <div class="row">
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="kategori" class="form-label">kategori</label>
+                                                                  <select name="kategori" id="kategori" class="form-select" required>
+                                                                     <?php
+                                                                     $query = tampildata("SELECT * FROM barang_kategori WHERE tipe=1");
+                                                                     ?>
+                                                                     <option value="<?= $row['kategori'] ?>"><?= $row['kategori'] ?></option>
+                                                                     <?php foreach ($query as $data) : ?>
+                                                                        <option value="<?= $data['kategori'] ?>"><?= $data['kategori'] ?></option>
+                                                                     <?php endforeach ?>
+                                                                  </select>
+                                                               </div>
+                                                            </div>
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="jenis" class="form-label">Jenis</label>
+                                                                  <select name="jenis" id="jenis" class="form-select" required>
+                                                                     <?php
+                                                                     $query = tampildata("SELECT * FROM barang_jenis WHERE tipe=1");
+                                                                     ?>
+                                                                     <option value="<?= $row['jenis'] ?>"><?= $row['jenis'] ?></option>
+                                                                     <?php foreach ($query as $data) : ?>
+                                                                        <option value="<?= $data['jenis'] ?>"><?= $data['jenis'] ?></option>
+                                                                     <?php endforeach ?>
+                                                                  </select>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                         <div class="row">
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="golongan" class="form-label">Golongan</label>
+                                                                  <select name="golongan" id="golongan" class="form-select" required>
+                                                                     <?php
+                                                                     $query = tampildata("SELECT * FROM farmasi_golonganobat");
+                                                                     ?>
+                                                                     <option value="<?= $row['golongan'] ?>"><?= $row['golongan'] ?></option>
+                                                                     <?php foreach ($query as $data) : ?>
+                                                                        <option value="<?= $data['golongan'] ?>"><?= $data['golongan'] ?></option>
+                                                                     <?php endforeach ?>
+                                                                  </select>
+                                                               </div>
+                                                            </div>
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="satuan" class="form-label">Unit (Satuan)</label>
+                                                                  <select name="satuan" id="satuan" class="form-select" required>
+                                                                     <?php
+                                                                     $query = tampildata("SELECT * FROM satuan WHERE tipe=1");
+                                                                     ?>
+                                                                     <option value="<?= $row['unit'] ?>"><?= $row['unit'] ?></option>
+                                                                     <?php foreach ($query as $data) : ?>
+                                                                        <option value="<?= $data['satuan'] ?>"><?= $data['satuan'] ?></option>
+                                                                     <?php endforeach ?>
+                                                                  </select>
+                                                               </div>
+                                                            </div>
                                                          </div>
                                                          <div class="mb-3">
                                                             <label for="nama" class="form-label">Nama Obat</label>
-                                                            <input type="text" value="<?= $row['nama'] ?>" name="nama" id="nama" required="" class="form-control">
-                                                         </div>
-                                                         <div class="mb-3">
-                                                            <label for="satuan" class="form-label">Unit (Satuan)</label>
-                                                            <select name="satuan" id="satuan" class="form-select" required>
-                                                               <?php
-                                                               $query = tampildata("SELECT * FROM satuan WHERE tipe=1");
-                                                               ?>
-                                                               <option value="<?= $row['unit'] ?>"><?= $row['unit'] ?></option>
-                                                               <?php foreach ($query as $data) : ?>
-                                                                  <option value="<?= $data['satuan'] ?>"><?= $data['satuan'] ?></option>
-                                                               <?php endforeach ?>
-                                                            </select>
+                                                            <input type="text" name="namaobat" id="nama" required="" value="<?= $row['nama'] ?>" class="form-control">
                                                          </div>
                                                          <div class="mb-3">
                                                             <label for="kandungan" class="form-label">Kandungan</label>
-                                                            <textarea name="kandungan" id="" cols="30" rows="5" class="form-control"><?= $row['kandungan'] ?></textarea>
+                                                            <textarea name="kandungan" id="" cols="30" rows="4" class="form-control"><?= $row['kandungan'] ?></textarea>
                                                          </div>
                                                          <div class="mb-3">
                                                             <label for="alias" class="form-label">Alias</label>
-                                                            <textarea name="alias" id="" cols="30" rows="5" class="form-control">><?= $row['alias'] ?></textarea>
+                                                            <textarea name="alias" id="" cols="30" rows="4" class="form-control"><?= $row['alias'] ?></textarea>
                                                          </div>
                                                       </div>
                                                       <div class="modal-footer">
@@ -209,6 +255,12 @@ $totaldata = mysqli_num_rows($data);
             </div>
             <!-- Container-fluid Ends-->
          </div>
+         <?php if (@$_SESSION['sukses']) { ?>
+            <script>
+               swal("Good job!", "<?php echo $_SESSION['sukses']; ?>", "success");
+            </script>
+         <?php unset($_SESSION['sukses']);
+         } ?>
          <!-- footer start-->
          <?php
          require '../../template/footer.php';
@@ -228,41 +280,77 @@ $totaldata = mysqli_num_rows($data);
             </div>
             <form action="" method="POST">
                <div class="modal-body">
-                  <div class="mb-3">
-                     <label for="kategori" class="form-label">Golongan</label>
-                     <select name="kategori" id="kategori" class="form-select" required>
-                        <?php
-                        $query = tampildata("SELECT * FROM farmasi_golonganobat");
-                        ?>
-                        <option value="">PILIH</option>
-                        <?php foreach ($query as $data) : ?>
-                           <option value="<?= $data['golongan'] ?>"><?= $data['golongan'] ?></option>
-                        <?php endforeach ?>
-                     </select>
+                  <div class="row">
+                     <div class="col">
+                        <div class="mb-3">
+                           <label for="kategori" class="form-label">kategori</label>
+                           <select name="kategori" id="kategori" class="form-select" required>
+                              <?php
+                              $query = tampildata("SELECT * FROM barang_kategori WHERE tipe=1");
+                              ?>
+                              <option value="">PILIH</option>
+                              <?php foreach ($query as $data) : ?>
+                                 <option value="<?= $data['kategori'] ?>"><?= $data['kategori'] ?></option>
+                              <?php endforeach ?>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="mb-3">
+                           <label for="jenis" class="form-label">Jenis</label>
+                           <select name="jenis" id="jenis" class="form-select" required>
+                              <?php
+                              $query = tampildata("SELECT * FROM barang_jenis WHERE tipe=1");
+                              ?>
+                              <option value="">PILIH</option>
+                              <?php foreach ($query as $data) : ?>
+                                 <option value="<?= $data['jenis'] ?>"><?= $data['jenis'] ?></option>
+                              <?php endforeach ?>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col">
+                        <div class="mb-3">
+                           <label for="golongan" class="form-label">Golongan</label>
+                           <select name="golongan" id="golongan" class="form-select" required>
+                              <?php
+                              $query = tampildata("SELECT * FROM farmasi_golonganobat");
+                              ?>
+                              <option value="">PILIH</option>
+                              <?php foreach ($query as $data) : ?>
+                                 <option value="<?= $data['golongan'] ?>"><?= $data['golongan'] ?></option>
+                              <?php endforeach ?>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="mb-3">
+                           <label for="satuan" class="form-label">Unit (Satuan)</label>
+                           <select name="satuan" id="satuan" class="form-select" required>
+                              <?php
+                              $query = tampildata("SELECT * FROM satuan WHERE tipe=1");
+                              ?>
+                              <option value="">PILIH</option>
+                              <?php foreach ($query as $data) : ?>
+                                 <option value="<?= $data['satuan'] ?>"><?= $data['satuan'] ?></option>
+                              <?php endforeach ?>
+                           </select>
+                        </div>
+                     </div>
                   </div>
                   <div class="mb-3">
                      <label for="nama" class="form-label">Nama Obat</label>
                      <input type="text" name="namaobat" id="nama" required="" class="form-control">
                   </div>
                   <div class="mb-3">
-                     <label for="satuan" class="form-label">Unit (Satuan)</label>
-                     <select name="satuan" id="satuan" class="form-select" required>
-                        <?php
-                        $query = tampildata("SELECT * FROM satuan WHERE tipe=1");
-                        ?>
-                        <option value="">PILIH</option>
-                        <?php foreach ($query as $data) : ?>
-                           <option value="<?= $data['satuan'] ?>"><?= $data['satuan'] ?></option>
-                        <?php endforeach ?>
-                     </select>
-                  </div>
-                  <div class="mb-3">
                      <label for="kandungan" class="form-label">Kandungan</label>
-                     <textarea name="kandungan" id="" cols="30" rows="5" class="form-control"></textarea>
+                     <textarea name="kandungan" id="" cols="30" rows="4" class="form-control"></textarea>
                   </div>
                   <div class="mb-3">
                      <label for="alias" class="form-label">Alias</label>
-                     <textarea name="alias" id="" cols="30" rows="5" class="form-control"></textarea>
+                     <textarea name="alias" id="" cols="30" rows="4" class="form-control"></textarea>
                   </div>
                </div>
                <div class="modal-footer">

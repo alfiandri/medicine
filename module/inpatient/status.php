@@ -1,15 +1,16 @@
 <?php
 session_start();
 $page = "Status Pasien";
-require '../../db/connect.php';
-require '../../controller/intpatient/permintaan.php';
-require '../../controller/intpatient/status.php';
-require 'view.php';
+require __DIR__ . '../../../db/connect.php';
+require __DIR__ . '../../../controller/intpatient/permintaan.php';
+require __DIR__ . '../../../controller/intpatient/status.php';
+require __DIR__ . '/view.php';
 $id = $_GET['id'];
 $info = mysqli_query($koneksi, "SELECT * FROM pasien_visit WHERE uid_pasien='$id'");
 $data = mysqli_fetch_array($info);
 $infopasien = mysqli_query($koneksi, "SELECT * FROM pasien WHERE uid_pasien='$id'");
 $datapasien = mysqli_fetch_array($infopasien);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,7 +118,7 @@ $datapasien = mysqli_fetch_array($infopasien);
                                              <div class="row">
                                                 <label for="catatan" class="col-sm-4 col-form-label">Catatan</label>
                                                 <div class="col-sm-8">
-                                                   <input type="text" readonly class="form-control-plaintext" id="catatan" value=": <?= $data['catatan'] ?>">
+                                                   <input type="text" readonly class="form-control-plaintext" id="catatan" value=": <?= @$data['catatan_kondisi'] ?>">
                                                 </div>
                                              </div>
                                           </div>
@@ -168,7 +169,7 @@ $datapasien = mysqli_fetch_array($infopasien);
                                           <hr>
                                           <div class="row mb-3">
                                              <input type="hidden" name="nomorrm" value="<?= $datapasien['nomor_rm'] ?>">
-                                             <input type="hidden" name="kode" value="<?= $data['kodebooking'] ?>">
+                                             <input type="hidden" name="kode" value="<?= $datapasien['kodebooking'] ?>">
                                              <div class="col-3">
                                                 <div class="mb-3">
                                                    <label for="status" class="form-label">Status Pulang</label>
@@ -180,6 +181,16 @@ $datapasien = mysqli_fetch_array($infopasien);
                                                       <?php foreach ($query as $row) : ?>
                                                          <option value="<?= $row['status'] ?>"><?= $row['status'] ?></option>
                                                       <?php endforeach ?>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="col-3">
+                                                <div class="mb-3">
+                                                   <label for="jenisresep" class="form-label">Jenis Resep</label>
+                                                   <select name="jenisresep" class="form-select" id="jenisresep" required="">
+                                                      <option value="Tidak ada">Tidak ada</option>
+                                                      <option value="Racikan">Racikan</option>
+                                                      <option value="Non racikan">Non racikan</option>
                                                    </select>
                                                 </div>
                                              </div>

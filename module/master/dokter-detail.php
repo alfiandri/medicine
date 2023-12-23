@@ -8,26 +8,35 @@ require '../admin/view.php';
 require '../../controller/master/dokter.php';
 $datacheck = mysqli_query($koneksi, "SELECT * FROM dokter WHERE uid_dokter='$id'");
 $data = mysqli_fetch_array($datacheck);
-$gelardepan = $data['gelar_depan'];
-$nip = $data['nip'];
-$sip = $data['sip'];
-$id_card = $data['id_card'];
-$gelarbelakang = $data['gelarbelakang'];
-$nama = $data['nama'];
-$tempatlahir = $data['tempat_lahir'];
-$tanggallahir = $data['tanggal_lahir'];
-$agama = $data['agama'];
-$gender = $data['gender'];
-$pendidikan = $data['pendidikan'];
-$email = $data['email'];
-$telepon = $data['telepon'];
-$kategori = $data['kategori'];
-$spesialis = $data['spesialis'];
-$sub = $data['sub'];
-$layanan = $data['layanan'];
-$status_kawin = $data['status_kawin'];
-$warga_negara = $data['warga_negara'];
-$catatan = $data['catatan'];
+$gelardepan = isset($data['gelar_depan']) ? $data['gelar_depan'] : 'BELUM DI ISI';
+$nip = isset($data['nip']) ? $data['nip'] : 'BELUM DI ISI';
+$sip = isset($data['sip']) ? $data['sip'] : 'BELUM DI ISI';
+$id_card = isset($data['id_card']) ? $data['id_card'] : 'BELUM DI ISI';
+$gelarbelakang = isset($data['gelar_belakang']) ? $data['gelar_belakang'] : 'BELUM DI ISI';
+$nama = isset($data['nama']) ? $data['nama'] : 'BELUM DI ISI';
+$tempatlahir = isset($data['tempat_lahir']) ? $data['tempat_lahir'] : 'BELUM DI ISI';
+$agama = isset($data['agama']) ? $data['agama'] : 'BELUM DI ISI';
+$gender = isset($data['gender']) ? $data['gender'] : 'BELUM DI ISI';
+$pendidikan = isset($data['pendidikan']) ? $data['pendidikan'] : 'BELUM DI ISI';
+$email = isset($data['email']) ? $data['email'] : 'BELUM DI ISI';
+$telepon = isset($data['telepon']) ? $data['telepon'] : 'BELUM DI ISI';
+$kategori = isset($data['kategori']) ? $data['kategori'] : 'BELUM DI ISI';
+$spesialis = isset($data['spesialis']) ? $data['spesialis'] : 'BELUM DI ISI';
+$sub = isset($data['sub']) ? $data['sub'] : 'BELUM DI ISI';
+$layanan = isset($data['layanan']) ? $data['layanan'] : 'BELUM DI ISI';
+$status_kawin = isset($data['status_kawin']) ? $data['status_kawin'] : 'BELUM DI ISI';
+$catatan = isset($data['catatan']) ? $data['catatan'] : 'BELUM DI ISI';
+$dataalamat = mysqli_query($koneksi, "SELECT * FROM dokter_alamat WHERE uid='$id'");
+$infoalamat = mysqli_fetch_array($dataalamat);
+$warga_negara = isset($infoalamat['warga_negara']) ? $infoalamat['warga_negara'] : 'BELUM DI ISI';
+$negara = isset($infoalamat['negara']) ? $infoalamat['negara'] : 'BELUM DI ISI';
+$alamat = isset($infoalamat['alamat']) ? $infoalamat['alamat'] : 'BELUM DI ISI';
+$provinsi = isset($infoalamat['provinsi']) ? $infoalamat['provinsi'] : 'BELUM DI ISI';
+$kabupaten = isset($infoalamat['kabupaten']) ? $infoalamat['kabupaten'] : 'BELUM DI ISI';
+$kecamatan = isset($infoalamat['kecamatan']) ? $infoalamat['kecamatan'] : 'BELUM DI ISI';
+$kelurahan = isset($infoalamat['kelurahan']) ? $infoalamat['kelurahan'] : 'BELUM DI ISI';
+$rtrw = isset($infoalamat['rtrw']) ? $infoalamat['rtrw'] : 'BELUM DI ISI';
+$kodepos = isset($infoalamat['kodepos']) ? $infoalamat['kodepos'] : 'BELUM DI ISI';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -185,7 +194,7 @@ $catatan = $data['catatan'];
                                              <div class="mb-3 row">
                                                 <label for="inputPassword" class="col-sm-4 col-form-label">Tanggal Lahir</label>
                                                 <div class="col-sm-8">
-                                                   <input type="date" class="form-control" name="tanggallahir" value="<?= $tanggallahir ?>" id="">
+                                                   <input type="date" class="form-control" required="" name="tanggallahir" value="<?= $tanggallahir ?>" id="">
                                                 </div>
                                              </div>
                                           </div>
@@ -300,6 +309,39 @@ $catatan = $data['catatan'];
                                                    </select>
                                                 </div>
                                              </div>
+
+                                          </div>
+                                          <div class="col-6">
+                                             <div class="mb-3 row">
+                                                <label for="sub" class="col-sm-4 col-form-label">Sub Spesialis</label>
+                                                <div class="col-sm-8">
+                                                   <?php
+                                                   $query = tampildata("SELECT * FROM subspesialis WHERE status=1");
+                                                   ?>
+                                                   <select name="sub" class="form-select" id="">
+                                                      <option value="<?= $sub ?>"><?= $sub ?></option>
+                                                      <?php foreach ($query as $row) : ?>
+                                                         <option value="<?= $row['sub'] ?>"><?= $row['sub'] ?></option>
+                                                      <?php endforeach ?>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-6">
+                                             <div class="mb-3 row">
+                                                <label for="notelepon" class="col-sm-4 col-form-label">No.Handphone</label>
+                                                <div class="col-sm-8">
+                                                   <input type="tel" value="<?= $telepon ?>" name="notelepon" class="form-control">
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-6">
+                                             <div class="mb-3 row">
+                                                <label for="email" class="col-sm-4 col-form-label">Email</label>
+                                                <div class="col-sm-8">
+                                                   <input type="email" value="<?= $email ?>" name="email" class="form-control">
+                                                </div>
+                                             </div>
                                           </div>
                                           <div class="col-12">
                                              <div class="mb-3 row">
@@ -307,7 +349,7 @@ $catatan = $data['catatan'];
                                                 <div class="col-sm-10">
                                                    <button class="btn btn-success" name="simpandokterdetail">Simpan</button>
                                                    <a href="<?= $path ?>/dokter">
-                                                      <button class="btn btn-light">Kembali</button>
+                                                      <button type="button" class="btn btn-light">Kembali</button>
                                                    </a>
                                                 </div>
                                              </div>
@@ -465,45 +507,111 @@ $catatan = $data['catatan'];
                                  </div>
                                  <div <?php if ($tipe == 3) echo "class='tab-pane fade show active'";
                                        echo "class='tab-pane fade'" ?> id="pills-warningcontact" role="tabpanel" aria-labelledby="pills-warningcontact-tab">
-                                    <form action="" method="POST">
-                                       <input type="hidden" name="id" value="<?= $id ?>">
-                                       <input type="hidden" name="tipe" value="3">
-                                       <div class="row">
-                                          <div class="col-12">
-                                             <div class="mb-3 row">
-                                                <label for="inputPassword" class="col-sm-2 col-form-label">Kewarganegaraan</label>
-                                                <div class="col-sm-3">
-                                                   <select name="warganegara" class="form-select" id="warganegara">
-                                                      <option selected>Pilih Kewarganegaraan</option>
+                                    <div class="row">
+                                       <div class="col-12">
+                                          <div class="mb-2 row">
+                                             <label for="warganegara" class="col-sm-2 col-form-label">Kewarganegaraan</label>
+                                             <div class="col-sm-3">
+                                                <input type="text" class="form-control form-control-sm" value="<?= $warga_negara ?>" readonly name="" id="">
+                                             </div>
+                                             <div class="col-sm-7">
+                                                <input type="text" class="form-control form-control-sm" value="<?= $negara ?>" readonly name="" id="">
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="col-12">
+                                          <div class="mb-2 row">
+                                             <label for="alamat" class="col-sm-2 col-form-label">Alamat Domisili</label>
+                                             <div class="col-sm-10">
+                                                <textarea name="alamat" readonly class="form-control form-control-sm" id="" cols="30" rows="4"><?= $alamat ?></textarea>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="col-12">
+                                          <div class="mb-2 row">
+                                             <label for="kodepos" class="col-sm-2 col-form-label">Provinsi</label>
+                                             <div class="col-sm-10 mb-2">
+                                                <input type="text" value="<?= $provinsi ?>" class="form-control form-control-sm" readonly name="kodepos" id="kodepos">
+                                             </div>
+                                             <label for="kodepos" class="col-sm-2 col-form-label">Kabupaten</label>
+                                             <div class="col-sm-10 mb-2">
+                                                <input type="text" value="<?= $kabupaten ?>" class="form-control form-control-sm" readonly name="kodepos" id="kodepos">
+                                             </div>
+                                             <label for="kodepos" class="col-sm-2 col-form-label">Kecamatan</label>
+                                             <div class="col-sm-10 mb-2">
+                                                <input type="text" value="<?= $kecamatan ?>" class="form-control form-control-sm" readonly name="kodepos" id="kodepos">
+                                             </div>
+                                             <label for="kodepos" class="col-sm-2 col-form-label">Kelurahan</label>
+                                             <div class="col-sm-10 mb-2">
+                                                <input type="text" value="<?= $kelurahan ?>" class="form-control form-control-sm" readonly name="kodepos" id="kodepos">
+                                             </div>
+                                             <label for="kodepos" class="col-sm-2 col-form-label">RT/RW</label>
+                                             <div class="col-sm-10 mb-2">
+                                                <input type="text" value="<?= $rtrw ?>" class="form-control form-control-sm" readonly name="kodepos" id="kodepos">
+                                             </div>
+                                             <label for="kodepos" class="col-sm-2 col-form-label">Kode Pos</label>
+                                             <div class="col-sm-10">
+                                                <input type="text" value="<?= $kodepos ?>" class="form-control form-control-sm" readonly name="kodepos" id="kodepos">
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <?php
+                                       $check = mysqli_query($koneksi, "SELECT * FROM dokter_alamat WHERE uid='$id'");
+                                       $datacheck = mysqli_fetch_array($check);
+                                       if ($datacheck == NULL) {
+                                          $ket = 'Isi Data';
+                                       } else {
+                                          $ket = 'Perbarui Data';
+                                       }
+                                       ?>
+                                       <div class="col-12">
+                                          <div class="mb-3 row">
+                                             <label for="" class="col-sm-2 col-form-label"></label>
+                                             <div class="col-sm-10">
+                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addalamat" type="button"><?= $ket ?></button>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+
+                                 <div class="modal fade" id="addalamat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                       <div class="modal-content">
+                                          <div class="modal-header">
+                                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Data</h1>
+                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <form action="" method="POST" enctype="multipart/form-data">
+                                             <input type="hidden" name="tipe" value="<?= $_GET['tipe'] ?>">
+                                             <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
+                                             <div class="modal-body">
+                                                <div class="mb-3">
+                                                   <label for="dokumen" class="form-label">Warga Negara</label>
+                                                   <select name="warganegara" class="form-select form-select-sm" id="warganegara" required="">
+                                                      <option value="">PILIH</option>
                                                       <option value="WNI">WNI</option>
                                                       <option value="WNA">WNA</option>
                                                    </select>
                                                 </div>
-                                                <div class="col-sm-7">
-                                                   <?php
-                                                   $query = tampildata("SELECT * FROM negara");
-                                                   ?>
-                                                   <input class="form-control" list="datanegara" id="neagara" name="negara" placeholder="cari negara...">
-                                                   <datalist id="datanegara">
+                                                <div class="mb-3">
+                                                   <label for="negara" class="form-label">Negara</label>
+                                                   <input class="form-control" list="datalistOptions" id="negara" name="negara" placeholder="Type to search...">
+                                                   <datalist id="datalistOptions">
+                                                      <?php
+                                                      $query = tampildata("SELECT * FROM negara");
+                                                      ?>
                                                       <?php foreach ($query as $data) : ?>
                                                          <option value="<?= $data['name'] ?>">
                                                          <?php endforeach ?>
                                                    </datalist>
                                                 </div>
-                                             </div>
-                                          </div>
-                                          <div class="col-12">
-                                             <div class="mb-3 row">
-                                                <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
-                                                <div class="col-sm-10">
-                                                   <textarea name="alamat" class="form-control" id="" cols="30" rows="4"></textarea>
+                                                <div class="mb-3">
+                                                   <label for="alamat" class="form-label">Alamat</label>
+                                                   <textarea name="alamat" class="form-control" id="alamat" cols="30" rows="5"></textarea>
                                                 </div>
-                                             </div>
-                                          </div>
-                                          <div class="col-12">
-                                             <div class="mb-2 row">
-                                                <label for="wilayah" class="col-sm-2 col-form-label">Wilayah</label>
-                                                <div class="col-sm-2">
+                                                <div class="mb-3">
+                                                   <label for="provinsi" class="form-label">Provinsi</label>
                                                    <select name="provinsi" class="form-select form-select-sm" id="provinsi" required="">
                                                       <option value="">Pilih Provinsi</option>
                                                       <?php
@@ -513,113 +621,37 @@ $catatan = $data['catatan'];
                                                       <?php } ?>
                                                    </select>
                                                 </div>
-                                                <div class="col-sm-2" id="a">
+                                                <div class="mb-3" id="a">
+                                                   <label for="kabupaten" class="form-label">Kabupaten</label>
                                                    <select name="kabupaten" id="kabupaten" required="" class="form-select form-select-sm">
                                                       <option selected>Pilih Kabupaten</option>
                                                    </select>
                                                 </div>
-                                                <div class="col-sm-2" id="b">
+                                                <div class="mb-3" id="b">
+                                                   <label for="kecamatan" class="form-label">Kecamatan</label>
                                                    <select name="kecamatan" id="kecamatan" required="" class="form-select form-select-sm">
                                                       <option selected>Pilih Kecamatan</option>
                                                    </select>
                                                 </div>
-                                                <div class="col-sm-2" id="c">
+                                                <div class="mb-3" id="c">
+                                                   <label for="kelurahan" class="form-label">Kelurahan</label>
                                                    <select name="kelurahan" id="kelurahan" required="" class="form-select form-select-sm">
                                                       <option selected>Pilih Kelurahan</option>
                                                    </select>
                                                 </div>
-
-                                                <div class="col-sm-2">
-                                                   <input type="text" class="form-control form-control-sm" placeholder="RT/RW" name="rtrw" id="rtrw" value="<?= $data['rtrw'] ?>">
+                                                <div class="mb-3">
+                                                   <label for="rtrw" class="form-label">RT RW</label>
+                                                   <input type="text" class="form-control" name="rtrw" id="rtrw">
                                                 </div>
                                              </div>
-                                          </div>
-                                          <div class="col-12">
-                                             <div class="mb-3 row">
-                                                <label for="inputPassword" class="col-sm-2 col-form-label"></label>
-                                                <div class="col-sm-10">
-                                                   <button class="btn btn-success" type="submit" name="simpanalamat">Simpan</button>
-                                                   <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#alamat">Lihat Data</button>
-                                                   <a href="<?= $path ?>/dokter">
-                                                      <button type="button" class="btn btn-light">Kembali</button>
-                                                   </a>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </form>
-                                 </div>
-
-                                 <!-- Modal -->
-                                 <div class="modal fade" id="alamat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                       <div class="modal-content">
-                                          <div class="modal-header">
-                                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Alamat Dokter</h1>
-                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                          </div>
-                                          <form action="" method="POST">
-                                             <?php
-                                             $dataalamat = mysqli_query($koneksi, "SELECT * FROM dokter_alamat WHERE uid='$id'");
-                                             $checkalamat = mysqli_fetch_array($dataalamat);
-                                             ?>
-                                             <div class="modal-body">
-                                                <div class="row">
-                                                   <div class="col">
-                                                      <div class="mb-3">
-                                                         <label for="warganegara" class="form-label">Warga Negara</label>
-                                                         <input type="text" class="form-control" readonly name="warganegara" value="<?= $checkalamat['warga_negara'] ?>" id="">
-                                                      </div>
-                                                   </div>
-                                                   <div class="col">
-                                                      <div class="mb-3">
-                                                         <label for="negara" class="form-label">Negara</label>
-                                                         <input type="text" " class=" form-control" readonly name="negara" value="<?= $checkalamat['negara'] ?>" id="">
-                                                      </div>
-                                                   </div>
-                                                </div>
-
-
-                                                <div class="mb-3">
-                                                   <label for="alamat" class="form-label">Alamat</label>
-                                                   <input type="text" " class=" form-control" readonly name="alamat" value="<?= $checkalamat['alamat'] ?>" id="">
-                                                </div>
-                                                <div class="mb-3">
-                                                   <label for="provinsi" class="form-label">Provinsi</label>
-                                                   <input type="text" " class=" form-control" readonly name="provinsi" value="<?= $checkalamat['provinsi'] ?>" id="">
-                                                </div>
-                                                <div class="mb-3">
-                                                   <label for="kabupaten" class="form-label">Kabupaten</label>
-                                                   <input type="text" " class=" form-control" readonly name="kabupaten" value="<?= $checkalamat['kabupaten'] ?>" id="">
-                                                </div>
-                                                <div class="mb-3">
-                                                   <label for="kecamatan" class="form-label">Kecamatan</label>
-                                                   <input type="text" " class=" form-control" readonly name="kecamatan" value="<?= $checkalamat['kecamatan'] ?>" id="">
-                                                </div>
-                                                <div class="mb-3">
-                                                   <label for="kelurahan" class="form-label">Kelurahan</label>
-                                                   <input type="text" " class=" form-control" readonly name="kelurahan" value="<?= $checkalamat['kelurahan'] ?>" id="">
-                                                </div>
-                                                <div class="row">
-                                                   <div class="col">
-                                                      <div class="mb-3">
-                                                         <label for="rtrw" class="form-label">RT/RW</label>
-                                                         <input type="text" " class=" form-control" readonly name="rtrw" value="<?= $checkalamat['rtrw'] ?>" id="">
-                                                      </div>
-                                                   </div>
-                                                   <div class="col">
-                                                      <div class="mb-3">
-                                                         <label for="kodepos" class="form-label">Kode Pos</label>
-                                                         <input type="text" " class=" form-control" readonly name="kodepos" value="<?= $checkalamat['kodepos'] ?>" id="">
-                                                      </div>
-                                                   </div>
-                                                </div>
+                                             <div class="modal-footer">
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary" name="simpanalamat">Simpan</button>
                                              </div>
                                           </form>
                                        </div>
                                     </div>
                                  </div>
-
                                  <div <?php if ($tipe == 4) echo "class='tab-pane fade show active'";
                                        echo "class='tab-pane fade'" ?> id="pills-keluarga" role="tabpanel" aria-labelledby="pills-keluarga-tab">
                                     <div class="row">
@@ -656,12 +688,12 @@ $catatan = $data['catatan'];
                                                                   <td><?= $row['telepon'] ?></td>
                                                                   <td><?= $row['alamat'] ?></td>
                                                                   <td class="text-center col-2">
-                                                                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
-                                                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id'] ?>">Hapus</button>
+                                                                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubahdokumen<?= $row['id'] ?>">Ubah</button>
+                                                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusdokumen<?= $row['id'] ?>">Hapus</button>
                                                                   </td>
                                                                </tr>
 
-                                                               <div class="modal fade" id="ubah<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                               <div class="modal fade" id="ubahdokumen<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                                   <div class="modal-dialog">
                                                                      <div class="modal-content">
                                                                         <div class="modal-header">
@@ -708,7 +740,7 @@ $catatan = $data['catatan'];
                                                                </div>
 
                                                                <!-- Modal -->
-                                                               <div class="modal fade" id="hapus<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                               <div class="modal fade" id="hapusdokumen<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                                   <div class="modal-dialog">
                                                                      <div class="modal-content">
                                                                         <div class="modal-header">
@@ -893,7 +925,8 @@ $catatan = $data['catatan'];
                                        </div>
                                     </form>
                                  </div>
-                                 <div class="tab-pane fade" id="pills-fotodiri" role="tabpanel" aria-labelledby="pills-fotodiri-tab">
+                                 <div <?php if ($tipe == 7) echo "class='tab-pane fade show active'";
+                                       echo "class='tab-pane fade'" ?> id="pills-fotodiri" role="tabpanel" aria-labelledby="pills-fotodiri-tab">
                                     <div class="row">
                                        <div class="col-4">
                                           <div class="card">

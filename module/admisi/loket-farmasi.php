@@ -46,13 +46,13 @@ require 'view.php';
                     <div class="page-title">
                         <div class="row">
                             <div class="col-6">
-                                <h3>Admisi</h3>
+                                <h3>Farmasi</h3>
                             </div>
                             <div class="col-6">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="index"> <i data-feather="home"></i></a></li>
                                     <li class="breadcrumb-item">Panggil Antrian</li>
-                                    <li class="breadcrumb-item active">Admisi </li>
+                                    <li class="breadcrumb-item active">Farmasi </li>
                                 </ol>
                             </div>
                         </div>
@@ -80,7 +80,7 @@ require 'view.php';
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $query = tampildata("SELECT * FROM loket_farmasi");
+                                                    $query = tampildata("SELECT * FROM loket where tipe = 'FARMASI'");
                                                     ?>
                                                     <?php foreach ($query as $row) : ?>
                                                         <tr>

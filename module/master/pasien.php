@@ -6,6 +6,7 @@ require '../../controller/master/pasien.php';
 $query = tampildata("SELECT * FROM pasien");
 $data = mysqli_query($koneksi, "SELECT id FROM pasien");
 $totaldata = mysqli_num_rows($data);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -111,19 +112,7 @@ $totaldata = mysqli_num_rows($data);
                                              <td><?= $row['nama_pasien'] ?></td>
                                              <td><?= $row['tempat_lahir'] ?> / <?= $row['tanggal_lahir'] ?></td>
                                              <td><?= $row['agama'] ?></td>
-                                             <td class="text-center">
-                                                <?php
-                                                $gn = $row['gender'];
-                                                if ($gn == 'L' or 'Pria' or 'Laki Laki') {
-                                                   $col = 'bg-success';
-                                                   $ket = 'Laki Laki';
-                                                } else {
-                                                   $col = 'bg-danger';
-                                                   $ket = 'Perempuan';
-                                                }
-                                                ?>
-                                                <span class="badge <?= $col ?>"><?= $ket ?></span>
-                                             </td>
+                                             <td class="text-center"><?= $row['gender'] ?></td>
                                              <td><?= $row['alamat'] ?></td>
                                              <td class="text-center">
                                                 <a href="<?= $path ?>/pasien-detail?tipe=1&id=<?= $row['uid_pasien'] ?>">
@@ -255,6 +244,7 @@ $totaldata = mysqli_num_rows($data);
          </div>
       </div>
    </div>
+
    <?php
    include '../admin/library.php';
    ?>

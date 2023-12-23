@@ -319,6 +319,17 @@ $data = mysqli_fetch_array($info);
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-2 row">
+                                                <label for="nomorreferensi" class="col-sm-2 col-form-label">Nomor Referensi</label>
+                                                <div class="col-sm-10">
+                                                   <div class="input-group">
+                                                      <input type="text" name="nomorreferensi" id="nomorreferensi" class="form-control form-control-sm" placeholder="Nomor Referensi" aria-describedby="basic-addon2">
+                                                      <button class="btn btn-outline-danger carireferensi">Cari</button>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-12">
+                                             <div class="mb-2 row">
                                                 <label for="jenislayanan" class="col-sm-2 col-form-label">Jenis Layanan</label>
                                                 <div class="col-sm-3">
                                                    <select name="jenislayanan" class="form-select form-select-sm" id="jenislayanan" required="">
@@ -337,6 +348,20 @@ $data = mysqli_fetch_array($info);
                                                       <?php foreach ($query as $row) : ?>
                                                          <option value="<?= $row['jenis'] ?>"><?= $row['jenis'] ?></option>
                                                       <?php endforeach ?>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-12">
+                                             <div class="mb-2 row">
+                                                <label for="jeniskunjungan" class="col-sm-2 col-form-label">Jenis Kunjungan</label>
+                                                <div class="col-sm-3">
+                                                   <select name="jeniskunjungan" id="jeniskunjungan" class="form-select form-select-sm" required>
+                                                      <option value="">--PILIH--</option>
+                                                      <option value="1">Rujukan FKTP</option>
+                                                      <option value="2">Rujukan Internal</option>
+                                                      <option value="3">Kontrol</option>
+                                                      <option value="4">Rujukan Antar RS</option>
                                                    </select>
                                                 </div>
                                              </div>
@@ -413,7 +438,7 @@ $data = mysqli_fetch_array($info);
                                                       $query = tampildata("SELECT * FROM poli");
                                                       ?>
                                                       <?php foreach ($query as $row) : ?>
-                                                         <option value="<?= $row['nmpoli'] ?>"><?= $row['nmpoli'] ?></option>
+                                                         <option value="<?= $row['kdpoli'] ?>"><?= $row['nmpoli'] ?></option>
                                                       <?php endforeach ?>
                                                    </select>
                                                 </div>
@@ -437,7 +462,7 @@ $data = mysqli_fetch_array($info);
                                              <div class="mb-2 row">
                                                 <label for="kodebooking" class="col-sm-2 col-form-label">Kode Booking</label>
                                                 <div class="col-sm-10">
-                                                   <input type="text" class="form-control form-control-sm" name="kodebooking" id="kodebooking" value="<?=@$data['kodebooking']?>" placeholder="Kode Booking">
+                                                   <input type="text" class="form-control form-control-sm" name="kodebooking" id="kodebooking" value="<?= @$data['kodebooking'] ?>" placeholder="Kode Booking">
                                                 </div>
                                              </div>
                                           </div>
@@ -1084,6 +1109,7 @@ $data = mysqli_fetch_array($info);
    <?php
    require 'library.php';
    ?>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
    <script>
       var kab = document.getElementById('a');
@@ -1169,12 +1195,7 @@ $data = mysqli_fetch_array($info);
          })
       });
 
-
-      $('#layanan').on('change', function() {
-         // Get the selected category value
-         const poli = $(this).val();
-         console.log(poli)
-
+      function caridokter(poli) {
          // Make an AJAX request
          $.ajax({
             url: '../controller/antrian/ambil-dokter',
@@ -1198,16 +1219,52 @@ $data = mysqli_fetch_array($info);
                console.error('Error:', error);
             }
          });
+      }
+
+      $('#layanan').on('change', function() {
+         // Get the selected category value
+         const poli = $(this).val();
+         caridokter(poli);
       });
 
       $('#dokter').on('change', function() {
-            // Get the selected category value
-            var selectedOption = $(this).find('option:selected');
+         // Get the selected category value
+         var selectedOption = $(this).find('option:selected');
 
-            var jadwal = selectedOption.data('jadwal');
+         var jadwal = selectedOption.data('jadwal');
 
-            $('.jadwal').val(jadwal);
-        });
+         $('.jadwal').val(jadwal);
+      });
+
+      $('.carireferensi').on('click', function(e) {
+         e.preventDefault();
+
+         const nomorreferensi = $('#nomorreferensi').val();
+
+         $.ajax({
+            url: '../controller/admisi/cari-referensi',
+            type: 'POST',
+            data: {
+               nomorreferensi: nomorreferensi,
+            },
+            dataType: 'json',
+            success: function(data) {
+               const metadata = data.metadata;
+               if (metadata.code != 200) {
+                  swal(metadata.message);
+                  return;
+               }
+               $('#jenislayanan').val(data.data.jenislayanan);
+               $('#layanan').val(data.data.layanan);
+               $('#jenisbayar').val(data.data.jenisbayar);
+
+               caridokter(data.data.layanan);
+            },
+            error: function(xhr, status, error) {
+               console.error('Error:', error);
+            }
+         });
+      });
    </script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
    </script>

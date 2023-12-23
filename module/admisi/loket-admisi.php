@@ -2,7 +2,7 @@
 $page = "Admisi";
 require '../../db/connect.php';
 require 'view.php';
-$data = mysqli_query($koneksi, "SELECT * FROM loket_admisi");
+$data = mysqli_query($koneksi, "SELECT * FROM loket where tipe = 'UMUM'");
 $totaldata = mysqli_num_rows($data);
 ?>
 <!DOCTYPE html>
@@ -86,7 +86,7 @@ $totaldata = mysqli_num_rows($data);
                                                     <tr>
                                                         <th class="text-center">Status</th>
                                                         <th class="text-center">Loket</th>
-                                                        <th class="text-center">Kode</th>
+                                                        <th class="text-center">Tipe Loket</th>
                                                         <th class="text-center">Layanan</th>
                                                         <th class="text-center">Mulai</th>
                                                         <th class="text-center">Selesai</th>
@@ -95,7 +95,7 @@ $totaldata = mysqli_num_rows($data);
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $query = tampildata("SELECT * FROM loket_admisi");
+                                                    $query = tampildata("SELECT * FROM loket where tipe = 'UMUM'");
                                                     ?>
                                                     <?php foreach ($query as $row) : ?>
                                                         <tr>
@@ -113,14 +113,11 @@ $totaldata = mysqli_num_rows($data);
                                                                 <span class="badge col-8 bg-<?= $color ?>"><?= $note ?></span>
                                                             </td>
                                                             <td class="text-center"><?= $row['loket'] ?></td>
-                                                            <td class="text-center"><?= $row['kode_loket'] ?></td>
+                                                            <td class="text-center"><?= $row['tipe'] ?></td>
                                                             <td class="text-center"><?= $row['layanan'] ?></td>
                                                             <td class="text-center"><?= $row['mulai'] ?></td>
                                                             <td class="text-center"><?= $row['selesai'] ?></td>
                                                             <td class="text-center col-3">
-                                                                <a href="admisi/loket-admisi-call?id=<?= $row['id'] ?>">
-                                                                    <button class="btn btn-primary">Buka Loket</button>
-                                                                </a>
                                                                 <a href="admisi/loket-admisi-list?id=<?= $row['id'] ?>">
                                                                     <button class="btn btn-success">Lihat Antrian</button>
                                                                 </a>

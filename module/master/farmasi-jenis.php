@@ -14,6 +14,7 @@ $totaldata = mysqli_num_rows($data);
    <?php
    require '../admin/head.php';
    ?>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body onload="startTime()">
@@ -120,7 +121,7 @@ $totaldata = mysqli_num_rows($data);
                                                       <input type="hidden">
                                                       <div class="modal-body">
                                                          <div class="mb-3">
-                                                            <label for="jenis" class="form-label">Jenis Barang</label>
+                                                            <label for="jenis" class="form-label">Jenis</label>
                                                             <input type="text" required="" value="<?= $row['jenis'] ?>" name="jenis" id="jenis" class="form-control">
                                                          </div>
                                                       </div>
@@ -169,6 +170,12 @@ $totaldata = mysqli_num_rows($data);
             </div>
             <!-- Container-fluid Ends-->
          </div>
+         <?php if (@$_SESSION['sukses']) { ?>
+            <script>
+               swal("Good job!", "<?php echo $_SESSION['sukses']; ?>", "success");
+            </script>
+         <?php unset($_SESSION['sukses']);
+         } ?>
          <!-- footer start-->
          <?php
          require '../../template/footer.php';
@@ -190,7 +197,7 @@ $totaldata = mysqli_num_rows($data);
                <input type="hidden" name="tipe" value="1">
                <div class="modal-body">
                   <div class="mb-3">
-                     <label for="jenis" class="form-label">Jenis Barang</label>
+                     <label for="jenis" class="form-label">Jenis </label>
                      <input type="text" required="" name="jenis" id="jenis" class="form-control">
                   </div>
                </div>

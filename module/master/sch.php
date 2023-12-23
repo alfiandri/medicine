@@ -84,7 +84,7 @@ $query = tampildata("SELECT * FROM dokter");
                                        <?php foreach ($query as $row) : ?>
                                           <tr>
                                              <?php
-                                             $status = $row['statusSch'];
+                                             $status = $row['status_kehadiran'];
                                              if ($status == 1) {
                                                 $warna = 'bg-success'; //Hadir
                                              } else if ($status == 0) {

@@ -375,9 +375,11 @@
                      <li><a class="submenu-title" href="javascript:;">Loket<span class="sub-arrow"><i class="fa fa-angle-right"></i></span></a>
                         <ul class="nav-sub-childmenu submenu-content">
                            <li><a href="master/loket-admisi">Admisi</a></li>
+                           <li><a href="master/loket-bpjs">BPJS</a></li>
                            <li><a href="master/loket-poliklinik">Poliklinik</a></li>
                            <li><a href="master/loket-farmasi">Farmasi</a></li>
                            <li><a href="master/loket-lab">Laboratorium</a></li>
+                           <li><a href="master/loket-mjkn">M-JKN</a></li>
                            <li><a href="master/loket-radiologi">Radiologi</a></li>
                         </ul>
                      </li>

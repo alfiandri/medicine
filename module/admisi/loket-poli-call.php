@@ -1,9 +1,13 @@
 <?php
-$page = "Admisi";
+$page = "Poli";
 require '../../db/connect.php';
 require 'view.php';
 $id = $_GET['id'];
-$data = mysqli_query($koneksi, "SELECT * FROM loket_admisi WHERE id='$id'");
+
+$data = mysqli_query($koneksi, "SELECT * FROM poli WHERE id = '$id'");
+$poli = mysqli_fetch_array($data);
+
+$data = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE sudah_dilayani = 0 AND batal = 0 AND tipe = '$poli[kode_antri]' AND status = 0");
 $datainfo = mysqli_fetch_array($data);
 ?>
 <!DOCTYPE html>
@@ -74,13 +78,13 @@ $datainfo = mysqli_fetch_array($data);
                                             </div>
                                             <div class="card-body">
                                                 <?php
-                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE status=1");
+                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE sudah_dilayani = 0 AND batal = 0 AND tipe = '$poli[kode_antri]' AND status = 0 ORDER BY antri_at");
                                                 $panggil = mysqli_fetch_array($callantrian);
                                                 ?>
-                                                <h1><?= @$panggil['loket'] ?>-<?= @$panggil['nomor'] ?></h1>
+                                                <h1><?= @$panggil['tipe'] ?>-<?= @$panggil['nomor'] ?></h1>
                                                 <p>
                                                     <?php
-                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_poli");
+                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE sudah_dilayani = 0 AND batal = 0 AND tipe = '$poli[kode_antri]' AND status = 0");
                                                     $dataantrian = mysqli_num_rows($antrian);
                                                     ?>
                                                     <hr>
@@ -95,17 +99,17 @@ $datainfo = mysqli_fetch_array($data);
                                                 Menu Panggil Antrian
                                             </div>
                                             <div class="card-body">
-                                                <h4><?= $datainfo['loket'] ?></h4>
-                                                <a href="../controller/antrian/loket?actions=1&loket?id=<?= $panggil['id'] ?>">
-                                                    <button class="btn btn-success mb-2 col-12">Panggil Berikutnya</button>
+                                                <h4>Loket <?= $panggil['loket'] ?></h4>
+                                                <button onclick="panggil('Antrian Nomor <?php echo $panggil['tipe'] . $panggil['nomor']; ?> Dipanggil Ke <?php echo $datainfo['loket']; ?>');" class="btn btn-primary mb-2 col-12">
+                                                    Panggil
+                                                </button>
+                                                <a href="../controller/antrian/loket?actions=2&id=<?= $panggil['id'] ?>&loket_id=<?= $poli['id'] ?>&kode=<?= $panggil['kodebooking'] ?>">
+                                                    <button class="btn btn-success mb-2 col-12">Hadir</button>
                                                 </a>
-                                                <a href="../controller/antrian/loket?actions=2&loket?id=<?= $panggil['id'] ?>">
-                                                    <button class="btn btn-primary mb-2 col-12">Panggil Ulang</button>
+                                                <a href="../controller/antrian/loket?actions=4&id=<?= $panggil['id'] ?>&loket_id=<?= $poli['id'] ?>&kode=<?= $panggil['kodebooking'] ?>">
+                                                    <button class="btn btn-warning mb-2 col-12">Lewati</button>
                                                 </a>
-                                                <a href="admisi/print-antrian?id=<?= $panggil['id'] ?>" target="_blank">
-                                                    <button class="btn btn-warning mb-2 col-12">Cetak Antrian Poli</button>
-                                                </a>
-                                                <a href="../controller/antrian/loket?actions=3&loket?id=<?= $panggil['id'] ?>">
+                                                <a href="../controller/antrian/loket?actions=5&id=<?= $panggil['id'] ?>&loket_id=<?= $poli['id'] ?>">
                                                     <button class="btn btn-danger mb-2 col-12">Batal</button>
                                                 </a>
 
@@ -127,17 +131,20 @@ $datainfo = mysqli_fetch_array($data);
         </div>
     </div>
     <script type="text/javascript">
-        function panggil() {
-            let open = new Audio('antrian/sound/open.mp3');
-            let nomor = new Audio('antrian/sound/a1.mp3');
-            let loket = new Audio('antrian/sound/loket.mp3');
-            open.play();
-            setTimeout(function() {
-                nomor.play();
-            }, 1900);
-            setTimeout(function() {
-                loket.play();
-            }, 3000);
+        function panggil(text) {
+            if (text.trim() !== "") {
+                var kataKata = text.split(' ');
+                console.log(kataKata)
+                for (var i = 0; i < kataKata.length; i++) {
+                    setTimeout(function(kata) {
+                        return function() {
+                            var suara = new SpeechSynthesisUtterance(kata);
+                            suara.lang = 'id-ID';
+                            window.speechSynthesis.speak(suara);
+                        };
+                    }(kataKata[i]), i * 1000);
+                }
+            }
         }
     </script>
     <?php

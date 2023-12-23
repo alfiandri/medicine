@@ -70,7 +70,7 @@ $page = "Loket";
                </div>
             </div>
             <?php
-            $query = tampildata("SELECT * FROM loket_admisi");
+            $query = tampildata("SELECT * FROM loket where status = 1");
             ?>
             <?php foreach ($query as $row) : ?>
                <div class="col-md-3">

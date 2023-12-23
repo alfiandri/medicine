@@ -70,7 +70,7 @@ require '../../controller/admisi/admisi.php';
                               <div class="row">
                                  <div class="col-12">
                                     <div class="mb-2 row">
-                                       <label for="nama" class="col-sm-2 col-form-label">No.Rekam Medis <span class="text-danger">*</span></label>121212121212121
+                                       <label for="nama" class="col-sm-2 col-form-label">No.Rekam Medis <span class="text-danger">*</span></label>
                                        <div class="col-sm-10">
                                           <form method="POST" action="../controller/admisi/validasi-rm?&tipe=<?= @$_GET['tipe'] ?>">
                                              <div class="input-group">
@@ -90,7 +90,37 @@ require '../../controller/admisi/admisi.php';
                                        </div>
                                     </div>
                                  </div>
+                                 <div class="col-12">
+                                    <div class="mb-2 row">
+                                       <label for="tglsep" class="col-sm-2 col-form-label">Tanggal SEP / Pelayanan</label>
+                                       <div class="col-sm-10">
+                                          <input type="date" class="form-control form-control-sm" name="tglsep" id="tglsep" placeholder="Tanggal SEP / Pelayanan">
+                                       </div>
+                                    </div>
+                                 </div>
                                  <form action="" method="POST">
+                                    <div class="col-12">
+                                       <div class="mb-2 row">
+                                          <label for="nama" class="col-sm-2 col-form-label">No.KTP <span class="text-danger">*</span></label>
+                                          <div class="col-sm-10">
+                                             <div class="input-group">
+                                                <input type="text" name="nokartu" id="nokartu" class="form-control form-control-sm" placeholder="Nomor Induk Kependudukan" aria-describedby="basic-addon2">
+                                                <button class="btn btn-outline-danger caribpjs">Cari</button>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-12">
+                                       <div class="mb-2 row">
+                                          <label for="nama" class="col-sm-2 col-form-label">No.BPJS</label>
+                                          <div class="col-sm-10">
+                                             <div class="input-group">
+                                                <input type="text" name="nobpjs" id="nobpjs" class="form-control form-control-sm" placeholder="Nomor BPJS" aria-describedby="basic-addon2">
+                                                <button class="btn btn-outline-danger caribpjs">Cari</button>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
                                     <input type="hidden" name="tipe" value="<?= @$_GET['tipe'] ?>">
                                     <input type="hidden" name="nomorrm" value="<?= $rm ?>">
                                     <div class="col-12">
@@ -117,22 +147,6 @@ require '../../controller/admisi/admisi.php';
                                           <label for="kodebooking" class="col-sm-2 col-form-label">Kode Booking</label>
                                           <div class="col-sm-10">
                                              <input type="text" class="form-control form-control-sm" name="kodebooking" id="kodebooking" placeholder="Kode Booking">
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-12">
-                                       <div class="mb-2 row">
-                                          <label for="kategori" class="col-sm-2 col-form-label">No.KTP <span class="text-danger">*</span></label>
-                                          <div class="col-sm-10">
-                                             <input type="text" class="form-control form-control-sm" name="nokartu" id="nokartu" required="" placeholder="Nomor Induk Kependudukan">
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-12">
-                                       <div class="mb-2 row">
-                                          <label for="kategori" class="col-sm-2 col-form-label">No.Kartu BPJS</label>
-                                          <div class="col-sm-10">
-                                             <input type="text" class="form-control form-control-sm" name="nobpjs" id="nobpjs" placeholder="Nomor Kartu BPJS">
                                           </div>
                                        </div>
                                     </div>
@@ -286,6 +300,45 @@ require '../../controller/admisi/admisi.php';
    <?php
    require 'library.php';
    ?>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+   <script>
+      $('.caribpjs').on('click', function(e) {
+         e.preventDefault();
+
+         const nokartu = $('#nokartu').val();
+         const nobpjs = $('#nobpjs').val();
+         const tglsep = $('#tglsep').val();
+
+         $.ajax({
+            url: '../controller/admisi/cari-bpjs',
+            type: 'POST',
+            data: {
+               nokartu: nokartu,
+               nobpjs: nobpjs,
+               tglsep: tglsep,
+            },
+            dataType: 'json',
+            success: function(data) {
+               const metadata = data.metadata;
+               if (metadata.code == 201) {
+                  swal(metadata.message);
+                  return;
+               }
+               $('#sebutan').val(data.data.sebutan);
+               $('#nama').val(data.data.nama);
+               $('#nokartu').val(data.data.nokartu);
+               $('#nobpjs').val(data.data.nobpjs);
+               $('#tanggallahir').val(data.data.tanggallahir);
+               $('#gender').val(data.data.gender);
+
+            },
+            error: function(xhr, status, error) {
+               console.error('Error:', error);
+            }
+         });
+      });
+   </script>
 </body>
 
 </html>

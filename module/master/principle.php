@@ -14,6 +14,7 @@ $totaldata = mysqli_num_rows($data);
    <?php
    require '../admin/head.php';
    ?>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body onload="startTime()">
@@ -123,6 +124,7 @@ $totaldata = mysqli_num_rows($data);
                                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                    </div>
                                                    <form action="" method="POST">
+                                                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                       <div class="modal-body">
                                                          <div class="mb-3">
                                                             <label for="nama" class="form-label">Nama Perusahaan</label>
@@ -187,6 +189,12 @@ $totaldata = mysqli_num_rows($data);
             </div>
             <!-- Container-fluid Ends-->
          </div>
+         <?php if (@$_SESSION['sukses']) { ?>
+            <script>
+               swal("Good job!", "<?php echo $_SESSION['sukses']; ?>", "success");
+            </script>
+         <?php unset($_SESSION['sukses']);
+         } ?>
          <!-- footer start-->
          <?php
          require '../../template/footer.php';

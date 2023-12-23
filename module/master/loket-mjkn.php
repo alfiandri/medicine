@@ -108,9 +108,9 @@ $totaldata = mysqli_num_rows($data);
                                              <td><?= $row['layanan'] ?></td>
                                              <td><?= $row['mulai'] ?> - <?= $row['selesai'] ?></td>
                                              <td class="text-center col-2">
-                                             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
+                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id'] ?>">Hapus</button>
-                                            
+
                                              </td>
                                           </tr>
 
@@ -124,25 +124,26 @@ $totaldata = mysqli_num_rows($data);
                                                    <form action="" method="POST">
                                                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                       <div class="modal-body">
-                                                      	<div class="mb-3">
-															<label for="nama" class="form-label">Loket</label>
-															<input type="text" required="" name="nama" id="nama" class="form-control" value="<?=$row['loket']?>">
-														</div>
-															<input type="hidden" name="tipe_loket" value="MJKN">
-														<div class="row">
-															<div class="col">
-																<div class="mb-3">
-																<label for="mulai" class="form-label">Mulai</label>
-																<input type="time" required="" name="mulai" id="mulai" class="form-control" value="<?=$row['mulai']?>">
-																</div>
-															</div>
-															<div class="col">
-																<div class="mb-3">
-																<label for="selesai" class="form-label">Selesai</label>
-																<input type="time" required="" name="selesai" id="selesai" class="form-control" value="<?=$row['selesai']?>">
-																</div>
-															</div>
-														</div>
+                                                         <div class="mb-3">
+                                                            <label for="nama" class="form-label">Loket</label>
+                                                            <input type="text" required="" name="nama" id="nama" class="form-control" value="<?= $row['loket'] ?>">
+                                                         </div>
+                                                         <input type="hidden" name="tipe_loket" value="MJKN">
+                                                         <input type="hidden" name="kode_loket" value="M">
+                                                         <div class="row">
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="mulai" class="form-label">Mulai</label>
+                                                                  <input type="time" required="" name="mulai" id="mulai" class="form-control" value="<?= $row['mulai'] ?>">
+                                                               </div>
+                                                            </div>
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="selesai" class="form-label">Selesai</label>
+                                                                  <input type="time" required="" name="selesai" id="selesai" class="form-control" value="<?= $row['selesai'] ?>">
+                                                               </div>
+                                                            </div>
+                                                         </div>
                                                       </div>
                                                       <div class="modal-footer">
                                                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
@@ -211,7 +212,8 @@ $totaldata = mysqli_num_rows($data);
                      <label for="nama" class="form-label">Loket</label>
                      <input type="text" required="" name="nama" id="nama" class="form-control">
                   </div>
-                     <input type="hidden" name="tipe_loket" value="MJKN">
+                  <input type="hidden" name="tipe_loket" value="MJKN">
+                  <input type="hidden" name="kode_loket" value="M">
                   <div class="row">
                      <div class="col">
                         <div class="mb-3">

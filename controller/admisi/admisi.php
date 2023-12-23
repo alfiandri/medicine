@@ -1,6 +1,8 @@
 <?php
 require '../../db/connect.php';
 require '../../controller/base/integrasi.php';
+date_default_timezone_set('Asia/Jakarta');
+
 if (isset($_POST['simpancheck'])) {
    $id = $_POST['id'];
    $dokter = $_POST['dokter'];
@@ -191,11 +193,12 @@ if (isset($_POST['simpanlayanan'])) {
    $waktu = date('H:i:s');
    $noregistrasi = "RJ-" . date('Ymd') . rand(111, 999);
    $tipe = $_POST['tipe'];
-   if ($tipe == 1) {
+   if ($tipe == 1 || $jenislayanan == 'Poliklinik') {
       $sumber = 'RJ';
    } else if ($tipe == 2) {
       $sumber = "UGD";
    }
+
    $previousUrl = $_SERVER["HTTP_REFERER"];
 
    if (!$kodebooking) {
@@ -247,11 +250,12 @@ if (isset($_POST['simpanlayanan'])) {
    }
 
    $estimasidilayani = (time() + 600) * 1000;
+   $tanggalperiksa = date('Y-m-d');
 
    // get last antrean
    $check = mysqli_query($koneksi, "SELECT * FROM antrian_poli WHERE kodepoli='$poli[kdpoli]' AND tanggalperiksa = '$tanggalperiksa' ORDER BY nomor DESC LIMIT 1");
    $antrian_poli = mysqli_fetch_array($check);
-   if ($antrian_poli === null) {
+   if ($antrian_poli == null) {
       $angkaantrean = 1;
       $nomorantrean = $poli['kode_antri'] . '-' . $angkaantrean;
    } else {
@@ -278,7 +282,7 @@ if (isset($_POST['simpanlayanan'])) {
    }
 
    $jenispasien = 'NON JKN';
-   if ($_POST['jaminan'] == 'BPJS Kesehatan') {
+   if ($_POST['jenisbayar'] == 'BPJS Kesehatan') {
       $jenispasien = 'JKN';
    }
 
@@ -286,17 +290,15 @@ if (isset($_POST['simpanlayanan'])) {
 
    $status = 1;
    $task = 3;
-   $waktu = date('Y-m-d H:i:s');
-   $tanggalperiksa = date('Y-m-d');
+   $waktuTaskId = date('Y-m-d H:i:s');
    $prefix = $poli['kode_antri'];
 
-   $insertantrian = mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, kodepoli, nomor, tipe, nokartu, tanggalperiksa, jenispasien) VALUES('$kodebooking', '$poli[kdpoli]','$angkaantrean','$prefix','$pasien[nik]', '$tanggalperiksa', '$jenispasien') ");
+   $insertantrian = mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, kodepoli, kodedokter, jampraktek, nomor, tipe, nokartu, nik, tanggalperiksa, jenispasien, estimasi) VALUES('$kodebooking', '$poli[kdpoli]', '$dokter[kode_dokter]', '$_POST[jadwal]', '$angkaantrean','$prefix', '$pasien[nomor_kartu]', '$pasien[nik]', '$tanggalperiksa', '$jenispasien', '$estimasidilayani') ");
 
+   $insert = mysqli_query($koneksi, "INSERT INTO admisi_taskid (kodebooking, task_id, waktu)VALUES('$kodebooking','$task','$waktuTaskId')");
 
-   $insert = mysqli_query($koneksi, "INSERT INTO admisi_taskid (kodebooking, task_id, waktu)VALUES('$kodebooking','$task','$waktu')");
-
-   $insert = mysqli_query($koneksi, "INSERT INTO pasien_visit (uid_pasien, nomor_rm, nomor_visit, tanggal, waktu, jenis_layanan, rujukan, rujukan_catatan, layanan,  jenis_bayar, catatan_bayar, dokter, sumber)
-   VALUES ('$uid','$nomorrm','$noregistrasi','$tanggal','$waktu','$jenislayanan','$rujukan','$catatanrujukan','$layanan','$jenisbayar','$catatanbayar','$dokter','$sumber')");
+   $insert = mysqli_query($koneksi, "INSERT INTO pasien_visit (uid_pasien, nomor_rm, nomor_visit, kodebooking, tanggal, waktu, jenis_layanan, rujukan, rujukan_catatan, layanan,  jenis_bayar, catatan_bayar, dokter, sumber)
+   VALUES ('$uid','$nomorrm','$noregistrasi', '$kodebooking', '$tanggal','$waktu','$jenislayanan','$rujukan','$catatanrujukan','$layanan','$jenisbayar','$catatanbayar','$dokter[nama]','$sumber')");
 
    // add to WS BPJS
    $data = [
@@ -372,7 +374,7 @@ if (isset($_POST['simpanlayanan'])) {
          post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
 
          echo " <script>alert ('Berhasil Menambah Layanan');
-				document.location='$previousUrl'</script>";
+				document.location='../../module/console-box-antrian/print/print-poli?nomor=$kodebooking'</script>";
       }
    } else {
       mysqli_rollback($koneksi);

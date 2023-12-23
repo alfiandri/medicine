@@ -18,7 +18,8 @@ $tanggal = date("d-m-Y");
 <?php
 require '../../db/connect.php';
 $kodebooking = $_POST['kode'];
-$check = mysqli_query($koneksi, "SELECT * FROM antrian_farmasi");
+$currentdate = date('Y-m-d');
+$check = mysqli_query($koneksi, "SELECT * FROM antrian_farmasi where date(create_at) = '$currentdate'");
 $dataantrian = mysqli_num_rows($check);
 $antrian = $dataantrian + 1;
 $check = mysqli_query($koneksi, "SELECT * FROM permintaan_farmasi WHERE kodebooking='$kodebooking'");
@@ -27,7 +28,7 @@ if ($datacheck == NULL) {
     echo " <script>alert ('Kode Booking Anda Tidak Tersedia');
     document.location='../../module/console-box-antrian/index'</script>";
 } else {
-    $checkloket = mysqli_query($koneksi, "SELECT * FROM loket_farmasi WHERE status=1");
+    $checkloket = mysqli_query($koneksi, "SELECT * FROM loket WHERE tipe='FARMASI'");
     $dataloket = mysqli_fetch_array($checkloket);
     $loket = $dataloket['loket'];
     $kode = $dataloket['kode_loket'];
@@ -39,7 +40,7 @@ if ($datacheck == NULL) {
     } else {
         $nomorrm = $nomorrm;
     }
-    $insert = mysqli_query($koneksi, "INSERT INTO antrian_farmasi(kodebooking, loket, nomor, tipe, nokartu)VALUES('$kodebooking','$loket','$antrian','$kode','$nomorrm')");
+    $insert = mysqli_query($koneksi, "INSERT INTO antrian_farmasi(kodebooking, nomor, tipe, jenisresep) VALUES('$kodebooking','$antrian','$kode','$datacheck[jenis]')");
 }
 
 ?>
@@ -48,7 +49,7 @@ if ($datacheck == NULL) {
     <div class="container" style="background-color: skyblue;">
         <h5 style="margin-top:10px;">NOMOR ANTRIAN</h5>
         <div class="garis"></div>
-        <p>NO BOOKING : <?= date('dmY') . rand(000, 999) ?></p>
+        <p>NO BOOKING : <?= $kodebooking ?></p>
         <p style="font-size:50px;"><b><?= $kode ?>-<?= $antrian ?></b></p>
         <!-- <h6>POLI UMUM</h6> -->
         <p><b><?php echo $tanggal . " " . $waktu; ?></b></p>

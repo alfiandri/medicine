@@ -2,8 +2,8 @@
 $page = "Loket Farmasi";
 require '../admin/view.php';
 require '../../controller/master/loket.php';
-$query = tampildata("SELECT * FROM loket_farmasi");
-$data = mysqli_query($koneksi, "SELECT id FROM loket_farmasi");
+$query = tampildata("SELECT * FROM loket where tipe = 'FARMASI'");
+$data = mysqli_query($koneksi, "SELECT id FROM loket where tipe = 'FARMASI'");
 $totaldata = mysqli_num_rows($data);
 ?>
 <!DOCTYPE html>
@@ -85,7 +85,7 @@ $totaldata = mysqli_num_rows($data);
                                        <tr>
                                           <th class="col-1"></th>
                                           <th>Loket</th>
-                                          <th>Kode</th>
+                                          <th>Tipe</th>
                                           <th>Layanan</th>
                                           <th>Operasional</th>
                                           <th class="text-center col-1">Actions</th>
@@ -104,13 +104,76 @@ $totaldata = mysqli_num_rows($data);
                                              ?>
                                              <td class="<?= $warna ?>"></td>
                                              <td><?= $row['loket'] ?></td>
-                                             <td><?= $row['kode_loket'] ?></td>
+                                             <td><?= $row['tipe'] ?></td>
                                              <td><?= $row['layanan'] ?></td>
                                              <td><?= $row['mulai'] ?> - <?= $row['selesai'] ?></td>
-                                             <td class="text-center">
-                                                <button class="btn btn-warning">Update</button>
+                                             <td class="text-center col-2">
+                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id'] ?>">Ubah</button>
+                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id'] ?>">Hapus</button>
+
                                              </td>
                                           </tr>
+
+                                          <div class="modal fade" id="ubah<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                             <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                   <div class="modal-header">
+                                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Perubahan Data</h1>
+                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                   </div>
+                                                   <form action="" method="POST">
+                                                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                      <div class="modal-body">
+                                                         <div class="mb-3">
+                                                            <label for="nama" class="form-label">Loket</label>
+                                                            <input type="text" required="" name="nama" id="nama" class="form-control" value="<?= $row['loket'] ?>">
+                                                         </div>
+                                                         <input type="hidden" name="tipe_loket" value="FARMASI">
+                                                         <input type="hidden" name="kode_loket" value="F">
+                                                         <div class="row">
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="mulai" class="form-label">Mulai</label>
+                                                                  <input type="time" required="" name="mulai" id="mulai" class="form-control" value="<?= $row['mulai'] ?>">
+                                                               </div>
+                                                            </div>
+                                                            <div class="col">
+                                                               <div class="mb-3">
+                                                                  <label for="selesai" class="form-label">Selesai</label>
+                                                                  <input type="time" required="" name="selesai" id="selesai" class="form-control" value="<?= $row['selesai'] ?>">
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                         <button type="submit" name="ubahloket" class="btn btn-primary">Simpan</button>
+                                                      </div>
+                                                   </form>
+                                                </div>
+                                             </div>
+                                          </div>
+
+                                          <div class="modal fade" id="hapus<?= $row['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                             <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                   <div class="modal-header">
+                                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Data</h1>
+                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                   </div>
+                                                   <form action="" method="POST">
+                                                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                      <div class="modal-body">
+                                                         <p>Apakah anda yakin menghapus data loket <strong><?= $row['loket'] ?></strong> secara permanent, karena data yang telah anda hapus tidak dapat di kembalikan lagi</p>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                         <button type="submit" name="hapusloket" class="btn btn-danger">Ya, Hapus</button>
+                                                      </div>
+                                                   </form>
+                                                </div>
+                                             </div>
+                                          </div>
                                        <?php endforeach ?>
                                     </tbody>
                                  </table>
@@ -134,9 +197,6 @@ $totaldata = mysqli_num_rows($data);
       </div>
    </div>
 
-
-
-
    <!-- Modal -->
    <div class="modal fade" id="add" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -146,16 +206,14 @@ $totaldata = mysqli_num_rows($data);
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="POST">
-               <input type="hidden" name="tipe" value="3">
+               <input type="hidden" name="tipe" value="1">
                <div class="modal-body">
                   <div class="mb-3">
                      <label for="nama" class="form-label">Loket</label>
                      <input type="text" required="" name="nama" id="nama" class="form-control">
                   </div>
-                  <div class="mb-3">
-                     <label for="kode" class="form-label">Kode Loket</label>
-                     <input type="text" required="" name="kode" id="kode" class="form-control">
-                  </div>
+                  <input type="hidden" name="tipe_loket" value="FARMASI">
+                  <input type="hidden" name="kode_loket" value="F">
                   <div class="row">
                      <div class="col">
                         <div class="mb-3">
