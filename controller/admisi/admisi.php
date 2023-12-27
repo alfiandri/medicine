@@ -1,5 +1,5 @@
 <?php
-require '../../db/connect.php';
+require_once '../../db/connect.php';
 require '../../controller/base/integrasi.php';
 date_default_timezone_set('Asia/Jakarta');
 
