@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Jakarta');
-require '../../controller/base/integrasi.php';
+require_once '../../controller/base/integrasi.php';
+require '../../db/connect.php';
 $kodePoli = $_POST['poli'];
 $tanggal = date('Y-m-d');
 // $tanggal = '2023-12-08';

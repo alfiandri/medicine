@@ -12,7 +12,12 @@ function validateFieldNotEmpty($request, $fieldName)
 
 function getSetting($key, $table)
 {
-    global $koneksi;
+    $host = "localhost";
+    $uname = "root";
+    $password = "";
+    // $database = "db_simrs";
+    $database = "db_medicine";
+    $koneksi = mysqli_connect($host, $uname, $password, $database);
 
     $sql = "SELECT * FROM $table WHERE status = 1";
 
