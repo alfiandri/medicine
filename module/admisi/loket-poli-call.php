@@ -100,7 +100,7 @@ $datainfo = mysqli_fetch_array($data);
                                             </div>
                                             <div class="card-body">
                                                 <h4>Loket <?= $panggil['loket'] ?></h4>
-                                                <button onclick="panggil('Antrian Nomor <?php echo $panggil['tipe'] . $panggil['nomor']; ?> Dipanggil Ke <?php echo $datainfo['loket']; ?>');" class="btn btn-primary mb-2 col-12">
+                                                <button onclick="panggil('Antrian Nomor <?php echo $panggil['tipe'] . $panggil['nomor']; ?> Dipanggil Ke-loket-<?php echo $datainfo['tipe']; ?>');" class="btn btn-primary mb-2 col-12">
                                                     Panggil
                                                 </button>
                                                 <a href="../controller/antrian/loket?actions=2&id=<?= $panggil['id'] ?>&loket_id=<?= $poli['id'] ?>&kode=<?= $panggil['kodebooking'] ?>">
