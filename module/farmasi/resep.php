@@ -1,9 +1,9 @@
 <?php
 session_start();
 $page = "Resep";
-require '../../db/connect.php';
-require 'view.php';
-require '../../controller/farmasi/resep.php';
+require_once '../../db/connect.php';
+require_once 'view.php';
+require_once '../../controller/farmasi/resep.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

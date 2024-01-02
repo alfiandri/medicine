@@ -16,7 +16,7 @@ function getSetting($key, $table)
     $uname = "root";
     $password = "";
     // $database = "db_simrs";
-    $database = "db_medicine";
+    $database = "db_antrean";
     $koneksi = mysqli_connect($host, $uname, $password, $database);
 
     $sql = "SELECT * FROM $table WHERE status = 1";

@@ -1,7 +1,7 @@
 <?php
 $page = "Non-Resep";
-require '../admin/view.php';
-require '../../controller/farmasi/resep.php';
+require_once '../admin/view.php';
+require_once '../../controller/farmasi/resep.php';
 $query = tampildata("SELECT * FROM permintaan_nonresep ");
 $data = mysqli_query($koneksi, "SELECT id FROM permintaan_nonresep");
 $totaldata = mysqli_num_rows($data);

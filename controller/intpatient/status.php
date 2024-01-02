@@ -1,6 +1,6 @@
 <?php
-require __DIR__ . '/../../db/connect.php';
-require __DIR__ . '/../../controller/base/integrasi.php';
+require_once __DIR__ . '/../../db/connect.php';
+require_once __DIR__ . '/../../controller/base/integrasi.php';
 date_default_timezone_set('Asia/Jakarta');
 
 if (isset($_POST['simpanstatus'])) {

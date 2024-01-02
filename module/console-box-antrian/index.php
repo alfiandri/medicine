@@ -411,7 +411,7 @@ $jenisPasien = $_GET['jenispasien'] ?? null;
               </tr>
               <tr>
                  <td colspan="2">
-                    <button class="btn btn-success form-control pilihrujuk" data-poli="${item.kode_poli}" data-norujuk="${item.no_kunjungan}" data-nokartu="${item.no_kartu}" data-nik="${item.nik}" data-jeniskunjungan="${item.jeniskunjungan}" data-jenis_rujukan="${jenis_rujukan}" data-provperujuk="${provperujuk}" data-jenispeserta="${jenispeserta}">PILIH</button>
+                    <button class="btn btn-success form-control pilihrujuk" data-poli="${item.kode_poli}" data-norujuk="${item.no_kunjungan}" data-nokartu="${item.no_kartu}" data-nik="${item.nik}" data-jeniskunjungan="${item.jeniskunjungan}" data-jenis_rujukan="${item.jenis_rujukan}" data-provperujuk="${item.provperujuk}" data-jenispeserta="${item.jenispeserta}">PILIH</button>
                  </td>
               </tr>
            </table>

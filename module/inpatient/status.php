@@ -1,10 +1,10 @@
 <?php
 session_start();
 $page = "Status Pasien";
-require __DIR__ . '../../../db/connect.php';
-require __DIR__ . '../../../controller/intpatient/permintaan.php';
-require __DIR__ . '../../../controller/intpatient/status.php';
-require __DIR__ . '/view.php';
+require_once __DIR__ . '../../../db/connect.php';
+require_once __DIR__ . '../../../controller/intpatient/permintaan.php';
+require_once __DIR__ . '../../../controller/intpatient/status.php';
+require_once __DIR__ . '/view.php';
 $id = $_GET['id'];
 $info = mysqli_query($koneksi, "SELECT * FROM pasien_visit WHERE uid_pasien='$id'");
 $data = mysqli_fetch_array($info);

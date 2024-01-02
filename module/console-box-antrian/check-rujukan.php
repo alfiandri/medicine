@@ -41,6 +41,7 @@ if (isset($jsonData['metaData']['code']) && $jsonData['metaData']['code'] == 200
     $responseData = $jsonData['response'];
     $key = $consIdVclaim . $secretKeyVclaim . $timeStamp;
     $responseData = decrypt($key, $responseData);
+//   die;
     $listData = json_decode($responseData, true);
 
     foreach ($listData['rujukan'] as $row) {

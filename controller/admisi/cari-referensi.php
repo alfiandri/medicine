@@ -27,7 +27,7 @@ if (isset($jsonData['metaData']['code'])) {
       $responseData = $jsonData['response'];
       $key = $consIdVclaim . $secretKeyVclaim . $timeStamp;
       $responseData = decrypt($key, $responseData);
-      $listData = json_decode($responseData, true)['rujukan'];
+      $listData = json_decode($responseData, true)['rujukan'][0];
 
       $peserta = [
          'jenislayanan' => 'Poliklinik',

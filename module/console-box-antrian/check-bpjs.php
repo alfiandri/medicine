@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../db/connect.php';
 require_once __DIR__ . '/view.php';
-require __DIR__ . '/../../controller/base/integrasi.php';
+require_once __DIR__ . '/../../controller/base/integrasi.php';
 date_default_timezone_set('Asia/Jakarta');
 
 $previousUrl = $_SERVER["HTTP_REFERER"];
@@ -81,9 +81,7 @@ if ($row) {
 // Start the transaction
 mysqli_begin_transaction($koneksi);
 try {
-    $checkloket = mysqli_query($koneksi, "SELECT * FROM loket_poliklinik WHERE status=1");
-    $dataloket = mysqli_fetch_array($checkloket);
-    $kode = $dataloket['kode_loket'];
+    $kode = $prefix;
 
     mysqli_query($koneksi, "INSERT INTO antrian_poli(kodebooking, loket, kodepoli, nomor, tipe, nokartu, nik, tanggalperiksa, jenispasien) VALUES('$kodebooking', '$kode', '$poli[kdpoli]','$angkaantrean','$prefix','$nokartu', '$nik', '$tanggalperiksa', 'JKN') ");
 
@@ -98,11 +96,11 @@ try {
     $layanan = $poli['nmpoli'];
     $jenisbayar = 'BPJS Kesehatan';
     $catatanbayar = $_POST['jenispeserta'];
-    $dokter = $dokter['nama'];
+    $namadokter = $dokter['nama'];
     $sumber = 'RJ';
 
     $insertRawatJalan = mysqli_query($koneksi, "INSERT INTO pasien_visit (uid_pasien, nomor_rm, nomor_visit, tanggal, waktu, jenis_layanan, rujukan, rujukan_catatan, layanan,  jenis_bayar, catatan_bayar, dokter, sumber)
-    VALUES ('$uid','$nomorrm','$noregistrasi','$tanggal','$waktu','$jenislayanan','$rujukan','$catatanrujukan','$layanan','$jenisbayar','$catatanbayar','$dokter','$sumber')");
+    VALUES ('$uid','$nomorrm','$noregistrasi','$tanggal','$waktu','$jenislayanan','$rujukan','$catatanrujukan','$layanan','$jenisbayar','$catatanbayar','$namadokter','$sumber')");
 
     $data = [
         "kodebooking" => $kodebooking,
@@ -112,7 +110,7 @@ try {
         "nohp" => $pasien['no_handphone'],
         "kodepoli" => $_POST["poli"],
         "namapoli" => $poli['nmpoli'],
-        "pasienbaru" => $pasien['status_pasien'],
+        "pasienbaru" => 0,
         "norm" => $pasien['nomor_rm'],
         "tanggalperiksa" => $tanggalperiksa,
         "kodedokter" => $dokter['kode_dokter'],
@@ -129,6 +127,9 @@ try {
         "kuotanonjkn" => $kuotanonjkn,
         "keterangan" => @$_POST["keterangan"],
     ];
+
+    echo json_encode($data);
+    die;
 
     $apiUrl = "$baseUrl/$serviceNameAntrean/antrean/add";
     $response = post($apiUrl, $data, $consId, $secretKey, $userKeyAntrean);
@@ -165,6 +166,7 @@ try {
 } catch (\Throwable $th) {
     mysqli_rollback($koneksi);
     $msg = $th->getMessage();
+    // die;
     echo " <script>alert (`$msg`);
-			document.location='$previousUrl'</script>";
+    		document.location='$previousUrl'</script>";
 }
