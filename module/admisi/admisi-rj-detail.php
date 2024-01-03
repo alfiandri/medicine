@@ -319,7 +319,7 @@ $data = mysqli_fetch_array($info);
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-2 row">
-                                                <label for="nomorreferensi" class="col-sm-2 col-form-label">Nomor Referensi</label>
+                                                <label for="nomorreferensi" class="col-sm-2 col-form-label">Nomor Rujukan</label>
                                                 <div class="col-sm-10">
                                                    <div class="input-group">
                                                       <input type="text" name="nomorreferensi" id="nomorreferensi" class="form-control form-control-sm" placeholder="Nomor Referensi" aria-describedby="basic-addon2">

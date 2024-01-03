@@ -1,8 +1,8 @@
 <?php
 session_start();
 $page = "Registrasi Pasien Baru";
-require 'view.php';
-require '../../controller/admisi/admisi.php';
+require_once __DIR__ . '/view.php';
+require_once __DIR__ . '/../../controller/admisi/admisi.php';
 $id = $_GET['id'];
 $status = $_GET['status'];
 $visit = @$_GET['visit'];
@@ -89,8 +89,7 @@ $data = mysqli_fetch_array($info);
                               <ul class="nav nav-tabs nav-primary" id="pills-warningtab" role="tablist">
                                  <li class="nav-item"><a <?php if ($status == 1) echo "class='nav-link active'";
                                                          echo "class='nav-link'" ?> id="pills-warninghome-tab" data-bs-toggle="pill" href="#pills-warninghome" role="tab" aria-controls="pills-warninghome" aria-selected="true"><i class="icofont icofont-ui-home"></i>Profil Pasien</a></li>
-                                 <li class="nav-item"><a <?php if ($status == 2) echo "class='nav-link active'";
-                                                         echo "class='nav-link'" ?> id="pills-warningprofile-tab" data-bs-toggle="pill" href="#pills-warningprofile" role="tab" aria-controls="pills-warningprofile" aria-selected="false"><i class="icofont icofont-man-in-glasses"></i>Layanan</a></li>
+
                                  <li class="nav-item"><a <?php if ($status == 3) echo "class='nav-link active'";
                                                          echo "class='nav-link'" ?> id="pills-warningcontact-tab" data-bs-toggle="pill" href="#pills-warningcontact" role="tab" aria-controls="pills-warningcontact" aria-selected="false"><i class="icofont icofont-contacts"></i>Alamat</a></li>
                                  <li class="nav-item"><a <?php if ($status == 4) echo "class='nav-link active'";
@@ -103,6 +102,8 @@ $data = mysqli_fetch_array($info);
                                                          echo "class='nav-link'" ?> id="pills-datalain-tab" data-bs-toggle="pill" href="#pills-datalain" role="tab" aria-controls="pills-datalain" aria-selected="false"><i class="icofont icofont-contacts"></i>Data Lain</a></li>
                                  <li class="nav-item"><a <?php if ($status == 8) echo "class='nav-link active'";
                                                          echo "class='nav-link'" ?> id="pills-fotodiri-tab" data-bs-toggle="pill" href="#pills-fotodiri" role="tab" aria-controls="pills-fotodiri" aria-selected="false"><i class="icofont icofont-contacts"></i>Foto & TTD</a></li>
+                                 <li class="nav-item"><a <?php if ($status == 2) echo "class='nav-link active'";
+                                                         echo "class='nav-link'" ?> id="pills-warningprofile-tab" data-bs-toggle="pill" href="#pills-warningprofile" role="tab" aria-controls="pills-warningprofile" aria-selected="false"><i class="icofont icofont-man-in-glasses"></i>Layanan</a></li>ƒ
                               </ul>
                            </div>
                            <div class="card-body file-manager">
@@ -319,7 +320,7 @@ $data = mysqli_fetch_array($info);
                                        <div class="row">
                                           <div class="col-12">
                                              <div class="mb-2 row">
-                                                <label for="nomorreferensi" class="col-sm-2 col-form-label">Nomor Referensi</label>
+                                                <label for="nomorreferensi" class="col-sm-2 col-form-label">Nomor Rujukan</label>
                                                 <div class="col-sm-10">
                                                    <div class="input-group">
                                                       <input type="text" name="nomorreferensi" id="nomorreferensi" class="form-control form-control-sm" placeholder="Nomor Referensi" aria-describedby="basic-addon2">
@@ -623,7 +624,7 @@ $data = mysqli_fetch_array($info);
                                        echo "class='tab-pane fade'" ?> id="pills-keluarga" role="tabpanel" aria-labelledby="pills-keluarga-tab">
                                     <form action="" method="POST">
                                        <input type="hidden" name="id" value="<?= $id ?>">
-                                       <input type="hidden" name="nomorRM" value="<?= $data['nomor_rm'] ?>">
+                                       <input type="hidden" name="nomorRM" value="<?= @$data['nomor_rm'] ?>">
                                        <input type="hidden" name="visit" value="<?= $_GET['visit'] ?>">
                                        <div class="row">
                                           <div class="col-12">

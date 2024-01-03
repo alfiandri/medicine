@@ -1,9 +1,9 @@
 <?php
 session_start();
 $page = "Registrasi Pasien Baru";
-require '../../db/connect.php';
-require 'view.php';
-require '../../controller/admisi/admisi.php';
+require_once __DIR__ . '/../../db/connect.php';
+require_once __DIR__ . '/view.php';
+require_once __DIR__ . '/../../controller/admisi/admisi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,36 +68,6 @@ require '../../controller/admisi/admisi.php';
                         <div class="card">
                            <div class="card-body file-manager">
                               <div class="row">
-                                 <div class="col-12">
-                                    <div class="mb-2 row">
-                                       <label for="nama" class="col-sm-2 col-form-label">No.Rekam Medis <span class="text-danger">*</span></label>
-                                       <div class="col-sm-10">
-                                          <form method="POST" action="../controller/admisi/validasi-rm?&tipe=<?= @$_GET['tipe'] ?>">
-                                             <div class="input-group">
-                                                <?php
-                                                $rm = @$_GET['rm'];
-                                                if ($rm == NULL) {
-                                                   $rm = generateUniqueNRM();
-                                                } else {
-                                                   $rm = $rm;
-                                                }
-                                                ?>
-                                                <input type="text" name="nomorrm" required="" class="form-control form-control-sm" value="<?= $rm ?>" aria-describedby="basic-addon2">
-                                                <button class="btn btn-outline-danger" type="submit">Cek RM</button>
-                                             </div>
-                                          </form>
-
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div class="col-12">
-                                    <div class="mb-2 row">
-                                       <label for="tglsep" class="col-sm-2 col-form-label">Tanggal SEP / Pelayanan</label>
-                                       <div class="col-sm-10">
-                                          <input type="date" class="form-control form-control-sm" name="tglsep" id="tglsep" placeholder="Tanggal SEP / Pelayanan">
-                                       </div>
-                                    </div>
-                                 </div>
                                  <form action="" method="POST">
                                     <div class="col-12">
                                        <div class="mb-2 row">
@@ -316,7 +286,6 @@ require '../../controller/admisi/admisi.php';
             data: {
                nokartu: nokartu,
                nobpjs: nobpjs,
-               tglsep: tglsep,
             },
             dataType: 'json',
             success: function(data) {

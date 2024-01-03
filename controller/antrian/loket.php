@@ -53,12 +53,12 @@ if ($act == 1) {
 } else if ($act == 4) {
    $id = $_GET['id'];
    $kode = @$_GET['kode'];
+   $timestamp = date('Y-m-d H:i:s');
 
    if ($kode) {
-      $timestamp = date('Y-m-d H:i:s');
       $update = mysqli_query($koneksi, "UPDATE antrian_poli SET antri_at = '$timestamp' WHERE kodebooking='$kode'");
    } else {
-      $update = mysqli_query($koneksi, "UPDATE antrian_loket SET lewati='1' WHERE id='$id'");
+      $update = mysqli_query($koneksi, "UPDATE antrian_loket SET antri_at = '$timestamp' WHERE id='$id'");
    }
    echo " <script>alert ('Anda telah melewati pasien Ini');
    document.location='$previousUrl'</script>";

@@ -13,10 +13,11 @@ if ($nomorreferensi) {
    echo json_encode([
       'metadata' => [
          'code' => 201,
-         'message' => 'Nomor referensi harus diisi'
+         'message' => 'Nomor rujukan harus diisi'
       ],
    ]);
-   exit;}
+   exit;
+}
 $response = get($apiUrl, $consIdVclaim, $secretKeyVclaim, $userKeyVclaim);
 
 $timeStamp = $response[1];

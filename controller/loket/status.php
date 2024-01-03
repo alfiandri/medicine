@@ -1,6 +1,8 @@
 <?php
-require '../../db/connect.php';
+require_once __DIR__ . '/../../db/connect.php';
 $id = $_GET['id'];
+$previousUrl = $_SERVER["HTTP_REFERER"];
+
 $check = mysqli_query($koneksi, "SELECT * FROM loket WHERE id='$id'");
 $datacheck = mysqli_fetch_array($check);
 $status = $datacheck['status'];
@@ -16,6 +18,6 @@ if ($status == 0) {
    $updatestatus = mysqli_query($koneksi, "UPDATE loket SET status='$status' WHERE id='$id' ");
    if ($updatestatus) {
       echo " <script>alert ('Loket Telah Di Tutup');
-   document.location='../../module/admisi/loket-admisi'</script>";
+   document.location='$previousUrl'</script>";
    }
 }

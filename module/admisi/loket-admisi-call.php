@@ -1,5 +1,4 @@
 <?php
-$page = "Admisi";
 require '../../db/connect.php';
 require 'view.php';
 $id = $_GET['id'];
@@ -18,6 +17,7 @@ if ($datainfo['tipe'] == 'MJKN') {
 if ($datainfo['tipe'] == 'FARMASI') {
     $tipeLoket = 'F';
 }
+$page = $datainfo['tipe'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,13 +62,13 @@ if ($datainfo['tipe'] == 'FARMASI') {
                     <div class="page-title">
                         <div class="row">
                             <div class="col-6">
-                                <h3>Admisi</h3>
+                                <h3><?=$datainfo['tipe']?></h3>
                             </div>
                             <div class="col-6">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="index"> <i data-feather="home"></i></a></li>
                                     <li class="breadcrumb-item">Panggil Antrian</li>
-                                    <li class="breadcrumb-item active">Admisi </li>
+                                    <li class="breadcrumb-item active"><?=$datainfo['tipe']?> </li>
                                 </ol>
                             </div>
                         </div>
@@ -87,14 +87,15 @@ if ($datainfo['tipe'] == 'FARMASI') {
                                             </div>
                                             <div class="card-body">
                                                 <?php
-                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE status = 0 AND tipe = '$tipeLoket' AND lewati = 0");
+                                                $now = date('Y-m-d');
+                                                $callantrian = mysqli_query($koneksi, "SELECT * FROM antrian_loket WHERE status = 0 AND tipe = '$tipeLoket' AND date(create_at) = '$now' ORDER BY antri_at ASC");
                                                 $panggil = mysqli_fetch_array($callantrian);
 
                                                 ?>
                                                 <h1><?= @$panggil['tipe'] ?>-<?= @$panggil['nomor'] ?></h1>
                                                 <p>
                                                     <?php
-                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_loket where status = 0");
+                                                    $antrian  = mysqli_query($koneksi, "SELECT * FROM antrian_loket where status = 0 AND tipe = '$tipeLoket' AND date(create_at) = '$now'");
                                                     $dataantrian = mysqli_num_rows($antrian);
                                                     ?>
                                                     <hr>
@@ -110,7 +111,7 @@ if ($datainfo['tipe'] == 'FARMASI') {
                                             </div>
                                             <div class="card-body">
                                                 <h4><?= $datainfo['loket'] ?></h4>
-                                                <button onclick="panggil('Antrian Nomor <?php echo $panggil['tipe'] . $panggil['nomor']; ?> Dipanggil Ke <?php echo $datainfo['loket']; ?>');" class="btn btn-primary mb-2 col-12">
+                                                <button onclick="panggil('Antrian-Nomor <?php echo $panggil['tipe'] . $panggil['nomor']; ?> Dipanggil ke <?php echo $datainfo['loket']; ?>');" class="btn btn-primary mb-2 col-12">
                                                     Panggil
                                                 </button>
                                                 <a href="../controller/antrian/loket?actions=2&id=<?= $panggil['id'] ?>&loket_id=<?= $datainfo['id'] ?>">

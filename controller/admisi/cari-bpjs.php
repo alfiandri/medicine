@@ -5,17 +5,7 @@ header('Content-Type: application/json');
 
 $nokartu = @$_POST['nokartu'];
 $nobpjs = @$_POST['nobpjs'];
-$tglsep = @$_POST['tglsep'];
-
-if (!$tglsep) {
-   echo json_encode([
-      'metadata' => [
-         'code' => 201,
-         'message' => 'Tanggal SEP harus diisi untuk pencarian data'
-      ],
-   ]);
-   exit;
-}
+$tglsep = date('Y-m-d');
 
 $peserta = [];
 if ($nokartu) {

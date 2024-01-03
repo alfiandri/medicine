@@ -1,6 +1,6 @@
 <?php
-require_once '../../db/connect.php';
-require '../../controller/base/integrasi.php';
+require_once __DIR__ . '/../../db/connect.php';
+require_once __DIR__ . '/../../controller/base/integrasi.php';
 date_default_timezone_set('Asia/Jakarta');
 
 if (isset($_POST['simpancheck'])) {
@@ -106,7 +106,20 @@ if (isset($_POST['simpandaftarulang'])) {
 if (isset($_POST['simpanpasien'])) {
    $tipe = $_POST['tipe'];
    $uid = md5(rand(1111, 9999));
-   $nomorrm = $_POST['nomorrm'];
+
+
+   $sql = "SELECT * FROM pasien order by nomor_rm DESC";
+
+   $result = mysqli_query($koneksi, $sql);
+   $row = mysqli_fetch_array($result);
+
+   if ($row) {
+      $rm = intval($row['nomor_rm']) + 1;
+      $nomorrm = sprintf("%06d", $rm);
+   } else {
+      $nomorrm = sprintf("%06d", 1);
+   }
+
    $kodebooking = @$_POST['kodebooking'];
    $sebutan = $_POST['sebutan'];
    $nama = $_POST['nama'];
